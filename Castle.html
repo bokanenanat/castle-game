@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Castle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sonsie+One&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #000;
+    }
+
+    .castle-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(92vw, 400px);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: #000;
+      border: 1px solid #ffb300;
+      border-radius: 20px;
+      box-shadow:
+        0 0 30px rgba(255, 179, 0, 0.4),
+        0 0 60px rgba(255, 100, 0, 0.2),
+        inset 0 0 30px rgba(255, 179, 0, 0.05);
+      z-index: 10000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      animation: castleAppear 0.4s ease;
+      direction: ltr;
+      box-sizing: border-box;
+    }
+
+    .castle-panel *,
+    .castle-panel *::before,
+    .castle-panel *::after {
+      box-sizing: border-box;
+    }
+
+    @keyframes castleAppear {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -45%) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 35px;
+      height: 35px;
+      background: #0a0a0a;
+      color: #ffb300;
+      border: 1px solid #ffb300;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      z-index: 10;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .panel-close:hover {
+      background: #ffb300;
+      color: #000;
+      box-shadow: 0 0 15px rgba(255, 179, 0, 0.6);
+      transform: rotate(90deg);
+    }
+
+    .panel-content {
+      padding: 1.5rem;
+    }
+
+    .castle-header {
+      text-align: center;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .castle-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 0.5rem;
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .castle-title {
+      font-family: 'Sonsie One', cursive;
+      font-size: 1.6rem;
+      color: #000;
+      -webkit-text-stroke: 1px #f00;
+      margin: 0;
+      text-shadow: 0 0 10px#f00;
+      letter-spacing: 1px;
+    }
+
+    .castle-level-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #000, #333);
+      border: 1px solid #f00;
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: #f00;
+    }
+
+    .castle-desc {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 179, 0, 0.2);
+    }
+
+    .castle-desc p {
+      margin: 0;
+      color: #ccc;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      text-align: justify;
+    }
+
+    .castle-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat-item {
+      background: rgba(255, 179, 0, 0.08);
+      border: 1px solid rgba(255, 179, 0, 0.25);
+      border-radius: 10px;
+      padding: 0.7rem 0.4rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      background: rgba(255, 179, 0, 0.15);
+      border-color: #ffb300;
+      transform: translateY(-3px);
+    }
+
+    .stat-icon {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.65rem;
+      color: #aaa;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 1rem;
+      color: #ffd700;
+      font-weight: bold;
+    }
+
+    .upgrade-section {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 179, 0, 0.3);
+    }
+
+    .upgrade-title {
+      text-align: center;
+      color: #ffa500;
+      font-size: 0.95rem;
+      margin: 0 0 0.8rem 0;
+    }
+
+    .cost-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .cost-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 179, 0, 0.15);
+    }
+
+    .cost-icon {
+      font-size: 1.1rem;
+    }
+
+    .cost-label {
+      color: #ccc;
+      font-size: 0.85rem;
+      flex: 1;
+      margin-left: 0.5rem;
+    }
+
+    .cost-value {
+      color: #ffd700;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .upgrade-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, #ff8c00, #ffb300);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .upgrade-btn:hover {
+      background: linear-gradient(135deg, #ffb300, #ffd700);
+      box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .upgrade-btn:active {
+      transform: translateY(0) scale(0.97);
+    }
+
+    .btn-icon {
+      font-size: 1.2rem;
+    }
+
+    .upgrade-btn:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    @media (max-width: 480px) {
+      .panel-content {
+        padding: 1rem;
+      }
+
+      .castle-icon {
+        font-size: 2.5rem;
+        box-shadow: none;
+      }
+      .castle-icon img {
+        width: 30vw;
+        border-radius: 999px;
+        border: 1px solid #950;
+      }
+
+      .castle-title {
+        font-size: 1.3rem;
+      }
+
+      .castle-stats {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+      }
+
+      .stat-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 0.8rem;
+      }
+
+      .stat-icon {
+        margin-bottom: 0;
+      }
+
+      .stat-label {
+        margin-bottom: 0;
+        flex: 1;
+        text-align: left;
+      }
+    }
+    .error-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  animation: errorShake 0.5s ease;
+}
+
+.error-box {
+  background: linear-gradient(160deg, #1a0505 0%, #0d0202 40%, #1f0a0a 100%);
+  border: 2px solid #ff2222;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow:
+    0 0 40px rgba(255, 0, 0, 0.6),
+    0 0 80px rgba(255, 50, 0, 0.3),
+    inset 0 0 30px rgba(255, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  min-width: 280px;
+  max-width: 90vw;
+}
+
+.error-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.error-icon {
+  font-size: 2rem;
+  animation: errorPulse 1s ease-in-out infinite;
+}
+
+.error-title {
+  color: #ff4444;
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+}
+
+.error-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.error-text {
+  color: #cc8888;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.error-divider {
+  height: 1px;
+  background: rgba(255, 0, 0, 0.3);
+  margin: 0.5rem 0;
+}
+
+.error-link {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(135deg, #ff2222, #ff5500);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+}
+
+.error-link:hover {
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+  transform: translateY(-2px);
+  letter-spacing: 2px;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+  25% { transform: translate(-50%, -50%) translateX(-10px); }
+  75% { transform: translate(-50%, -50%) translateX(10px); }
+}
+
+@keyframes errorPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  }
+    .error-lock {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 99999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lock-content {
+  background: linear-gradient(160deg, #1a0a2a, #0d0515);
+  border: 2px solid #7c4dff;
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  position: relative;
+  box-shadow:
+    0 0 40px rgba(124, 77, 255, 0.5),
+    0 0 80px rgba(124, 77, 255, 0.2),
+    inset 0 0 30px rgba(124, 77, 255, 0.1);
+  max-width: 90vw;
+  animation: lockShake 0.5s ease;
+}
+
+@keyframes lockShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.lock-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+  animation: lockPulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(124, 77, 255, 0.7));
+}
+
+@keyframes lockPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.lock-title {
+  color: #b388ff;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 15px rgba(124, 77, 255, 0.7);
+}
+
+.lock-text {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.lock-link {
+  display: inline-block;
+  padding: 0.7rem 2rem;
+  background: linear-gradient(135deg, #7c4dff, #b388ff);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(124, 77, 255, 0.5);
+  margin-bottom: 1rem;
+}
+
+.lock-link:hover {
+  box-shadow: 0 0 30px rgba(124, 77, 255, 0.8);
+  transform: translateY(-2px);
+  letter-spacing: 2px;
+}
+
+.lock-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #7c4dff;
+  background: transparent;
+  color: #b388ff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.lock-close:hover {
+  background: #7c4dff;
+  color: #fff;
+  transform: rotate(90deg);
+    }
+    #max-message {
+      width: 80%;
+      height: 15vh;
+      border: none;
+      background: #a00;
+      position: fixed;
+      bottom: 1vh;
+      left: 10%;
+      border-radius: 10px;
+      box-shadow: 0 0 30px #800;
+      display: none;
+      grid-template-rows: 1fr 1fr;
+      gap: 0.5px;
+      z-index: 100000;
+      align-items: center;
+      justify-items: center;
+    }
+    #max-message h1 {
+      font-size: clamp(5px,4vw,40px);
+      color: #000;
+      font-family: 'Sonsie One', cursive;
+      height: 98%;
+      width: 100%;
+      -webkit-text-stroke: 1px #f00;
+      text-shadow: 0 0 10px #f00;
+      background: #000;
+      border-radius: 5px;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+    }
+  </style>
+</head>
+<body>
+  <section id='max-message'>
+    <h1>Maximum</h1>
+    <h1>Level 25</h1>
+  </section>
+  <section class="castle-panel" id="castle-panel">
+    <a class="panel-close" id="castle-close" href="Game.html">×</a>
+    <div class="panel-content">
+      <div class="castle-header">
+        <div class="castle-icon">
+          <img src='button/castle.png' id='image-castle'>
+        </div>
+        <h2 class="castle-title" id='castle-title'>Royal Castle</h2>
+        <div class="castle-level-badge">Level <span id="castle-level">1</span></div>
+      </div>
+      <div class="castle-desc">
+        <p>Command center and symbol of your power. This magnificent castle has withstood enemies for centuries, and every brick is a testament to your dynasty's greatness. By upgrading the castle, not only will its defensive strength increase, but your troops will march into battle with higher morale.</p>
+      </div>
+      <div class="castle-stats">
+        <div class="stat-item">
+          <span class="stat-icon">🛡️</span>
+          <span class="stat-label">Defense Power</span>
+          <span class="stat-value" id="castle-defense">120</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">👥</span>
+          <span class="stat-label">Troop Capacity</span>
+          <span class="stat-value" id="castle-capacity">50</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">⚔️</span>
+          <span class="stat-label">Attack Power</span>
+          <span class="stat-value" id="castle-attack">80</span>
+        </div>
+      </div>
+      <div class="upgrade-section">
+        <h3 class="upgrade-title">📦 Required Resources for Upgrade</h3>
+        <div class="cost-list">
+          <div class="cost-item">
+            <span class="cost-icon">🪙</span>
+            <span class="cost-label">Gold</span>
+            <span class="cost-value" id="castle-cost-gold">200</span>
+          </div>
+          <div class="cost-item">
+            <span class="cost-icon">🪵</span>
+            <span class="cost-label">Wood</span>
+            <span class="cost-value" id="castle-cost-wood">150</span>
+          </div>
+          <div class="cost-item">
+            <span class="cost-icon">🌾</span>
+            <span class="cost-label">Weath</span>
+            <span class="cost-value" id="castle-cost-weath"></span>
+          </div>
+        </div>
+        <button class="upgrade-btn" id="castle-upgrade-btn">
+          <span class="btn-icon">⚡</span>
+          <span class="btn-text">Upgrade Castle</span>
+        </button>
+      </div>
+    </div>
+  </section>
+<div class="error-overlay" id="error-overlay">
+  <div class="error-box">
+    <div class="error-header">
+      <span class="error-icon">⚠️</span>
+      <span class="error-title">Not Enough Resources!</span>
+    </div>
+    <div class="error-body">
+      <p class="error-text">Your resources are not sufficient for this upgrade.</p>
+      <div class="error-divider"></div>
+      <a href="shop.html" class="error-link">⚡ Go to Shop</a>
+    </div>
+  </div>
+</div>
+  <div class="error-lock" id="error-lock">
+  <div class="lock-content">
+    <span class="lock-icon">🔒</span>
+    <h2 class="lock-title">Castle Level Locked</h2>
+    <p class="lock-text">You reached the maximum castle level. Research at the University to unlock higher levels.</p>
+    <a href="university.html" class="lock-link">🎓 Go to University</a>
+    <button class="lock-close" id="lock-close">×</button>
+  </div>
+  </div>
+  <audio src="Sounds/Castle.mp3" id="music" loop></audio>
+
+  <script>
+    /* ==================== SOUND ==================== */
+    const music = document.getElementById('music');
+    document.addEventListener('click', () => {
+      music.play();
+      music.volume = 0.5;
+    });
+
+    /* ==================== COST DATA ==================== */
+    let allCost = {
+      gold: 15,
+      wood: 15,
+      weath: 15,
+    };
+
+    let level = 1;
+
+    /* ==================== LEVEL FUNCTIONS ==================== */
+    function getLevel() {
+      let savedLevel = parseInt(localStorage.getItem('castleLevel'));
+      if (savedLevel) {
+        level = savedLevel;
+      }
+    }
+
+    function setLevel() {
+      localStorage.setItem('castleLevel', level);
+    }
+
+    function showLevel() {
+      let levelTag = document.getElementById('castle-level');
+      levelTag.textContent = level;
+    }
+
+    /* ==================== COST FUNCTIONS ==================== */
+    function readCost() {
+      let savedCostGold = parseInt(localStorage.getItem('castleCostGold'));
+      let savedCostWood = parseInt(localStorage.getItem('castleCostWood'));
+      let savedCostWeath = parseInt(localStorage.getItem('castleCostWeath'));
+      if (savedCostGold) {
+        allCost.gold = savedCostGold;
+      }
+      if (savedCostWood) {
+        allCost.wood = savedCostWood;
+      }
+      if (savedCostWeath) {
+        allCost.weath = savedCostWeath;
+      }
+    }
+
+    function showCost() {
+      let costGold = document.getElementById('castle-cost-gold');
+      let costWood = document.getElementById('castle-cost-wood');
+      let costWeath = document.getElementById('castle-cost-weath');
+
+      costGold.textContent = allCost.gold;
+      costWood.textContent = allCost.wood;
+      costWeath.textContent = allCost.weath;
+    }
+
+    /* ==================== RESOURCE DATA ==================== */
+    let savedResources = JSON.parse(localStorage.getItem('resources')) || {
+      gold: 100,
+      wood: 100,
+      weath: 100
+    };
+    setInterval( ()=>{
+      let fresh = JSON.parse(localStorage.getItem('resources'));
+      if(fresh) {
+        savedResources = fresh;
+      }
+    },3000);
+    /* ==================== SAVE FUNCTION ==================== */
+    function save() {
+      localStorage.setItem('resources',JSON.stringify(savedResources));
+      localStorage.setItem('castleCostGold', allCost.gold);
+      localStorage.setItem('castleCostWood', allCost.wood);
+      localStorage.setItem('castleCostWeath', allCost.weath);
+    }
+    
+    const errorLock = document.getElementById('error-lock');
+
+function showCastleLockError() {
+  errorLock.style.display = 'flex';
+}
+
+document.getElementById('lock-close').addEventListener('click', () => {
+  errorLock.style.display = 'none';
+});
+/* ==================== GET RESEARCHS ==================== */
+    let savedResearch = localStorage.getItem('research');
+    let research = savedResearch ? JSON.parse(savedResearch) : {
+      resources: 0,
+      forces: 0,
+      castle: 0
+    };
+    
+    /* ==================== UPGRADE FUNCTION ==================== */
+    let upgradeBtn = document.getElementById('castle-upgrade-btn');
+    
+    
+    function countResources() {
+     const maxLevel = 5 + (research.castle * 5);
+      if(maxLevel <= level) {
+        showCastleLockError();
+        return
+      }
+      savedResources.gold -= allCost.gold;
+      savedResources.wood -= allCost.wood;
+      savedResources.weath -= allCost.weath;
+
+      for (let key in allCost) {
+        allCost[key] = Math.round(allCost[key] * (1.2 + 0.8));
+      }
+
+      level += 1;
+      setLevel();
+      showCost();
+      save();
+      let fresh = JSON.parse(localStorage.getItem('resources'));
+      if(fresh) {
+        savedResources = fresh;
+    }
+      showLevel();
+    }
+
+    /* ==================== UPGRADE BUTTON EVENT ==================== */
+    
+    upgradeBtn.addEventListener('click', () => {
+      if (allCost.gold <= savedResources.gold && allCost.wood <= savedResources.wood && allCost.weath <= savedResources.weath) {
+        countResources();
+      } else{
+      document.getElementById('error-overlay').style.display = 'block';
+    }
+    });
+    /* ==================== INITIALIZE ==================== */
+    getLevel();
+    readCost();
+    showLevel();
+    showCost();
+    let maxMessage = document.getElementById('max-message');
+    let imageCastle = document.getElementById('image-castle');
+    if(level >= 25) {
+      upgradeBtn.style.display = 'none';
+      maxMessage.style.display = 'grid';
+      imageCastle.src = 'button/max.png';
+      imageCastle.style.width = '40vw';
+    }
+  </script>
+</body>
+</html>
