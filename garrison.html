@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garrison</title>
+  <style>
+    :root {
+      --bg: #050510;
+      --gold: #ffb300;
+      --card: rgba(15, 15, 30, 0.9);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      font-family: 'Georgia', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .garrison-panel {
+      width: min(95vw, 500px);
+      background: var(--card);
+      border: 2px solid rgba(255, 180, 0, 0.3);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 0 40px rgba(255, 180, 0, 0.1);
+    }
+
+    .resources-bar {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 180, 0, 0.3);
+      border-radius: 12px;
+      padding: 0.8rem;
+    }
+
+    .resource-item {
+      color: #ddd;
+      font-size: 0.9rem;
+    }
+
+    .garrison-title {
+      text-align: center;
+      color: var(--gold);
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 15px rgba(255, 180, 0, 0.5);
+    }
+
+    .forces-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .force-card {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .force-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(255, 180, 0, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .force-img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 0.5rem;
+      object-fit: contain;
+    }
+
+    .force-name {
+      color: #ddd;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .force-cost {
+      color: #888;
+      font-size: 0.7rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .force-count {
+      color: var(--gold);
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .create-btn {
+      width: 100%;
+      padding: 0.6rem;
+      background: linear-gradient(135deg, #1a1a4a, #2a2a6a);
+      border: 1px solid rgba(100, 150, 255, 0.4);
+      border-radius: 10px;
+      color: #dde;
+      cursor: pointer;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .create-btn:hover {
+      background: linear-gradient(135deg, #2a2a7a, #3a3aaa);
+      border-color: rgba(140, 170, 255, 0.8);
+      box-shadow: 0 0 15px rgba(100, 140, 255, 0.3);
+    }
+
+    .create-btn:active {
+      transform: scale(0.95);
+    }
+
+    .create-btn:disabled {
+      background: #333;
+      color: #666;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .error-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(160deg, #0a0a1a, #101025);
+  border: 1px solid rgba(70, 130, 200, 0.5);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  z-index: 99999;
+  display: none;
+  text-align: center;
+  box-shadow:
+    0 0 25px rgba(70, 130, 200, 0.3),
+    0 0 50px rgba(200, 170, 80, 0.1);
+  animation: errorShake 0.5s ease;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+  25% { transform: translate(-50%, -50%) translateX(-8px); }
+  75% { transform: translate(-50%, -50%) translateX(8px); }
+}
+
+.error-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.error-icon {
+  font-size: 1.5rem;
+  animation: iconPulse 1s infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.error-title {
+  color: #aac;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.error-text {
+  color: #889;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.error-close {
+  margin-top: 0.8rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(70, 130, 200, 0.5);
+  background: transparent;
+  color: #aac;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.error-close:hover {
+  background: rgba(70, 130, 200, 0.3);
+  box-shadow: 0 0 10px rgba(70, 130, 200, 0.5);
+  }
+  </style>
+</head>
+<body>
+  <div class="garrison-panel">
+    <div class="resources-bar">
+      <span class="resource-item">🪙 <span id="res-gold">0</span></span>
+      <span class="resource-item">🪵 <span id="res-wood">0</span></span>
+      <span class="resource-item">🌾 <span id="res-weath">0</span></span>
+    </div>
+
+    <h1 class="garrison-title">⚔️ GARRISON</h1>
+
+    <div class="forces-grid">
+      <div class="force-card">
+        <img src="button/infantry.png" class="force-img" alt="Infantry">
+        <div class="force-name">Infantry</div>
+        <div class="force-cost">🪙50 🪵180 🌾180</div>
+        <div class="force-count" id="count-infantry">0</div>
+        <button class="create-btn" data-force="infantry" data-gold="50" data-wood="180" data-weath="180">Create</button>
+      </div>
+
+      <div class="force-card">
+        <img src="button/archer.png" class="force-img" alt="Archer">
+        <div class="force-name">Archer</div>
+        <div class="force-cost">🪙30 🪵80 🌾80</div>
+        <div class="force-count" id="count-archer">0</div>
+        <button class="create-btn" data-force="archer" data-gold="30" data-wood="80" data-weath="80">Create</button>
+      </div>
+
+      <div class="force-card">
+        <img src="button/cavalry.png" class="force-img" alt="Cavalry">
+        <div class="force-name">Cavalry</div>
+        <div class="force-cost">🪙40 🪵100 🌾100</div>
+        <div class="force-count" id="count-cavalry">0</div>
+        <button class="create-btn" data-force="cavalry" data-gold="40" data-wood="100" data-weath="100">Create</button>
+      </div>
+
+      <div class="force-card">
+        <img src="button/chariot.png" class="force-img" alt="Chariot">
+        <div class="force-name">Chariot</div>
+        <div class="force-cost">🪙60 🪵150 🌾150</div>
+        <div class="force-count" id="count-chariot">0</div>
+        <button class="create-btn" data-force="chariot" data-gold="60" data-wood="150" data-weath="150">Create</button>
+      </div>
+    </div>
+  </div>
+  <div class="error-box" id="error-box">
+  <div class="error-header">
+    <span class="error-icon">⚠️</span>
+    <span class="error-title">Not Enough Resources</span>
+  </div>
+  <p class="error-text">You don't have enough resources to create this force.</p>
+  <button class="error-close" id="error-close">×</button>
+  </div>
+  <audio id='soundClick'src='Sounds/click2.mp3'></audio>
+  <script>
+    const errorBox = document.getElementById('error-box');
+const errorClose = document.getElementById('error-close');
+
+function showError() {
+  errorBox.style.display = 'block';
+}
+
+errorClose.addEventListener('click', () => {
+  errorBox.style.display = 'none';
+});
+    let resources = {
+      gold: 300,
+      wood: 300,
+      weath: 300
+    };
+
+    let forces = {
+      infantry: 0,
+      archer: 0,
+      cavalry: 0,
+      chariot: 0
+    };
+
+    let savedGold = parseInt(localStorage.getItem('gold'));
+    let savedWood = parseInt(localStorage.getItem('wood'));
+    let savedWeath = parseInt(localStorage.getItem('weath'));
+
+    if (savedGold) resources.gold = savedGold;
+    if (savedWood) resources.wood = savedWood;
+    if (savedWeath) resources.weath = savedWeath;
+
+    let savedForces = JSON.parse(localStorage.getItem('forces'));
+
+    if (savedForces) {
+      forces = savedForces;
+    }
+
+    function updateResources() {
+      document.getElementById('res-gold').textContent = resources.gold;
+      document.getElementById('res-wood').textContent = resources.wood;
+      document.getElementById('res-weath').textContent = resources.weath;
+    }
+
+    function updateDisplay() {
+      document.getElementById('count-infantry').textContent = forces.infantry;
+      document.getElementById('count-archer').textContent = forces.archer;
+      document.getElementById('count-cavalry').textContent = forces.cavalry;
+      document.getElementById('count-chariot').textContent = forces.chariot;
+    }
+
+    function saveAll() {
+      localStorage.setItem('gold', resources.gold);
+      localStorage.setItem('wood', resources.wood);
+      localStorage.setItem('weath', resources.weath);
+      localStorage.setItem('forces', JSON.stringify(forces));
+    }
+
+    document.querySelectorAll('.create-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        let forceType = btn.dataset.force;
+        let costGold = parseInt(btn.dataset.gold);
+        let costWood = parseInt(btn.dataset.wood);
+        let costWeath = parseInt(btn.dataset.weath);
+
+        if (resources.gold >= costGold && resources.wood >= costWood && resources.weath >= costWeath) {
+          resources.gold -= costGold;
+          resources.wood -= costWood;
+          resources.weath -= costWeath;
+          forces[forceType] += 1;
+          saveAll();
+          updateResources();
+          updateDisplay();
+        } else {
+          showError();
+        }
+      });
+    });
+
+    updateResources();
+    updateDisplay();
+    document.addEventListener('click',()=>{
+      let soundClick = document.getElementById('soundClick');
+      soundClick.play();
+    });
+
+  </script>
+</body>
+  </html>
