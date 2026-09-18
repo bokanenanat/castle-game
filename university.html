@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University</title>
+  <style>
+    body {
+      background: #000;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .university-panel {
+      width: 100%;
+      max-width: 500px;
+      max-height: 95vh;
+      overflow-y: auto;
+      background: linear-gradient(160deg, #0a0a1a 0%, #0d0d20 40%, #1a1228 100%);
+      border: 2px solid #7c4dff;
+      border-radius: 20px;
+      box-shadow:
+        0 0 30px rgba(124, 77, 255, 0.4),
+        inset 0 0 30px rgba(124, 77, 255, 0.05);
+      padding: 1.5rem;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 35px;
+      height: 35px;
+      background: #0a0a1a;
+      color: #7c4dff;
+      border: 2px solid #7c4dff;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .panel-close:hover {
+      background: #7c4dff;
+      color: #fff;
+      transform: rotate(90deg);
+    }
+
+    .university-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-top: 0.5rem;
+    }
+
+    .university-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.5));
+    }
+
+    .university-title {
+      font-size: 1.6rem;
+      color: #b388ff;
+      margin: 0;
+      text-shadow:
+        0 0 10px rgba(179, 136, 255, 0.6),
+        0 0 20px rgba(124, 77, 255, 0.3);
+      letter-spacing: 2px;
+    }
+
+    /* ==================== SECTION TITLE ==================== */
+    .section-title {
+      color: #b388ff;
+      font-size: 1rem;
+      margin: 1.5rem 0 0.8rem;
+      padding-left: 0.5rem;
+      border-left: 3px solid #7c4dff;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(124, 77, 255, 0.4);
+    }
+
+    /* ==================== HORIZONTAL SCROLLER ==================== */
+    .h-scroller {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 4px 12px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .h-scroller::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .h-scroller::-webkit-scrollbar-track {
+      background: rgba(124, 77, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .h-scroller::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #7c4dff, #b388ff);
+      border-radius: 10px;
+    }
+
+    /* ==================== ITEM CARD ==================== */
+    .research-card {
+      flex-shrink: 0;
+      width: 150px;
+      scroll-snap-align: start;
+      background: linear-gradient(160deg, #1a0f2a, #0d0d20);
+      border: 1px solid rgba(124, 77, 255, 0.4);
+      border-radius: 14px;
+      padding: 0.9rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .research-card:hover {
+      border-color: #b388ff;
+      box-shadow:
+        0 0 20px rgba(124, 77, 255, 0.5),
+        inset 0 0 15px rgba(124, 77, 255, 0.1);
+      transform: translateY(-4px);
+    }
+
+    .research-card.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .research-card.locked::after {
+      content: '🔒';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .research-card.done {
+      border-color: #00e5a0;
+      box-shadow: 0 0 20px rgba(0, 229, 160, 0.4);
+    }
+
+    .research-card.done::before {
+      content: '✓';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 22px;
+      height: 22px;
+      background: #00e5a0;
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.8rem;
+      z-index: 2;
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.4rem;
+      filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.4));
+    }
+
+    .card-name {
+      color: #d1c4e9;
+      font-size: 0.8rem;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.5px;
+      font-weight: bold;
+    }
+
+    .card-req {
+      color: #aa6666;
+      font-size: 0.65rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-cost {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.7rem;
+      color: #b388ff;
+    }
+
+    .card-cost span {
+      display: flex;
+      justify-content: space-between;
+      padding: 1px 4px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+    }
+
+    /* ==================== INFO BAR ==================== */
+    .info-bar {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(124, 77, 255, 0.2);
+      border-radius: 10px;
+      padding: 0.6rem;
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .info-bar span {
+      color: #b388ff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ==================== ERROR OVERLAY ==================== */
+    .error-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 99999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      animation: errorShake 0.5s ease;
+    }
+
+    .error-box {
+      background: linear-gradient(160deg, #1a0505 0%, #0d0202 40%, #1f0a0a 100%);
+      border: 2px solid #ff2222;
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
+      min-width: 280px;
+    }
+
+    .error-title {
+      color: #ff4444;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    }
+
+    .error-text {
+      color: #cc8888;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .error-link {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      background: linear-gradient(135deg, #ff2222, #ff5500);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    @keyframes errorShake {
+      0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+      25% { transform: translate(-50%, -50%) translateX(-10px); }
+      75% { transform: translate(-50%, -50%) translateX(10px); }
+    }
+
+    /* ==================== LOCK OVERLAY ==================== */
+    .error-lock {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 99999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .lock-content {
+      background: linear-gradient(160deg, #1a0a0a, #0d0505);
+      border: 2px solid #ff3300;
+      border-radius: 20px;
+      padding: 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .lock-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .lock-title {
+      color: #ff5533;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .lock-text {
+      color: #aa6666;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .lock-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid #ff3300;
+      background: transparent;
+      color: #ff5533;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="university-panel" id="university-panel">
+    <a class="panel-close" id="university-close" href="Game.html">×</a>
+
+    <div class="university-header">
+      <div class="university-icon">🎓</div>
+      <h2 class="university-title">Royal University</h2>
+    </div>
+
+    <!-- ==================== SECTION 1: RESOURCES RESEARCH ==================== -->
+    <h3 class="section-title">🌾 Resources Research</h3>
+    <div class="h-scroller" id="scroller-resources"></div>
+
+    <!-- ==================== SECTION 2: FORCES RESEARCH ==================== -->
+    <h3 class="section-title">⚔ Forces Research</h3>
+    <div class="h-scroller" id="scroller-forces"></div>
+
+    <!-- ==================== SECTION 3: CASTLE UNLOCK ==================== -->
+    <h3 class="section-title">🏰 Castle Unlock</h3>
+    <div class="h-scroller" id="scroller-castle"></div>
+
+  </section>
+
+  <!-- ==================== ERROR OVERLAYS ==================== -->
+  <div class="error-overlay" id="error-overlay">
+    <div class="error-box">
+      <div class="error-title">⚠️ Not Enough Resources!</div>
+      <p class="error-text">You don't have enough resources.</p>
+      <a href="shop.html" class="error-link">⚡ Go to Shop</a>
+    </div>
+  </div>
+
+  <div class="error-lock" id="error-lock">
+    <div class="lock-content">
+      <span class="lock-icon">🔒</span>
+      <h2 class="lock-title">Castle Level Too Low</h2>
+      <p class="lock-text">Upgrade your Castle to unlock this research.</p>
+      <button class="lock-close" id="lock-close">×</button>
+    </div>
+  </div>
+
+  <audio src="Sounds/Univer.mp3" id="music"></audio>
+
+  <script>
+    /* ==================== MUSIC ==================== */
+    const music = document.getElementById('music');
+    document.addEventListener('click', () => {
+      music.play();
+      music.volume = 0.5;
+    });
+
+    /* ==================== RESEARCH DATA ==================== */
+    const researchData = {
+      resources: [
+        { icon: '🪵', name: 'Wood Production', castleReq: 5,  cost: { weath: 5000,  wood: 5000,  gold: 2500 } },
+        { icon: '🌾', name: 'Wheat Production', castleReq: 10, cost: { weath: 10000, wood: 10000, gold: 5000 } },
+        { icon: '🪙', name: 'Gold Production', castleReq: 15, cost: { weath: 20000, wood: 20000, gold: 10000 } },
+        { icon: '✨', name: 'All Production', castleReq: 20, cost: { weath: 50000, wood: 50000, gold: 25000 } }
+      ],
+      forces: [
+        { icon: '🏹', name: 'Archer Power', castleReq: 5,  cost: { weath: 3000,  wood: 3000,  gold: 1500 } },
+        { icon: '⚔️', name: 'Infantry Power', castleReq: 10, cost: { weath: 6000,  wood: 6000,  gold: 3000 } },
+        { icon: '🐎', name: 'Cavalry Power', castleReq: 15, cost: { weath: 12000, wood: 12000, gold: 6000 } },
+        { icon: '🛞', name: 'Chariot Power', castleReq: 20, cost: { weath: 25000, wood: 25000, gold: 12000 } }
+      ],
+      castle: [
+        { icon: '🏰', name: 'Unlock Level 10', castleReq: 5,  cost: { weath: 10000,  wood: 10000,  gold: 5000 } },
+        { icon: '🏰', name: 'Unlock Level 15', castleReq: 10, cost: { weath: 25000,  wood: 25000,  gold: 12000 } },
+        { icon: '🏰', name: 'Unlock Level 20', castleReq: 15, cost: { weath: 50000,  wood: 50000,  gold: 25000 } },
+        { icon: '🏰', name: 'Unlock Level 25', castleReq: 20, cost: { weath: 100000, wood: 100000, gold: 50000 } }
+      ]
+    };
+
+    /* ==================== STATE ==================== */
+    let resources = JSON.parse(localStorage.getItem('resources')) || {
+      gold: 100,
+      wood: 100,
+      weath: 100
+    };
+
+    let research = JSON.parse(localStorage.getItem('research')) || {
+      resources: 0,
+      forces: 0,
+      castle: 0
+    };
+
+    /* ==================== RENDER SCROLLERS ==================== */
+    function renderScroller(containerId, category, stateKey) {
+      let container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      let castleLevel = parseInt(localStorage.getItem('castleLevel')) || 1;
+      let currentLevel = research[stateKey];
+
+      researchData[category].forEach((item, index) => {
+        let card = document.createElement('div');
+        card.className = 'research-card';
+
+        let isDone = index < currentLevel;
+        let isLocked = index !== currentLevel;
+        let castleOk = castleLevel >= item.castleReq;
+
+        if (isDone) {
+          card.classList.add('done');
+        } else if (isLocked || !castleOk) {
+          card.classList.add('locked');
+        }
+
+        card.innerHTML = `
+          <span class="card-icon">${item.icon}</span>
+          <div class="card-name">${item.name}</div>
+          <div class="card-req">🏰 Castle ${item.castleReq}</div>
+          <div class="card-cost">
+            <span>🌾 ${item.cost.weath}</span>
+            <span>🪵 ${item.cost.wood}</span>
+            <span>🪙 ${item.cost.gold}</span>
+          </div>
+        `;
+
+        if (!isDone && !isLocked && castleOk) {
+          card.addEventListener('click', () => {
+            tryResearch(stateKey, index, item);
+          });
+        } else if (!isDone && !castleOk) {
+          card.addEventListener('click', () => {
+            showLockError();
+          });
+        }
+
+        container.appendChild(card);
+      });
+    }
+
+    /* ==================== TRY RESEARCH ==================== */
+    function tryResearch(stateKey, index, item) {
+      let castleLevel = parseInt(localStorage.getItem('castleLevel')) || 1;
+
+      if (castleLevel < item.castleReq) {
+        showLockError();
+        return;
+      }
+
+      if (resources.weath < item.cost.weath ||
+          resources.wood < item.cost.wood ||
+          resources.gold < item.cost.gold) {
+        showError();
+        return;
+      }
+
+      resources.weath -= item.cost.weath;
+      resources.wood -= item.cost.wood;
+      resources.gold -= item.cost.gold;
+
+      research[stateKey] = index + 1;
+
+      saveAll();
+      renderAll();
+    }
+
+    /* ==================== SAVE ==================== */
+    function saveAll() {
+      localStorage.setItem('resources', JSON.stringify(resources));
+      localStorage.setItem('research', JSON.stringify(research));
+    }
+
+    /* ==================== ERRORS ==================== */
+    function showError() {
+      document.getElementById('error-overlay').style.display = 'block';
+    }
+
+    function showLockError() {
+      document.getElementById('error-lock').style.display = 'flex';
+    }
+
+    document.getElementById('lock-close').addEventListener('click', () => {
+      document.getElementById('error-lock').style.display = 'none';
+    });
+
+    /* ==================== RENDER ALL ==================== */
+    function renderAll() {
+      renderScroller('scroller-resources', 'resources', 'resources');
+      renderScroller('scroller-forces', 'forces', 'forces');
+      renderScroller('scroller-castle', 'castle', 'castle');
+    }
+
+    /* ==================== INIT ==================== */
+    renderAll();
+
+    /* ==================== AUTO REFRESH ==================== */
+    setInterval(() => {
+      let fresh = JSON.parse(localStorage.getItem('resources'));
+      if (fresh) {
+        resources = fresh;
+        renderAll();
+      }
+    }, 3000);
+  </script>
+
+</body>
+  </html>
