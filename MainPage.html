@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MainPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Risque&display=swap" rel="stylesheet">
+  <style>
+    /* ==================== GLOBAL ==================== */
+    body {
+      font-family: 'Risque', cursive;
+      user-select: none;
+      background: #020206;
+      color: #fff;
+      -webkit-tap-highlight-color: transparent;
+      display: grid;
+      justify-items: center;
+    }
+
+    :root {
+      --cl-earth: linear-gradient(90deg, #8b7355, #6b5b3a, #4a3a2a);
+    }
+
+    /* ==================== PROFILE ==================== */
+    .content-prof {
+      top: 1vh;
+      margin-left: -70%;
+      padding: 0;
+      background: #000;
+      position: relative;
+      border: 1px solid #557;
+      display: flex;
+      border-radius: 5px;
+      justify-content: center;
+    }
+
+    .prof {
+      width: 23vw;
+      border: 0.5px solid #2aaacf;
+      box-shadow: 0 0 5px #2cafde;
+      border-radius: 100px;
+    }
+
+    .prof:hover {
+      box-shadow: 0 0 5px #f70;
+      z-index: 10999;
+      top: 0;
+      border: 0.5px solid #f90;
+      max-height: 10rem;
+    }
+
+    /* ==================== INFO PANEL ==================== */
+    .container-info {
+      margin: 0;
+      width: 70vw;
+      border: none;
+      display: grid;
+      height: 100%;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 0.5px;
+      position: absolute;
+      background: #aaf;
+      top: -1px;
+      font-size: 1px;
+      border-radius: 1px;
+      max-width: 47rem;
+      left: 105%;
+    }
+
+    .container-info h1 {
+      font-size: clamp(1px, 3vw, 2rem);
+      height: 100%;
+      color: #999;
+      border: none;
+      margin-top: 0;
+      display: flex;
+      background: #000;
+      margin-bottom: 0;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .container-info h1:hover {
+      color: #4aaaef;
+      text-shadow: 0 0 15px #00f;
+      box-shadow: none;
+      border: 1px solid #333;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /* ==================== EARTH MAP ==================== */
+    .father-earth {
+      left: 0;
+      margin-bottom: 30vh;
+      aspect-ratio: 1/1;
+      position: relative;
+      width: 92vw;
+      max-width: 92vw;
+      top: 15vh;
+      border: none;
+      z-index: 1;
+      background: none;
+    }
+
+    .earth-image {
+      flex-shrink: 0;
+      user-select: none;
+      z-index: 1;
+      margin: 0;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      border: 1px solid #aaf;
+      opacity: 0.9;
+      box-shadow: 0 0 20px #aaf;
+      border-radius: 999px;
+    }
+    .earth-image:active {
+      opacity: 1;
+    }
+
+    .castle-P,
+    .univer-P,
+    .mint-P,
+    .blacksmithing-P {
+      height: 15vw;
+      width: 15vw;
+      top: 18vw;
+      aspect-ratio: 1/1;
+      left: 38vw;
+      position: absolute;
+      border: none;
+      pointer-events: auto;
+      background: none;
+      z-index: 10;
+      border-radius: 20px;
+    }
+
+    .univer-P {
+      top: 29vw;
+      left: 14.8vw;
+    }
+
+    .mint-P {
+      top: 45vw;
+      left: 40vw;
+    }
+
+    .blacksmithing-P {
+      top: 30vw;
+      left: 64vw;
+    }
+
+    /* ==================== BOTTOM BUTTONS ==================== */
+    .container-btn-all {
+      position: fixed;
+      overflow: auto;
+      bottom: 1vh;
+      width: 80%;
+      max-height: 15rem;
+      z-index: 100;
+      max-width: 50rem;
+      height: 13vh;
+      border: 0.5px solid #aaaae0;
+      box-shadow: 0 0 10px #aaaae0;
+      background: #0f0f0f;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .container-btn {
+      margin-left: 5vw;
+      margin-right: 5vw;
+      border: 0.5px solid #4affea;
+      flex-shrink: 0;
+      background: #0a0a0a;
+      border-radius: 15px;
+      height: 10vh;
+      width: 10vh;
+      padding: 0;
+      box-shadow: 0 0 3px #f08700;
+    }
+
+    .container-btn:hover {
+      border: 0.5px solid #55ddef;
+      box-shadow: 0 0 10px #55ccef;
+      background: #000;
+    }
+
+    .img-btn-attack {
+      transition: all 1s ease;
+      height: 100%;
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    /* ==================== CANVAS ==================== */
+    canvas {
+      z-index: 2;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .change-earth-img {
+      position: absolute;
+      height: 10vw;
+      width: 40%;
+      border: 1px solid #aaf;
+      top: 105%;
+      left: 30%;
+    }
+    .unit {
+      color: #ffa700;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PROFILE + INFO ==================== -->
+  <section class="content-prof" href="Gallery.html">
+    <a href="Gallery.html">
+      <img src="prof/2.jpg" class="prof" id="prof-present" alt="Profile">
+    </a>
+    <button class='change-earth-img' id='btn-change-earth-img'></button>
+    <section class="container-info">
+      <h1 id="gold"></h1>
+      <h1 id="wood"></h1>
+      <h1 id="weath"></h1>
+
+      <a href="UserName.html">
+        <h1 id="name"></h1>
+      </a>
+      <h1 id="power"></h1>
+      <h1 id="level"></h1>
+    </section>
+  </section>
+  
+  
+  <!-- ==================== EARTH MAP ==================== -->
+  <section class="father-earth">
+    <a class="castle-P" href="Castle.html"></a>
+    <a class="univer-P" href="university.html"></a>
+    <a class="mint-P" href="garrison.html"></a>
+    <a class="blacksmithing-P" href="blacksmithing.html"></a>
+    <img src="earth/1.png" class="earth-image" alt="Map" id="img-earth">
+  </section>
+
+  <!-- ==================== BOTTOM BUTTONS ==================== -->
+  <section class="container-btn-all">
+    <a class="container-btn" href="shop.html">
+      <img src="button/shop.png" class="img-btn-attack" alt="Shop">
+    </a>
+    <a class="container-btn" href="WarMap.html">
+      <img src="button/katana-2.jpg" class="img-btn-attack" alt="Attack">
+    </a>
+    <button class="container-btn">
+      <img src="button/resorces.jpg" class="img-btn-attack" alt="Resources">
+    </button>
+    <button class="container-btn">
+      <img src="button/demon.jpg" class="img-btn-attack" alt="Demon">
+    </button>
+    <button class="container-btn">
+      <img src="button/message.jpg" class="img-btn-attack" alt="Messages">
+    </button>
+  </section>
+
+  <!-- ==================== CANVAS + AUDIO ==================== -->
+  <canvas id="canvas"></canvas>
+  <audio id="soundClick" src="Sounds/click2.mp3"></audio>
+
+  <!-- ==================== SCRIPT ==================== -->
+  <script>
+    /* ==================== CANVAS STARS ==================== */
+    let bg = document.getElementById('canvas');
+    let pn = bg.getContext('2d');
+    bg.width = window.innerWidth;
+    bg.height = window.innerHeight;
+    let atoms = [];
+
+    class creatAtom {
+      constructor() {
+        this.x = Math.random() * bg.width;
+        this.y = Math.random() * bg.height;
+        this.moveX = (Math.random() - 0.5) * 0.5;
+        this.moveY = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2.5;
+        this.opacity = Math.random() + 0.09;
+      }
+      update() {
+        this.x += this.moveX;
+        this.y += this.moveY;
+        if (this.x > bg.width || this.x < 0) {
+          this.moveX *= -1;
+        }
+        if (this.y > bg.height || this.y < 0) {
+          this.moveY *= -1;
+        }
+      }
+      draw() {
+        pn.beginPath();
+        pn.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        pn.fillStyle = `rgba(80,80,110,${this.opacity})`;
+        pn.fill();
+      }
+    }
+
+    for (let i = 0; i < 300; i++) {
+      atoms.push(new creatAtom());
+    }
+
+    function updateAtom() {
+      pn.clearRect(0, 0, bg.width, bg.height);
+      atoms.forEach(A => {
+        A.update();
+        A.draw();
+      });
+      requestAnimationFrame(updateAtom);
+    }
+    updateAtom();
+    
+    /* ==================== CLICK SOUND ==================== */
+    document.addEventListener('click', () => {
+      let soundClick = document.getElementById('soundClick');
+      soundClick.play();
+    });
+    /* ==================== OBJECT S ==================== */
+    let resources = {
+      gold : 100 ,
+      wood : 100 ,
+      weath : 100
+    }
+    let player = {
+      name : 'lord' , 
+      power : 200 ,
+      level : 1 ,
+    }
+      
+    /* ==================== SAVE RESOURCES ==================== */
+    function saveResources() {
+        localStorage.setItem('resources',JSON.stringify(resources));
+      }
+    
+    /* ==================== READ RESOURCES ==================== */
+    function readResources() { 
+      resources = JSON.parse(localStorage.getItem('resources')) || resources;
+    }
+    /* ==================== GET RESEARCHS ==================== */
+    let savedResearch = localStorage.getItem('research');
+    let research = savedResearch ? JSON.parse(savedResearch) : {
+      resources: 0,
+      forces: 0,
+      castle: 0
+    };
+    
+    /* ==================== ADD RESOURCES AUTO ==================== */
+    let castleLevel = parseInt(localStorage.getItem('castleLevel')) || 1;
+    function addResources() {
+      readResources();
+      /*castleLevel = parseInt(localStorage.getItem('castleLevel'));*/
+      let bonus = 1 + (research.resources * 0.5);
+      resources.gold += (castleLevel * 50) * bonus;
+      resources.wood += (castleLevel * 100) * bonus;
+      resources.weath += (castleLevel * 100) * bonus;
+      saveResources();
+      showResources();
+      showPlayer();
+    }
+    addResources();
+    setInterval( addResources,5000 );
+    /* ==================== SHOW INFO RESOURCES ==================== */
+    function showResources() {
+      document.getElementById('gold').innerHTML = "🪙 " + shortResources(resources.gold || 0);
+  document.getElementById('wood').innerHTML = "🪵 " + shortResources(resources.wood || 0);
+  document.getElementById('weath').innerHTML = "🌾 " + shortResources(resources.weath);
+    }
+    showResources();
+    /* ==================== PLAYER NAME ==================== */
+    let playerName = localStorage.getItem('playerName');
+
+    if (playerName) {
+      if (playerName.length > 10) {
+        const lengthRem = (playerName.length - 10) * -1;
+        player.name = playerName.slice(0, lengthRem);
+      } else {
+        player.name = playerName;
+      }
+    }
+    /* ==================== SHORT POWER ==================== */
+    function shortPower(num) {
+      if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+      }
+      else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+      }
+      else {
+        return num;
+      }
+    }
+    /* ==================== SHORT RESOURCES ==================== */
+    function shortResources(source) {
+      if(source >= 1000000000) {
+        return (source/1000000000).toFixed(3)+'<span class="unit">B</span>';
+      }
+      if(source >= 1000000) {
+        return (source/1000000).toFixed(3)+'<span class="unit">M</span>';
+      }
+      if(source >= 1000) {
+        return (source/1000).toFixed(3)+'<span class="unit">K</span>';
+      } else {
+        return source;
+      }
+    }
+    
+    /* ==================== SHOW INFO PLAYER  ==================== */
+    function showPlayer() {
+      let power = parseInt(localStorage.getItem('power')) || 0;
+      let level = parseInt(localStorage.getItem('castleLevel')) || 1;
+      player.level = level;
+      document.getElementById('name').textContent = "✏️ => " + (player.name || 'Lord');
+      document.getElementById('power').textContent = "⚔ => " + shortPower(power);
+      document.getElementById('level').textContent = "⭐ => " + (player.level || 1);
+    }
+    showPlayer();
+    /* ==================== SET PROFILE ==================== */
+    let savedProfile = localStorage.getItem('selectedProfile');
+    if (savedProfile) {
+      document.getElementById('prof-present').src = savedProfile;
+    }
+    /*==================== CHANG EARTH IMG ====================*/
+    const btnChangEarth = document.getElementById('btn-change-earth-img');
+    const earthImg = document.getElementById('img-earth');
+
+    let count = 0;
+    const sourceEarths = [
+      [25, 'earth/25.png'],
+      [15, 'earth/15.png'],
+      [10, 'earth/10.png'],
+      [5,  'earth/5.png'],
+      [1,  'earth/1.png']
+    ];
+    const pathEarth = sourceEarths.find(([level])=> castleLevel >= level);
+    if(pathEarth) {
+      earthImg.src = pathEarth[1];
+    }
+  </script>
+
+</body>
+</html>
