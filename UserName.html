@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Your Name</title>
+  <style>
+    :root {
+      --bg-void: #050508;
+      --gold-1: #ffd700;
+      --gold-2: #b8860b;
+      --gold-3: #8b6508;
+      --text-glow: #f0e6d3;
+      --border-gold: rgba(255, 215, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg-void);
+      font-family: 'Georgia', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fog {
+      position: fixed;
+      inset: -50%;
+      pointer-events: none;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at 30% 40%, rgba(100, 80, 40, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, rgba(100, 80, 40, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(100, 80, 40, 0.1) 0%, transparent 40%);
+      filter: blur(60px);
+      animation: fogDrift 20s ease-in-out infinite;
+    }
+
+    @keyframes fogDrift {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(-2%, 1%); }
+      50% { transform: translate(1%, -2%); }
+      75% { transform: translate(2%, 2%); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      width: min(90vw, 450px);
+    }
+
+    .emblem {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: emblemPulse 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+    }
+
+    @keyframes emblemPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .title {
+      font-size: clamp(1.5rem, 6vw, 2.2rem);
+      color: var(--text-glow);
+      letter-spacing: 4px;
+      margin-bottom: 0.5rem;
+      text-shadow:
+        0 0 10px rgba(255, 215, 0, 0.5),
+        0 0 30px rgba(255, 215, 0, 0.3);
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--gold-3);
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .name-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid var(--border-gold);
+      border-radius: 14px;
+      color: var(--text-glow);
+      font-size: 1.2rem;
+      font-family: inherit;
+      letter-spacing: 2px;
+      text-align: center;
+      outline: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .name-input::placeholder {
+      color: #555;
+      letter-spacing: 1px;
+    }
+
+    .name-input:focus {
+      border-color: var(--gold-1);
+      box-shadow:
+        0 0 20px rgba(255, 215, 0, 0.3),
+        inset 0 0 15px rgba(255, 215, 0, 0.05);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .char-count {
+      text-align: left;
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 0.4rem;
+      padding-left: 0.5rem;
+    }
+
+    .random-btn {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: 1px solid var(--border-gold);
+      color: var(--gold-1);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .random-btn:hover {
+      background: rgba(255, 215, 0, 0.15);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .confirm-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--gold-3), var(--gold-2), var(--gold-1));
+      color: #1a1a1a;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 3px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+    }
+
+    .confirm-btn:hover {
+      box-shadow: 0 0 35px rgba(255, 140, 0, 0.6);
+      letter-spacing: 5px;
+      transform: translateY(-2px);
+    }
+
+    .confirm-btn:disabled {
+      background: #333;
+      color: #666;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .names-list {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .name-chip {
+      padding: 0.4rem 1rem;
+      background: rgba(255, 215, 0, 0.05);
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      color: var(--gold-2);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .name-chip:hover {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: var(--gold-1);
+      color: var(--gold-1);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+    .error-alert {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a0a0a;
+  color: #ff4444;
+  border: 2px solid #ff4444;
+  border-radius: 14px;
+  padding: 1rem 2rem;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow:
+    0 0 25px rgba(255, 68, 68, 0.4),
+    inset 0 0 15px rgba(255, 68, 68, 0.05);
+  animation: errorShake 0.5s ease;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(-50%) translateX(0); }
+  25% { transform: translateX(-50%) translateX(-10px); }
+  75% { transform: translateX(-50%) translateX(10px); }
+}
+
+.error-icon {
+  font-size: 1.5rem;
+}
+
+.error-text {
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.error-close {
+  background: transparent;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.error-close:hover {
+  background: #ff4444;
+  color: #fff;
+      }
+  </style>
+</head>
+<body>
+  <div class="fog"></div>
+
+  <div class="container">
+    <div class="emblem">👑</div>
+    <h1 class="title">CHOOSE YOUR NAME</h1>
+    <p class="subtitle">A name that will echo through history...</p>
+
+    <div class="input-wrapper">
+      <input 
+        class="name-input" 
+        id="name-input" 
+        placeholder="our ruler name.." 
+        maxlength="10"
+      >
+      <button class="random-btn" id="random-btn" title="Random Name">🎲</button>
+    </div>
+
+    <div class="char-count" id="char-count">0 / 10</div>
+
+    <button class="confirm-btn" id="confirm-btn" disabled>⚜️ Confirm Name</button>
+
+    <div class="names-list" id="names-list">
+      <span class="name-chip" data-name="Aragorn">Aragorn</span>
+      <span class="name-chip" data-name="Thranduil">Thranduil</span>
+      <span class="name-chip" data-name="Sauron">Sauron</span>
+      <span class="name-chip" data-name="Gandalf">Gandalf</span>
+      <span class="name-chip" data-name="Legolas">Legolas</span>
+      <span class="name-chip" data-name="Gimli">Gimli</span>
+    </div>
+  </div>
+<div class="error-alert" id="error-alert">
+  <span class="error-icon">⚠️</span>
+  <span class="error-text">Name not selected!</span>
+  <button class="error-close" id="error-close">×</button>
+</div>
+  <script>
+    const errorAlert = document.getElementById('error-alert');
+const errorClose = document.getElementById('error-close');
+
+function showError() {
+  errorAlert.style.display = 'flex';
+}
+
+errorClose.addEventListener('click', () => {
+  errorAlert.style.display = 'none';
+});
+    const nameInput = document.getElementById('name-input');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const charCount = document.getElementById('char-count');
+    const randomBtn = document.getElementById('random-btn');
+    const namesList = document.getElementById('names-list');
+
+    const randomNames = [
+      'Aragorn',
+      'Thranduil',
+      'Sauron',
+      'Gandalf',
+      'Legolas',
+      'Gimli',
+      'Boromir',
+      'Faramir',
+      'Galadriel',
+      'Elrond'
+    ];
+
+    nameInput.addEventListener('input', () => {
+      const length = nameInput.value.length;
+      charCount.textContent = length + ' / 10';
+      
+      if (nameInput.value.trim().length > 0) {
+        confirmBtn.disabled = false;
+      } else {
+        confirmBtn.disabled = true;
+      }
+    });
+
+    randomBtn.addEventListener('click', () => {
+      const randomName = randomNames[Math.floor(Math.random() * randomNames.length)];
+      nameInput.value = randomName;
+      charCount.textContent = randomName.length + ' / 10';
+      confirmBtn.disabled = false;
+    });
+
+    namesList.addEventListener('click', (e) => {
+      if (e.target.dataset.name) {
+        nameInput.value = e.target.dataset.name;
+        charCount.textContent = e.target.dataset.name.length + ' / 10';
+        confirmBtn.disabled = false;
+      }
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      
+      if (name) {
+        try {
+        localStorage.setItem('playerName', name);
+        }
+      catch(error) {
+        showError();
+      }
+        window.location.href = 'Game.html';
+      }
+    });
+  </script>
+</body>
+  </html>
