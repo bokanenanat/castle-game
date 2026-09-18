@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Faster+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Londrina+Shadow&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Risque&display=swap" rel="stylesheet">
+  <title>WarMap</title>
+  <style>
+    body {
+      min-height: 100dvh;
+      background: #000;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      margin: 0;
+      font-family: "Uncial Antiqua", cursive;
+    }
+    @keyframes changeColor {
+      0%,100% {box-shadow: 0 0 13px #444;}
+      50% {box-shadow: 0 0 10px #0ff;}
+    }
+    /*img:hover {
+      box-shadow: 0 0 10px #0fe;
+      animation: shake 2s infinite;
+    }*/
+    @keyframes shake {
+
+0%, 100% { transform: translate(0, 0); }
+25% { transform: translate(-2px, 2px); }
+50% { transform: translate(2px, -2px); }
+75% { transform: translate(-2px, -2px); }
+      
+    }
+    
+    #fatherMap {
+      width: 100%;
+      border: none;
+      transition: all 1s ease;
+      aspect-ratio: 1/1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      position: relative;
+      z-index: 10;
+      align-items: center;
+      justify-items: center;
+    }
+    #fatherMap img {
+      width: 100%;
+      border: 1px solid #333;
+      box-shadow: 0 0 clamp(4px,4vw,40px) #f88;
+      border-radius: 500px;
+      z-index: 10;
+      animation: changeColor 2s infinite,shake 2s infinite;
+    }
+    
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #starCanvas {
+      z-index: 20;
+    }
+    
+    #lineCanvas {
+      z-index: 5;
+      filter: drop-shadow(0 0 15px #00f0ff);
+    }
+
+    .space-nav {
+      position: fixed;
+      bottom: 10px;
+      gap: 2px;
+      background: linear-gradient(135deg,#333,#000);
+      border: 0.5px solid #4488aaff;
+      border-radius: 9px;
+      box-shadow: 0 0 clamp(4px,4vw,40px) #00ffff;
+      z-index: 1000;
+      width: 33%;
+      max-width: 15vh;
+      aspect-ratio: 1/1;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+    }
+
+    .nav-btn {
+      font-family: "Uncial Antiqua", cursive;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1vw,3vw,5vw);
+      background: none;
+      border: 1px solid #333;
+      border-radius: 9px;
+      color:transparent;
+      transition: all 1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .nav-btn:hover {
+      border-color: #999;;
+      color: #bbb;
+    }
+    .nav-center {
+      border: clamp(1px,1vw,4px)  solid #000;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: clamp(1px,0.5vw,8px) ;
+      background: #588;
+      transition: all 3s ease;
+    }
+    .nav-center:hover {
+      transform: rotate(135deg);
+      background: #000;
+    }
+    .nav-center button {
+      background: #000;
+      border: none;
+      border-radius: 10px;
+    }
+    #nav-attack{
+      width: 50%;
+      aspect-ratio: 1/1;
+      border-radius: 999px;
+      border: 4px solid #666;
+      background: none;
+      border-left: none;
+      border-bottom: none;
+      border-right: none;
+      z-index: 9999;
+      top: 10px;
+      position: fixed;
+      display: none;
+      grid-template-columns: repeat(2,1fr);
+      grid-template-rows: repeat(2,1fr);
+      gap: 0;
+      justify-items: center;
+      align-items:center;
+    }
+    #nav-attack button {
+      background: #000;
+      border: clamp(1px,0.5vw,8px) solid #666;
+      border-radius: 999px;
+      box-shadow: 0 0 10px #555;
+      height: 70%;
+      width: 70%;
+      color: #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1px,3vw,4vw);
+      font-family: "Uncial Antiqua", cursive;
+    }
+    .info-me {
+      position: fixed;
+      left: 1vw;
+      top: 1vh;
+      height: 35vw;
+      width: 35vw;
+      border: 1px solid #000;
+      background: #fa0;
+      box-shadow: 0 0 10px #000;
+      gap: 1px;
+      display: grid;
+      grid-template-rows: repeat(3,1fr);
+    }
+    .info-me div {
+      color: #fc0;
+      font-size: clamp(1px,2vh,3vh);
+      border: none; 
+      display: flex;
+      justify-content: left;
+      background: #000;
+      align-items: center;
+      overflow: auto;
+      white-space: nowrap;
+      font-family: "Faster One", cursive;
+    }
+    #map-enemie {
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10000;
+      box-shadow: 0 0 1px inset #aaa;
+      background: #050505;
+      display: none;
+      justify-items: center;
+      overflow-x: hidden;
+    }
+    .section-map-enemie-castle {
+      border: none !important;
+      
+      border-left: 1px solid #ff3b1f !important;
+      border-right: 1px solid #00d4ff !important;
+      width: 80vw;
+      margin-left: 0;
+      margin-top: 58%;
+      aspect-ratio: 1/1;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      border-radius: 999px;
+    }
+    .map-enemie-castle {
+      width: 98%;
+      
+      border-radius: 999px;
+      border: none;
+      box-shadow: none;
+      transition: all 2s ease;
+    }
+    .map-enemie-castle:hover {
+      animation: rotate-rem 2s infinite;
+    }
+    .section-map-enemie-castle:hover {
+      animation: rotate 2s infinite;
+    }
+    @keyframes rotate {
+      0% {transform:rotate(0);}
+      100% {transform:rotate(360deg);}
+    }
+    @keyframes rotate-rem {
+      0% {transform:rotate(0);}
+      100% {transform:rotate(-360deg);}
+    }
+    
+    @keyframes shakeHard {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-5px, 8px) rotate(-2deg); }
+  20% { transform: translate(8px, -6px) rotate(3deg); }
+  30% { transform: translate(-12px, 4px) rotate(-5deg); }
+  40% { transform: translate(10px, 10px) rotate(6deg); }
+  50% { transform: translate(-15px, -12px) rotate(-8deg); }
+  60% { transform: translate(14px, 5px) rotate(7deg); }
+  70% { transform: translate(-8px, 15px) rotate(-4deg); }
+  80% { transform: translate(6px, -10px) rotate(5deg); }
+  90% { transform: translate(-3px, 3px) rotate(-2deg); }
+    }
+    .meno-in-map-enemie {
+      position: fixed;
+      bottom: 1vh;
+      left: 20%;
+      width: 60%;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      height: 15vh;
+      gap: 20px;
+      border: 1px solid #555;;
+      
+    }
+    .btn-in-meno{
+      font-family: "Londrina Shadow", cursive;
+      /*background: linear-gradient(135deg,#222,#000);*/
+      background: none;
+      color: #f00;
+      text-shadow: 0 0 10px #f00;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      font-weight: 400;
+      align-items: center;
+      border: 1px solid #f00;
+      font-size: clamp(1px,5vw,7vw);
+      border-radius: 999px;
+      border-left: none;
+      border-right: none;
+      background: linear-gradient(135deg,#111,#000);
+    }
+    .section-cards {
+      width: 70vw;
+      aspect-ratio: 1/0.8;
+      border: none;
+      box-shadow: none;
+      position: fixed;
+      display: flex;
+      gap: 1px;
+      justify-content: center;
+      align-items: center;
+    }
+    .card-me, .card-enemie {
+      height: 100%;
+      background: #000000;
+      border-radius: 10px;
+      border: 1px solid #ff3b1f;
+      box-shadow: 0 0 25px rgba(255,59,31,0.6);
+      width: 42%;
+      position: relative;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+    }
+    .card-enemie {
+      border:1px solid #00d4ff;
+      box-shadow: 0 0 25px rgba(0,212,255,0.5);
+    }
+    .card-me img, .card-enemie img {
+      position: absolute;
+      width: 90%;
+      animation: none;
+      border: none;
+      box-shadow: none;
+      border-radius: 2px;
+    }
+    .card-me h1, .card-enemie h1 {
+      font-family: none;
+      height: 20%;
+      width: 100%;
+      border: none;
+      color: #fa0;
+      position: absolute;
+      bottom: 0;
+      font-size: clamp(1px,4vw,8vw);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .emoji-katana {
+      width: 16%;
+      font-size: clamp(4px,8vw,10vw);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 0 10px #ffaa12;
+      height: 100%;
+    }
+    #section-info-enemie { 
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: #000;
+      z-index: 10000;
+      display: none;
+      overflow-y: auto;
+      justify-items: center;
+    }
+    .section-info-enemie-img {
+      width: 60%;
+      aspect-ratio: 1/1;
+      margin-top: 5vh;
+      
+    }
+    #section-info-enemie title {
+      height: 5vh;
+      display: grid;
+      align-items: center;
+      text-align: center;
+      justify-items: center;
+      margin-top: 1vh;
+      color: #f80;
+      font-size: clamp(1px,6vw,30px);
+      background:linear-gradient(90deg,#ffd700,#f50,#ffd700);
+      animation: bg 4s infinite;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      background-size: 200% 100%;
+    }
+    @keyframes bg {
+      0% {background-position: 0% 50%}
+      100% {background-position: 200% 50%}
+    }
+    .info {
+      border:0.5px solid #333;
+      background: #555;
+      margin-top: 1vh;
+      display: grid;
+      justify-items: center;
+      grid-template-columns: repeat(1,1fr);
+      grid-template-rows: repeat(3,1fr);
+      gap: 1px;
+      height: 20vh;
+      width: 90vw;
+      box-shadow: 0 2px 4px #555;
+    }
+    
+    .info output {
+      background: #000;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      border-radius: 0;
+      display: grid;
+      align-items: center;
+    }
+    
+    .info output h1, .info output h2 {
+      
+      background: linear-gradient(90deg,#333,#fff,#555);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      font-size: clamp(1px,4vw,30px);
+      position: absolute;
+      left: 20px;
+    }
+    .info output h2 {
+      color: #888;
+      right: 20px;
+      left: auto;
+      text-shadow: none;
+      font-family: 'Risque', cursive;
+    }
+    .info output img {
+      position: absolute;
+      height: 90%;
+      left: 20px;
+    }
+    #show-castle {
+      position: fixed;
+      right: 1vw;
+      bottom: 20%;
+      width: 10vw;
+      height: 10vw;
+      border-radius: 10px;
+      border: 1px solid #fa0;
+      padding: 0 0 ;
+    }
+    #img-show-castle {
+      height: 100% !important;
+      width: 100% !important;
+      border-radius: 10px;
+    }
+    .btn-close {
+      position: absolute;
+      top:1vh;
+      left: 1vw;
+      width: 10vw;
+      aspect-ratio:1/1;
+      background: #000;
+      border: 1px solid #fff;
+      border-radius: 999px;
+      color: #fff;
+      font-size: clamp(2px,3vw,30px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="lineCanvas"></canvas>
+  <canvas id="starCanvas"></canvas>
+  <output class="info-me">
+    <div>🏆C.P = 100</div>
+    <div>⚔S.F = 300</div>
+    <div>⭐L.L = 200</div>
+  </output>
+  <nav id="nav-attack">
+    <button id="btn-attack">Atack</button>
+    <button id="btn-info">Info</button>
+  </nav>
+  <section id="fatherMap">
+    <section></section>
+    <img src="Enemies/1.png" class="castle223" data-info = '{"power":10000,"level":10,"name":"castle1","gold":1000,"wood":3500,"weath":3500,"cavalry":150,"chariot":50,"archer":800,"infantry":1000}'>
+    <section></section>
+    <img src="Enemies/2.png" class="castle223" data-info = '{"power":15000,"level":15,"name":"castle2","gold":1500,"wood":15000,"weath":15000,"cavalry":225,"chariot":75,"archer":1200,"infantry":1500}'>
+    <div class="nav-center">
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+    </div>
+    <img src="Enemies/3.png" class="castle223" data-info = '{"power":25000,"level":20,"name":"castle3","gold":3500,"wood":25000,"weath":25000,"cavalry":450,"chariot":150,"archer":2400,"infantry":3000}'>
+    <section></section>
+    <img src="Enemies/4.png" class="castle223" data-info = '{"power":50000,"level":25,"name":"castle4","gold":7000,"wood":40000,"weath":40000,"cavalry":1000,"chariot":500,"archer":5000,"infantry":6000}'>
+    <section></section>
+    <audio src="Sounds/War.mp3" id="music" loop></audio>
+    <audio id="soundClick"src="Sounds/click.mp3"></audio>
+  </section>
+
+  <nav class="space-nav">
+    <button class="nav-btn" id="playMusic">Music</b'totalutton>
+    <button class="nav-btn">Attack</button>
+    <button class="nav-btn" id="shop">Shop</button>
+    <button class="nav-btn" id="backPage">Back</button>
+  </nav>
+  <!--==================== SECTION ENEMIE MAP ====================-->
+  <section id="map-enemie">
+    <button class='btn-close'>×</button>
+    <section class="section-cards">
+      <div class="card-me">
+        <img src="button/forces.png">
+        <h1 id='forces-me'>30000</h1>
+      </div>
+      <div class="emoji-katana" id="emoji-katana">⚔</div>
+      <div class="card-enemie">
+        <img src="button/enemies1.png">
+        <h1 id='forces-enemie'>3727</h1>
+      </div>
+      
+    </section>
+    <section class="section-map-enemie-castle">
+      <img id="castle-enemie" src="" class="map-enemie-castle">
+    </section>
+    <nav class="meno-in-map-enemie">
+      <button class="btn-in-meno">Attack</button>
+      <button class="btn-in-meno">Runing</button>
+    </nav>
+    <button id="show-castle">
+      <img src='' id='img-show-castle'>
+    </button>
+  </section>
+    <section id='section-info-enemie'>
+      <button class='btn-close'>×</button>
+      <img src='button/spy.png' class='section-info-enemie-img'>
+      <title>✦Castle✦</title>
+      <section class='info'>
+      <output>
+        <h1>power :</h1>
+        <h2 id='enemie-power'></h2>
+      </output>
+      <output>
+        <h1>level:</h1>
+        <h2 id='enemie-level'></h2>
+      </output>
+      <output>
+        <h1>castle name :</h1>
+        <h2 id='enemie-name'></h2>
+      </output>
+      </section>
+      <title>✦Treasury✦</title>
+      <section class='info top'>
+        <output>
+          <h1>gold :</h1>
+          <h2 id='enemie-gold'></h2>
+        </output>
+        <output>
+          <h1>wood :</h1>
+          <h2 id='enemie-wood'></h2>
+        </output>
+        <output>
+          <h1>weath :</h1>
+          <h2 id='enemie-weath'></h2>
+        </output>
+      </section>
+      <title>✦Army✦</title>
+      <section class='info top' style='height: 33.3vh; grid-template-rows: repeat(5,1fr);'>
+        <output>
+          <img src='button/cavalry.png'>
+          <h2 id='enemie-cavalry'></h2>
+        </output>
+        <output>
+          <img src='button/chariot.png'>
+          <h2 id='enemie-chariot'></h2>
+        </output>
+        <output>
+          <img src='button/archer.png'>
+          <h2 id='enemie-archer'></h2>
+        </output>
+        <output>
+          <img src='button/infantry.png'>
+          <h2 id='enemie-infantry'></h2>
+        </output>
+        <output>
+          <img src='button/forces.png'>
+          <h2 id='enemie-forces'></h2>
+        </output>
+      </section>
+    </section>
+  <script>
+    // ==================== CANVAS STAR ====================
+    let starBg = document.getElementById("starCanvas");
+    let starPn = starBg.getContext("2d");
+    starBg.width = window.innerWidth;
+    starBg.height = window.innerHeight;
+    
+    let atoms = [];
+    
+    class creatAtom {
+      constructor() {
+        this.x = Math.random() * starBg.width;
+        this.y = Math.random() * starBg.height;
+        this.moveX = (Math.random() - 0.5) * 0.5;
+        this.moveY = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2.5;
+        this.opacity = Math.random() + 0.05;
+      }
+      
+      update() {
+        this.x += this.moveX;
+        this.y += this.moveY;
+        if (this.x > starBg.width || this.x < 0) {
+          this.moveX *= -1;
+        }
+        if (this.y > starBg.height || this.y < 0) {
+          this.moveY *= -1;
+        }
+      }
+      
+      draw() {
+        starPn.beginPath();
+        starPn.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        starPn.fillStyle = `rgba(100,180,180,${this.opacity})`;
+        starPn.fill();
+      }
+    }
+    
+    for (let i = 0; i < 200; i++) {
+      atoms.push(new creatAtom());
+    }
+    
+    function updateStars() {
+      starPn.clearRect(0, 0, starBg.width, starBg.height);
+      
+      atoms.forEach(A => {
+        A.update();
+        A.draw();
+      });
+      
+      requestAnimationFrame(updateStars);
+    }
+    
+    updateStars();
+    
+    // ==================== CANVAS LINES ====================
+    let lineBg = document.getElementById("lineCanvas");
+    let linePn = lineBg.getContext("2d");
+    lineBg.width = window.innerWidth;
+    lineBg.height = window.innerHeight;
+    linePn.shadowColor = "#33f0ff";
+    linePn.shadowBlur = 5;
+    let castles = document.querySelectorAll(".castle223");
+    function drawLines() {
+      let positions = [];
+      
+      castles.forEach(img => {
+        positions.push(img.getBoundingClientRect());
+      });
+      
+      for (let i = 0; i < positions.length; i++) {
+        for (let j = i + 1; j < positions.length; j++) {
+          let a = positions[i];
+          let b = positions[j];
+          
+          linePn.beginPath();
+          linePn.moveTo(a.x + a.width / 2, a.y + a.height / 2);
+          linePn.lineTo(b.x + b.width / 2, b.y + b.height / 2);
+          linePn.strokeStyle = "#555";
+          linePn.lineWidth = 0.7;
+          linePn.stroke();
+        }
+      }
+    }
+    
+    drawLines();
+    
+    window.addEventListener("resize", () => {
+      starBg.width = window.innerWidth;
+      starBg.height = window.innerHeight;
+      lineBg.width = window.innerWidth;
+      lineBg.height = window.innerHeight;
+      atoms = [];
+for (let i = 0; i < 200; i++) {
+  let atom = new creatAtom();
+  atom.size *= 2;
+  atoms.push(atom);
+    }
+      drawLines();
+    });
+    /*=================== MUSIC SETTING ====================*/
+    let statusMusic = false;
+    let music = document.getElementById("music");
+    let btnMusic = document.getElementById("playMusic");
+      btnMusic.addEventListener("click",()=>{
+      if(statusMusic === false){
+        music.play();
+        statusMusic = true;
+      } else {
+        music.pause();
+        statusMusic = false;
+      }
+    });
+    document.addEventListener("click",()=>{
+      let soundClick = document.getElementById("soundClick");
+      soundClick.play();
+    });
+
+    /*=================== GO TO SHOP ====================*/
+    let btnShop = document.getElementById("shop");
+    btnShop.addEventListener("click", ()=>{
+      window.location.href  = "shop.html";
+    });
+    /*=================== BACK TO MAIN PAGE ====================*/
+    let btnBack = document.getElementById("backPage");
+    btnBack.addEventListener("click", ()=>{
+      window.location.href = "Game.html";
+    });
+    /*==================== EVENT CLICK BUILDING ====================*/
+    let castleEnemie = document.getElementById("castle-enemie");
+    let allImages = document.querySelectorAll("img");
+    let objectEnemieInfo = {};
+    allImages.forEach(EF=>{
+      EF.addEventListener("click",()=>{
+      castleEnemie.src = EF.src;
+        
+      });
+    });
+    let navAttack = document.getElementById("nav-attack");
+    let imgCastleEnemie = '';
+    castles.forEach(IMG =>{
+      IMG.addEventListener("click",()=>{
+        objectEnemieInfo = JSON.parse(IMG.dataset.info);
+        console.log(objectEnemieInfo);
+        imgCastleEnemie = IMG.src;
+        document.getElementById('img-show-castle').src = imgCastleEnemie;
+        navAttack.style.display = "grid";
+        setTimeout(()=>{
+          navAttack.style.display = "none";
+        },3000);
+      });
+    });
+     const btnShowCastle = document.getElementById("show-castle");
+    btnShowCastle.addEventListener("click",()=>{
+      castleEnemie.src = imgCastleEnemie;
+      
+        });
+  /*=================== EVENT BTN ATTACK ===================*/
+    const btnAttack = document.getElementById("btn-attack");
+    
+    let mapEnemie = document.getElementById("map-enemie");
+    btnAttack.addEventListener("click", ()=>{
+      mapEnemie.style.display = "grid";
+      enemie_information();
+    });
+  /*=================== EVENT BTN INFO ===================*/
+    const btnInfo = document.getElementById("btn-info");
+    const sectionInfoEnemie = document.getElementById('section-info-enemie');
+    btnInfo.addEventListener('click',()=>{
+      sectionInfoEnemie.style.display = 'grid';
+      enemie_information();
+    });
+    function enemie_information() {
+    const enemyFields = {
+      power: 'enemie-power',
+      level: 'enemie-level',
+      name: 'enemie-name',
+      gold: 'enemie-gold',
+      wood: 'enemie-wood',
+      weath: 'enemie-weath',
+      cavalry: 'enemie-cavalry',
+      chariot: 'enemie-chariot',
+      archer: 'enemie-archer',
+      infantry: 'enemie-infantry'
+    };
+    for([key,id] of Object.entries(enemyFields)){
+      document.getElementById(id).textContent = objectEnemieInfo[key];
+    }
+    const forcesEnemie =
+      Number(objectEnemieInfo.cavalry) +
+      Number(objectEnemieInfo.chariot) +
+      Number(objectEnemieInfo.archer) +
+      Number(objectEnemieInfo.infantry);
+
+      document.getElementById('enemie-forces').textContent = forcesEnemie;
+      document.getElementById('forces-enemie').textContent = forcesEnemie;
+          }
+  /*==================== BTN CLOSE ====================*/
+    document.querySelectorAll('.btn-close').forEach(page=>{
+      page.addEventListener('click',()=>{
+      sectionInfoEnemie.style.display = 'none';
+      mapEnemie.style.display = 'none';
+      });
+    });
+      
+/*==================== ALL FORCES ME/ENEMIE  ====================*/
+    let forcesMe = parseInt(localStorage.getItem('totalForces'));
+
+    
+    let tagForcesMe = document.getElementById('forces-me');
+    tagForcesMe.textContent = forcesMe;
+    
+    
+    
+  </script>
+</body>
+  </html>
