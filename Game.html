@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game</title>
+  <style>
+    /* ==================== ROOT VARIABLES ==================== */
+    :root {
+      --bg-void: #050508;
+      --bg-deep: #0a0a12;
+      --gold-1: #ffd700;
+      --gold-2: #b8860b;
+      --gold-3: #8b6508;
+      --text-glow: #f0e6d3;
+      --particle-color: rgba(255, 215, 0, 0.4);
+      --fog-color: rgba(100, 80, 40, 0.15);
+      --panel-bg: rgba(10, 10, 18, 0.9);
+      --panel-border: rgba(255, 215, 0, 0.3);
+    }
+
+    /* ==================== GLOBAL RESET ==================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg-void);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+    }
+
+    /* ==================== FOG LAYERS ==================== */
+    .fog {
+      position: fixed;
+      inset: -50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: fogDrift 20s ease-in-out infinite;
+    }
+
+    .fog::before,
+    .fog::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 40%, var(--fog-color) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, var(--fog-color) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, var(--fog-color) 0%, transparent 40%);
+      filter: blur(60px);
+    }
+
+    .fog::after {
+      animation: fogShift 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes fogDrift {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(-2%, 1%); }
+      50% { transform: translate(1%, -2%); }
+      75% { transform: translate(2%, 2%); }
+    }
+
+    @keyframes fogShift {
+      0% { opacity: 0.5; transform: translateX(-5%) translateY(-3%); }
+      50% { opacity: 0.8; transform: translateX(5%) translateY(3%); }
+      100% { opacity: 0.4; transform: translateX(-3%) translateY(5%); }
+    }
+
+    /* ==================== FLOATING PARTICLES ==================== */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--particle-color);
+      border-radius: 50%;
+      animation: particleFloat linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(0) translateX(0) scale(0);
+      }
+      10% {
+        opacity: 0.8;
+      }
+      50% {
+        opacity: 0.4;
+        transform: translateY(-40vh) translateX(20px) scale(1.5);
+      }
+      90% {
+        opacity: 0.1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-80vh) translateX(-20px) scale(0);
+      }
+    }
+
+    /* ==================== START CONTAINER ==================== */
+    .start-container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      animation: containerAppear 2s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes containerAppear {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* ==================== EMBLEM ==================== */
+    .emblem {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      animation: emblemPulse 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+    }
+
+    @keyframes emblemPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* ==================== TITLE ==================== */
+    .title {
+      font-size: clamp(2rem, 8vw, 4rem);
+      color: var(--text-glow);
+      letter-spacing: 8px;
+      margin-bottom: 0.5rem;
+      text-shadow:
+        0 0 10px rgba(255, 215, 0, 0.5),
+        0 0 30px rgba(255, 215, 0, 0.3),
+        0 0 60px rgba(255, 215, 0, 0.2);
+      animation: titleGlow 4s ease-in-out infinite;
+      font-weight: 700;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 30px rgba(255, 215, 0, 0.3); }
+      50% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.5), 0 0 80px rgba(255, 215, 0, 0.3); }
+    }
+
+    .subtitle {
+      font-size: clamp(0.8rem, 3vw, 1.2rem);
+      color: var(--gold-3);
+      letter-spacing: 4px;
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+
+    /* ==================== START BUTTON ==================== */
+    .start-btn {
+      background: transparent;
+      border: 2px solid var(--gold-2);
+      color: var(--gold-1);
+      padding: 1rem 3rem;
+      font-size: clamp(1rem, 4vw, 1.4rem);
+      letter-spacing: 3px;
+      cursor: pointer;
+      border-radius: 50px;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: btnPulse 2s ease-in-out infinite;
+      text-transform: uppercase;
+    }
+
+    .start-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+      border-radius: 50%;
+    }
+
+    .start-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .start-btn:hover {
+      box-shadow:
+        0 0 20px rgba(255, 215, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.3),
+        0 0 80px rgba(255, 215, 0, 0.2),
+        inset 0 0 20px rgba(255, 215, 0, 0.2);
+      background: rgba(255, 215, 0, 0.1);
+      transform: translateY(-3px);
+      letter-spacing: 5px;
+    }
+
+    .start-btn:active {
+      transform: translateY(0) scale(0.95);
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+      50% { box-shadow: 0 0 25px rgba(255, 15, 0, 0.5); }
+    }
+
+    /* ==================== GAME FRAME ==================== */
+    .game-frame {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: none;
+      position: relative;
+      z-index: 50;
+    }
+
+    /* ==================== SETTINGS PANEL ==================== */
+    .settings-panel {
+      position: fixed;
+      bottom: 20%;
+      left: 1px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 0.8rem;
+      backdrop-filter: blur(15px);
+      box-shadow:
+        0 0 25px rgba(255, 215, 0, 0.15),
+        inset 0 0 15px rgba(255, 215, 0, 0.03);
+      transition: all 0.3s ease;
+    }
+
+    .settings-panel:hover {
+      box-shadow:
+        0 0 35px rgba(255, 215, 0, 0.3),
+        inset 0 0 20px rgba(255, 215, 0, 0.05);
+      border-color: var(--gold-1);
+    }
+
+    .settings-btn {
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      color: var(--gold-1);
+      width: 8vw;
+      max-height: 30rem;
+      max-width: 15rem;
+      height: 10vw;
+      cursor: pointer;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .settings-btn img {
+      height: 100%;
+    }
+    .settings-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .settings-btn:hover::before {
+      opacity: 1;
+    }
+
+    .settings-btn:hover {
+      border-color: var(--gold-1);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .settings-btn:active {
+      transform: translateY(0) scale(0.9);
+    }
+
+    .settings-btn.active {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: var(--gold-1);
+      box-shadow:
+        0 0 20px rgba(255, 215, 0, 0.5),
+        inset 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 480px) {
+      .emblem {
+        font-size: 3rem;
+      }
+      .title {
+        letter-spacing: 4px;
+      }
+      .start-btn {
+        padding: 0.8rem 2rem;
+      }
+      .settings-panel {
+        bottom: 15%;
+        left: 1px;
+        gap: 0.4rem;
+        padding: 0.5rem;
+      }
+      .settings-btn {
+        width: 10vw;
+        max-height: 15rem;
+        max-width: 15rem;
+        height: 10vw;
+        font-size: 3.5vw;
+      }
+    }
+    .container-show-forces {
+      height: 50%;
+      width: 60%;
+      z-index: 10000;
+      border: clamp(1px,0.5vw,5vw) solid #0aa;
+      position: fixed;
+      left: 15vw;
+      top: 25%;
+      display: none;
+      grid-template-rows: repeat(5,1fr);
+      background: #000;
+    }
+    .container-show-forces div {
+      color:#aaa;
+      border: 1px solid #557;
+      position: relative;
+      display: flex;
+      align-items:center;
+    }
+    .container-show-forces div img {
+      right: 0;
+      top:0;
+      height: 100%;
+      aspect-ratio: 1/1;
+      position: absolute;
+    }
+    .container-show-forces div p{
+      font-size: clamp(2px,4vw,6vw);
+      color: #aaa;
+      left: 10px;
+      position: absolute;
+      text-align: center;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- ==================== FOG LAYERS ==================== -->
+  <div class="fog"></div>
+
+  <!-- ==================== FLOATING PARTICLES ==================== -->
+  <div class="particles" id="particles"></div>
+
+  <!-- ==================== START SCREEN ==================== -->
+  <div class="start-container" id="start-container">
+    <div class="emblem">⚜️</div>
+    <h1 class="title">CASTLE GAME</h1>
+    <p class="subtitle">Forge Your Destiny...</p>
+    <button class="start-btn" id="start-btn">⚔️ Start Game</button>
+  </div>
+
+  <!-- ==================== GAME IFRAME ==================== -->
+  <iframe src="MainPage.html" class="game-frame" id="game-frame"></iframe>
+
+  <!-- ==================== SETTINGS PANEL ==================== -->
+  <div class="settings-panel" id="settings-panel">
+    <button class="settings-btn" id="music-toggle" title="Toggle Music">
+      <img src='button/playMusic.png'>
+    </button>
+    <a class='settings-btn' href='Gallery.html'>👑</a>
+    <button class='settings-btn' id='btn-show-forces'>
+      <img src='button/cavalry.png'>
+    </button>
+    <button id='reset-all' class='settings-btn'>&#x21BB;</button>
+  </div>
+  <aside class='container-show-forces' id='container-show-forces'>
+    <div>
+      <p id='count-cavalry'>300,000</p>
+      <img src='button/cavalry.png'>
+    </div>
+    <div>
+      <p id='count-infantry'>300,000</p>
+      <img src='button/infantry.png'>
+    </div>
+    <div>
+      <p id='count-archer'>300,000</p>
+      <img src='button/archer.png'>
+    </div>
+    <div>
+      <p id='count-chariot'>300,000</p>
+      <img src='button/chariot.png'>
+    </div>
+    <div>
+      <p id='count-forces'>300,000</p>
+      <img src='button/forces.png'>
+    </div>
+  </aside>
+  <!-- ==================== AUDIO ==================== -->
+  <audio id="bg-music" src="Sounds/Castle.mp3" loop></audio>
+  <audio id='soundClick'src='Sounds/click2.mp3'></audio>
+
+  <script>
+    /*==================== FORCES SYSTEM ====================*/
+    let forces = {
+        infantry: 100,
+        cavalry: 100,
+        archer: 80,
+        chariot: 50,
+      };
+    let statusShowForces = false;
+    let sectionShowForces = document.getElementById('container-show-forces');
+      const btnShowForces = document.getElementById('btn-show-forces').addEventListener('click',()=>{
+        if(statusShowForces === false){
+        sectionShowForces.style.display = 'grid';
+        statusShowForces = true;
+    }  else if(statusShowForces===true){
+        sectionShowForces.style.display = 'none';
+          statusShowForces = false;
+    }
+    });
+    function saveForces() {
+      localStorage.setItem('forces', JSON.stringify(forces));
+    }
+    function getForces(){
+      let savedForces = JSON.parse(localStorage.getItem('forces'));
+      if (savedForces) {
+        forces = savedForces;
+      } else {
+        forces = forces;
+      }
+    }
+    
+    function systemForces() {
+      getForces();
+      saveForces();
+      forces.total = forces.infantry + forces.cavalry + forces.archer + forces.chariot;
+      const totalForces = forces.total;
+      localStorage.setItem('totalForces',totalForces);
+      let forcesArray = [
+        forces.cavalry,
+        forces.infantry,
+        forces.archer,
+        forces.chariot,
+        forces.total
+      ];
+      
+      let power = 0;
+      /*
+        IN = infantry;
+        AR = archer;
+        CA = cavalry;
+        CH = chariot;
+      */
+      
+      function creatPower(IN,AR,CA,CH) {
+        let castle = parseInt(localStorage.getItem('castleLevel'));
+        castle = (castle + 2)* 1000;
+        power = (IN * 2) + (AR * 40) + (CA * 60) + (CH * 80);
+        
+        power += castle;
+        localStorage.setItem('power',power);
+      }
+      creatPower(
+        forces.infantry,
+        forces.archer,
+        forces.cavalry,
+        forces.chariot,
+      );
+      
+      
+      let forcesHtml = document.querySelectorAll('[id^="count"]');
+      let indexFRC = 0;   forcesHtml.forEach(FRC =>{
+        FRC.textContent = forcesArray[indexFRC];
+        indexFRC += 1;
+      });
+    }
+    setInterval(systemForces,2000);
+    /* ==================== CREATE FLOATING PARTICLES ==================== */
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.bottom = Math.random() * 30 + '%';
+      particle.style.animationDuration = (Math.random() * 10 + 5) + 's';
+      particle.style.animationDelay = Math.random() * 10 + 's';
+      particle.style.width = (Math.random() * 3 + 1) + 'px';
+      particle.style.height = particle.style.width;
+      particlesContainer.appendChild(particle);
+    }
+
+    /* ==================== DOM ELEMENTS ==================== */
+    const startBtn = document.getElementById('start-btn');
+    const gameFrame = document.getElementById('game-frame');
+    const startContainer = document.getElementById('start-container');
+    const bgMusic = document.getElementById('bg-music');
+    const musicToggle = document.getElementById('music-toggle');
+    const settingsPanel = document.getElementById('settings-panel');
+
+    /* ==================== SETTINGS PANEL VISIBILITY ==================== */
+    settingsPanel.style.display = 'none';
+
+    /* ==================== MUSIC TOGGLE ==================== */
+    let musicPlaying = false;
+    bgMusic.volume = 0.8;
+
+    musicToggle.addEventListener('click', () => {
+      if (musicPlaying) {
+        bgMusic.pause();
+        musicToggle.classList.remove('active');
+        /*musicToggle.textContent = '🎵';*/
+        musicPlaying = false;
+        localStorage.setItem('toggleMainMusic','false');
+        let toggleMainMusic = localStorage.getItem('toggleMainMusic');
+      } else {
+        bgMusic.play();
+        musicToggle.classList.add('active');
+        localStorage.setItem('toggleMainMusic','true');
+        /*musicToggle.textContent = '🔊';*/
+        musicPlaying = true;
+      }
+    });
+    document.addEventListener('click',()=>{
+      let soundClick = document.getElementById('soundClick');
+      soundClick.play();
+    });
+
+    /* ==================== START BUTTON LOGIC ==================== */
+    startBtn.addEventListener('click', () => {
+      localStorage.setItem('gameStarted', 'true');
+      
+      startContainer.style.opacity = '0';
+      startContainer.style.transform = 'scale(1.5)';
+      startContainer.style.transition = 'all 0.8s ease';
+      
+      setTimeout(() => {
+        startContainer.style.display = 'none';
+        gameFrame.style.display = 'block';
+        gameFrame.style.animation = 'frameAppear 1s ease forwards';
+        settingsPanel.style.display = 'flex';
+      }, 800);
+    });
+
+    /* ==================== CHECK IF GAME STARTED ==================== */
+    let gameStarted = localStorage.getItem('gameStarted');
+    if (gameStarted === 'true') {
+      startContainer.style.display = 'none';
+      gameFrame.style.display = 'block';
+      settingsPanel.style.display = 'flex';
+    }
+
+    /* ==================== FRAME APPEAR ANIMATION ==================== */
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes frameAppear {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    document.getElementById('reset-all').addEventListener('click',()=> {
+      localStorage.clear();
+      alert('❗-{ removed all your information}-❗');
+      location.reload();
+        });
+  </script>
+</body>
+  </html>
