@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<hea÷d>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+    }
+    :root {
+      --gold: #ff9900;
+      --gray: #808080;
+      --blue: #2299ef;
+      --black:#01010f;
+      --green:#1eff55;
+    }
+    body {
+      background: var(--black);
+      overflow-y: hidden;
+      overflow-x: hidden;
+      min-height: 100dvh;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+    }
+    .father {
+      height: 40vh;
+      width: 84vw;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      align-items: center;
+    }
+    .main-section {
+      border: 0.5px solid var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+      background: #00000070;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .plans {
+      margin-top: 8vh;
+      margin-bottom: 8vh;
+      flex-shrink: 0;
+      height: 20vh;
+      width: 28vw;
+      margin-left: 0;
+      display: grid;
+      justify-items: center;
+      background: #000;
+      border: 1px solid var(--gold);
+    }
+    .plans img {
+      width: 28vw;
+      height: 14vh;
+      box-shadow: 0 0 10px var(--gold);
+      border: none;
+      border-bottom: 1px solid var(--gold);
+    }
+    .plans h1 {
+      color: var(--gold);
+      height: 6vh;
+      width: 28vw;
+      font-size: clamp(1px, 3vw,6vw);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-top: 0;
+      line-height: 1.1;
+      border: none;
+    }
+    .canvas {
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top:0;
+      left:0;
+      z-index: 10;
+      user-select: none;
+      pointer-events: none;
+    }
+    .forces-scroller {
+  position: fixed;
+  bottom: 2vh;
+  left: 0;
+  width: 100vw;
+  height: 18vh;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 1rem;
+  z-index: 30;
+  scroll-snap-type: x mandatory;
+}
+
+.forces-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.force-card {
+  flex-shrink: 0;
+  width: 25vw;
+  min-width: 100px;
+  height: 100%;
+  background: #000;
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+  border-radius: 10px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.force-card:hover {
+  box-shadow: 0 0 20px var(--gold);
+  transform: translateY(-3px);
+}
+
+.force-card img {
+  width: 100%;
+  height: 60%;
+  object-fit: contain;
+  border-bottom: 1px solid var(--gold);
+}
+
+.force-card h1 {
+  color: var(--gold);
+  font-size: clamp(8px, 3vw, 14px);
+  text-align: center;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  margin: 0;
+    }
+    .force-card h2 {
+      color: #eee;
+      top: 0;
+      left: 1px;
+      font-size: clamp(8px, 3vw, 14px);
+      z-index: 10000;
+      position: absolute;
+    }
+  </style>
+  <body>
+    <canvas id='canvas' class='canvas'></canvas>
+    <section class='father'>
+      <!--================== SCROLLER-Y-A ==================-->
+      <div class='main-section'>
+        <a class='plans'>
+          <img src='shop/1coin.png'><h1>6$<br>1500🪙</h1>
+        </a>
+        <a class='plans'> <img src='shop/2coin.png'><h1>9$<br>2500🪙</h1></a>
+        <a class='plans'> <img src='shop/3coin.png'><h1>12$<br>6000🪙</h1></a>
+      </div>
+      <!--================== SCROLLER-Y-B ==================-->
+      <div class='main-section'>
+        <a class='plans'>
+          <img src='shop/2weath.png'><h1>2$<br>4500🌾</h1>
+        </a>
+        <a class='plans'> <img src='shop/2weath.png'><h1>3$<br>11500🌾</h1></a>
+        <a class='plans'> <img src='shop/3weath.png'><h1>4$<br>18000🌾</h1></a>
+      </div>
+      <!--================== SCROLLER-Y-C ==================-->
+      <div class='main-section'>
+        <a class='plans'>
+          <img src='shop/1wood.png'><h1>2$<br>4500🪵</h1>
+        </a>
+        <a class='plans'> <img src='shop/2wood.png'><h1>3$<br>11500🪵</h1></a>
+        <a class='plans'> <img src='shop/3wood.png'><h1>4$<br>18000🪵</h1></a>
+      </div>
+    </section>
+    <section class="forces-scroller">
+  <div class="force-card" data-force="archer" data-cost="500">
+    <img src="button/archer.png">
+    <h2>250</h2>
+    <h1>Archer<br>500🪙</h1>
+  </div>
+  <div class="force-card" data-force="cavalry" data-cost="800">
+    <img src="button/cavalry.png">
+    <h2>250</h2>
+    <h1>Cavalry<br>800🪙</h1>
+  </div>
+  <div class="force-card" data-force="infantry" data-cost="300">
+    <img src="button/infantry.png">
+    <h2>250</h2>
+    <h1>Infantry<br>300🪙</h1>
+  </div>
+  <div class="force-card" data-force="chariot" data-cost="1200">
+    <img src="button/chariot.png">
+    <h2>250</h2>
+    <h1>Chariot<br>1200🪙</h1>
+  </div>
+    </section>
+  </body>
+  <script>
+    let bg = document.getElementById('canvas');
+    let pn = bg.getContext('2d');
+    bg.width = window.innerWidth;
+    bg.height = window.innerHeight;
+    let atoms = [];
+    class creatAtom {
+      constructor() {
+        this.x = Math.random()*bg.width;
+        this.y = Math.random()*bg.height;
+        this.moveX = (Math.random()-0.5)*0.5;
+        this.moveY = (Math.random()-0.5)*0.5;
+        this.size = Math.random()*3.5;
+        this.opacity = Math.random();
+      }
+      update() {
+        this.x += this.moveX;
+        this.y += this.moveY;
+        if(this.x > bg.width || this.x< 0){
+          this.moveX *= -1;
+        }
+        if(this.y > bg.height || this.y < 0) {
+          this.moveY *= -1;
+        }
+    }
+        draw() {
+          pn.beginPath();
+          pn.arc(this.x,this.y,this.size,0,Math.PI*2);
+          pn.fillStyle = `rgba(255,100,55,${this.opacity})`;
+          pn.fill();
+      }
+    }
+    for(let i = 0;i < 30; i++){
+      atoms.push(new creatAtom());
+    }
+    function updateAtom(){
+    pn.clearRect(0,0,bg.width,bg.height);
+    atoms.forEach(A=>{
+        A.update();
+        A.draw();
+      });
+      for(let i= 0; i< atoms.length; i++){
+        for(let j= i; j< atoms.length;j++){
+          let a = atoms[i];
+          let b = atoms[j];
+          const distance =  Math.floor(Math.sqrt((a.x-b.x)**2+(b.y-a.y)**2));
+        if(distance<150){
+        pn.beginPath();
+        pn.moveTo(a.x,a.y);
+        pn.lineTo(b.x,b.y);
+        pn.strokeStyle = '#ffaa33';
+          pn.lineWidth= 0.5;
+        pn.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(updateAtom);
+    }
+    updateAtom();
+    function openPyment(){
+      document.querySelectorAll('.plans').forEach(P=>{
+        P.addEventListener('click',()=>{window.location.href='pyment.html'});
+      });
+    } openPyment();
+    
+    document.querySelectorAll('.force-card').forEach(card => {
+  card.addEventListener('click', () => {
+    let forceType = card.dataset.force;
+    let cost = parseInt(card.dataset.cost);
+
+    let resources = JSON.parse(localStorage.getItem('resources')) || {
+  gold: 0,
+  wood: 0,
+  weath: 0
+};
+    if (resources.gold >= cost) {
+      resources.gold -= cost;
+      localStorage.setItem('resources', JSON.stringify(resources));
+      
+      let forces = JSON.parse(localStorage.getItem('forces')) || {
+        infantry: 0,
+        cavalry: 0,
+        archer: 0,
+        chariot: 0
+      };
+      
+      forces[forceType] += 250;
+      localStorage.setItem('forces', JSON.stringify(forces));
+      
+      alert('✅ ' + forceType + ' خریداری شد!');
+    } else {
+      alert('❌ طلا کافی نیست!');
+    }
+  });
+});
+  </script>
+  </head>
