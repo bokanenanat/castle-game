@@ -1,2 +1,0 @@
-# castle-game
-Castle Game
