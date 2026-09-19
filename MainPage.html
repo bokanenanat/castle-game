@@ -180,7 +180,7 @@
     .container-btn-all {
       position: fixed;
       overflow: auto;
-      bottom: 13vh;
+      bottom: 5vh;
       width: 80%;
       max-height: 15rem;
       z-index: 100;
@@ -230,13 +230,30 @@
       left: 0;
       pointer-events: none;
     }
-    .change-earth-img {
+    .advertisement-gold {
       position: absolute;
-      height: 10vw;
-      width: 40%;
-      border: 1px solid #aaf;
+      width: 100%;
+      aspect-ratio: 1/1;
+      border: 1px solid #ffd700;
+      background: #000;
+      border-radius: 5px;
       top: 105%;
       left: 30%;
+      display:grid;
+      grid-template-rows: 2fr 1fr;   
+    }
+    .advertisement-gold img {
+      height: 100%;
+    }
+    .advertisement-gold h1 {
+      height:100%;
+      width:100%;
+      color: #f50;
+      border: 1px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1px,3vw,14px);
     }
     .unit {
       color: #ffa700;
@@ -251,7 +268,10 @@
     <a href="Gallery.html">
       <img src="https://i.imgur.com/ErL4JHM.png" class="prof" id="prof-present" alt="Profile">
     </a>
-    <button class='change-earth-img' id='btn-change-earth-img'></button>
+    <button class='advertisement-gold' id='btn-change-earth-img'>
+      <img src=''>
+      <h1>45% Off</h1>
+    </button>
     <section class="container-info">
       <h1 id="gold"></h1>
       <h1 id="wood"></h1>
