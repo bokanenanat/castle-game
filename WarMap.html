@@ -19,6 +19,14 @@
       margin: 0;
       font-family: "Uncial Antiqua", cursive;
     }
+    * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+    }
     img {
       -webkit-touch-callout: none;
       user-select: none;
@@ -791,7 +799,9 @@ for (let i = 0; i < 200; i++) {
     tagForcesMe.textContent = forcesMe;
     
     
-    
+    document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
   </script>
 </body>
   </html>
