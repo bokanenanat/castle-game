@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Risque&display=swap" rel="stylesheet">
   <title>WarMap</title>
   <style>
+    /* ==================== CSS ==================== */
     body {
       min-height: 100dvh;
       background: #000;
@@ -101,8 +102,8 @@
       transition: all 3s ease;
     }
     .nav-center:hover { transform: rotate(135deg); background: #000;
-                      display:none;
-                      }
+      display:none;
+    }
     .nav-center button { background: #000; border: none; border-radius: 10px; }
     #nav-attack {
       width: 50%;
@@ -484,7 +485,6 @@
       color: #0f0;
       font-size: clamp(4px,5vw,24px);
     }
-    
   </style>
 </head>
 <body>
@@ -601,6 +601,7 @@
     </section>
   </section>
   <script>
+    /* ==================== JS ==================== */
     let starBg = document.getElementById("starCanvas");
     let starPn = starBg.getContext("2d");
     starBg.width = window.innerWidth;
@@ -723,21 +724,19 @@
     const btnInfo = document.getElementById("btn-info");
     const sectionInfoEnemie = document.getElementById('section-info-enemie');
     btnInfo.addEventListener('click', () => {
-      
       sectionInfoEnemie.style.display = 'grid';
       enemie_information();
-      
     });
-  /*==================== ENEMIE INFORMATION ==================== */
+    /*==================== ENEMIE INFORMATION ==================== */
     let forcesEnemie = 0;
     function enemie_forces(){
-        if(!objectEnemieInfo){
-          return
-        }else{
-      forcesEnemie = Number(objectEnemieInfo.cavalry) + Number(objectEnemieInfo.chariot) + Number(objectEnemieInfo.archer) + Number(objectEnemieInfo.infantry);
-      document.getElementById('enemie-forces').textContent = forcesEnemie;
-      document.getElementById('forces-enemie').textContent = forcesEnemie;
-        }
+      if(!objectEnemieInfo){
+        return
+      }else{
+        forcesEnemie = Number(objectEnemieInfo.cavalry) + Number(objectEnemieInfo.chariot) + Number(objectEnemieInfo.archer) + Number(objectEnemieInfo.infantry);
+        document.getElementById('enemie-forces').textContent = forcesEnemie;
+        document.getElementById('forces-enemie').textContent = forcesEnemie;
+      }
     }
     function enemie_information() {
       const enemyFields = {
@@ -752,7 +751,7 @@
         archer: 'enemie-archer',
         infantry: 'enemie-infantry'
       };
-      
+
       for ([key, id] of Object.entries(enemyFields)) {
         document.getElementById(id).textContent = objectEnemieInfo[key];
       }
@@ -761,14 +760,19 @@
     let forcesMe = parseInt(localStorage.getItem('totalForces')) || 0;
     let tagForcesMe = document.getElementById('forces-me');
     tagForcesMe.textContent = forcesMe;
-
-    let powerMe = shortPower(parseInt(localStorage.getItem('power')))||0;
+    let powerMe = 0;
+    function getPower(){
+       powerMe = shortPower(parseInt(localStorage.getItem('power')))||0;
+    }
+    getPower();
     let levelMe = parseInt(localStorage.getItem('castleLevel'))||1;
     let cups = parseInt(localStorage.getItem('cups'))||1;
+    function giveInfoMe(){
     document.getElementById('cup-me').textContent = '🏆 =>' + cups;
     document.getElementById('power-me').textContent = '⚔ =>' + powerMe;
     document.getElementById('level-me').textContent = '⭐ =>' + levelMe;
-
+      }
+    giveInfoMe();
     function shortPower(num) {
       if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
       else if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
@@ -777,11 +781,11 @@
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     /*==================== RESULT WAR ===================*/
     let resources = JSON.parse(localStorage.getItem('resources'))||{gold:0,wood:0,weath:0};
-    
-    let finalBtnAttack = document.getElementById('final-btn-attack');
-    let pageResultWar = document.getElementById('page-result-war'); 
 
-    
+    let finalBtnAttack = document.getElementById('final-btn-attack');
+    let pageResultWar = document.getElementById('page-result-war');
+
+
     finalBtnAttack.addEventListener('click',()=>{
       document.getElementById('result-music').play();
       let research = JSON.parse(localStorage.getItem('research')) || {
@@ -789,13 +793,19 @@
         resources:0,
         castle:0,
       };
+      let forces = JSON.parse(localStorage.getItem('forces'))|| { infantry: 0, cavalry: 0, archer: 0, chariot: 0 };
       let remainderForcesMe = forcesMe - (forcesEnemie * (1-(research.forces/10)));
       if(remainderForcesMe<0){
         remainderForcesMe = 0;
       }
+
       let remainderForcesEnemie = forcesEnemie - forcesMe;
       let theDeadMe = forcesMe>0?((forcesMe - (remainderForcesMe))/forcesMe)*100:100;
-      
+      let lostRatio = remainderForcesMe / forcesMe;
+      forces.infantry = Math.floor(forces.infantry * lostRatio);
+      forces.cavalry = Math.floor(forces.cavalry * lostRatio);
+      forces.archer = Math.floor(forces.archer * lostRatio);
+      forces.chariot = Math.floor(forces.chariot * lostRatio);
       if(remainderForcesEnemie<0){
         remainderForcesEnemie = 0;
       }
@@ -811,7 +821,7 @@
       if(theDeadMe <= 40){
         document.getElementById('star-2').textContent = '⭐';
         rewardCup += 1;
-        resultWar = 'very good';  
+        resultWar = 'very good';
       } else {
         document.getElementById('star-2').textContent = '💀';
       }
@@ -822,7 +832,7 @@
       } else {
         document.getElementById('star-3').textContent = '💀';
       }
-      
+
       document.getElementById('forces-me-2').textContent = forcesMe;
       document.getElementById('forces-enemie-2').textContent = forcesEnemie;
       document.getElementById('remainder-forces-me').textContent = remainderForcesMe;
@@ -833,43 +843,45 @@
         pageResultWar.style.display = 'grid';
         document.getElementById('reward-gold').textContent = '🪙: +'+(objectEnemieInfo.gold);
         resources.gold += objectEnemieInfo.gold;
-      document.getElementById('reward-wood').textContent = '🪵: +'+ objectEnemieInfo.wood;
+        document.getElementById('reward-wood').textContent = '🪵: +'+ objectEnemieInfo.wood;
         resources.wood += objectEnemieInfo.wood;
-      document.getElementById('reward-weath').textContent = '🌾: +'+ objectEnemieInfo.weath;
+        document.getElementById('reward-weath').textContent = '🌾: +'+ objectEnemieInfo.weath;
         resources.weath += objectEnemieInfo.weath;
-      document.getElementById('reward-cup').textContent = '🏆: +'+ rewardCup;
+        document.getElementById('reward-cup').textContent = '🏆: +'+ rewardCup;
         messageResultWar.innerHTML = 'You won<br>'+  resultWar;
-        } else if(remainderForcesMe<remainderForcesEnemie){
-          pageResultWar.style.display = 'grid';
-          sectionResultWar.style.border = '1px solid #f00';
+      } else if(remainderForcesMe<remainderForcesEnemie){
+        pageResultWar.style.display = 'grid';
+        sectionResultWar.style.border = '1px solid #f00';
         sectionResultWar.style.boxShadow = '0 0 10px #f00';
         messageResultWar.style.color = '#f00';
         messageResultWar.style.textShadow = '0 0 10px #f00';
         document.getElementById('reward-gold').textContent = '🪙: +'+ 0;
-      document.getElementById('reward-wood').textContent = '🪵: +' + 0;
-      document.getElementById('reward-weath').textContent = '🌾: +'+ 0;
-        
-      document.getElementById('reward-cup').textContent = '🏆: -2';
+        document.getElementById('reward-wood').textContent = '🪵: +' + 0;
+        document.getElementById('reward-weath').textContent = '🌾: +'+ 0;
+        document.getElementById('reward-cup').textContent = '🏆: -2';
         rewardCup -= 2;
         document.querySelectorAll('[id^="star-"]').forEach(star=>{
           star.style.color = '#f00';
         });
         messageResultWar.textContent = 'you lose';
-        }
+      }
       cups += rewardCup;
       if(cups<0){
         cups = 0;
       }
+      localStorage.setItem('forces', JSON.stringify(forces));
       localStorage.setItem('totalForces',remainderForcesMe);
-    localStorage.setItem('cups',cups);
-    localStorage.setItem('resources',JSON.stringify(resources));
-      });
+      localStorage.setItem('cups',cups);
+      localStorage.setItem('resources',JSON.stringify(resources));
+    });
     document.querySelectorAll('.btn-close').forEach(page => {
       page.addEventListener('click', () => {
         sectionInfoEnemie.style.display = 'none';
-        mapEnemie.style.display = 'none';
         pageResultWar.style.display = 'none';
+        mapEnemie.style.display = 'none';
       });
+      getPower();
+    giveInfoMe();
     });
     
   </script>
