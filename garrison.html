@@ -272,26 +272,9 @@ function showError() {
 errorClose.addEventListener('click', () => {
   errorBox.style.display = 'none';
 });
-    let resources = {
-      gold: 300,
-      wood: 300,
-      weath: 300
-    };
+    let resources = JSON.parse(localStorage.getItem('resources'))||{gold:0,wood:0,weath:0};
 
-    let forces = {
-      infantry: 0,
-      archer: 0,
-      cavalry: 0,
-      chariot: 0
-    };
-
-    let savedGold = parseInt(localStorage.getItem('gold'));
-    let savedWood = parseInt(localStorage.getItem('wood'));
-    let savedWeath = parseInt(localStorage.getItem('weath'));
-
-    if (savedGold) resources.gold = savedGold;
-    if (savedWood) resources.wood = savedWood;
-    if (savedWeath) resources.weath = savedWeath;
+    let forces = {};
 
     let savedForces = JSON.parse(localStorage.getItem('forces'));
 
@@ -313,9 +296,7 @@ errorClose.addEventListener('click', () => {
     }
 
     function saveAll() {
-      localStorage.setItem('gold', resources.gold);
-      localStorage.setItem('wood', resources.wood);
-      localStorage.setItem('weath', resources.weath);
+      localStorage.setItem('resources',JSON.stringify(resources));
       localStorage.setItem('forces', JSON.stringify(forces));
     }
 
@@ -349,4 +330,4 @@ errorClose.addEventListener('click', () => {
 
   </script>
 </body>
-  </html>
+                                                       </html>
