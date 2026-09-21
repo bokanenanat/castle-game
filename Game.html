@@ -424,7 +424,6 @@
     <button class='settings-btn' id='btn-show-forces'>
       <img src='https://i.imgur.com/GryqRa0.png'>
     </button>
-    <button id='reset-all' class='settings-btn'>&#x21BB;</button>
   </div>
   <aside class='container-show-forces' id='container-show-forces'>
     <div>
@@ -450,7 +449,7 @@
   </aside>
   <!-- ==================== AUDIO ==================== -->
   <audio id="bg-music" src="Sounds/Game1.mp3" type='audio/mpeg' loop></audio>
-  <audio id='soundClick'src='Sounds/click2.mp3'></audio>
+  <audio id='soundClick'src='Sounds/click.mp3'></audio>
 
   <script>
     /*==================== FORCES SYSTEM ====================*/
@@ -618,12 +617,7 @@
         }
       }
     `;
-    document.head.appendChild(style);
-    document.getElementById('reset-all').addEventListener('click',()=> {
-      localStorage.clear();
-      alert('❗-{ removed all your information}-❗');
-      location.reload();
-        });
+    
 
     document.addEventListener('contextmenu', function(e) {
   e.preventDefault();
