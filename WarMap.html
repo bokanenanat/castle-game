@@ -67,7 +67,7 @@
       border: 0.5px solid #4488aaff;
       border-radius: 9px;
       box-shadow: 0 0 clamp(4px,4vw,40px) #00ffff;
-      z-index: 1000;
+      z-index: 10;
       width: 30%;
       left: 35%;
       max-width: 18vh;
@@ -100,7 +100,9 @@
       background: #588;
       transition: all 3s ease;
     }
-    .nav-center:hover { transform: rotate(135deg); background: #000; }
+    .nav-center:hover { transform: rotate(135deg); background: #000;
+                      display:none;
+                      }
     .nav-center button { background: #000; border: none; border-radius: 10px; }
     #nav-attack {
       width: 50%;
@@ -112,7 +114,7 @@
       border-left: none;
       border-bottom: none;
       border-right: none;
-      z-index: 9999;
+      z-index: 10;
       top: 10px;
       position: fixed;
       display: none;
@@ -168,7 +170,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 10000;
+      z-index: 100;
       box-shadow: 0 0 1px inset #aaa;
       background: #050505;
       display: none;
@@ -220,26 +222,32 @@
     .meno-in-map-enemie {
       position: fixed;
       bottom: 1vh;
-      left: 20%;
-      width: 60%;
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      height: 15vh;
+      left: 25%;
+      width: 50%;
+      display: flex;
+      height: 10vh;
       gap: 20px;
-      border: 1px solid #555;
+      border: none;
+      border-bottom: 1px solid #555;
+      border-radius: 999px;
+      justify-content: center;
     }
     .btn-in-meno {
       font-family: "Londrina Shadow", cursive;
       background: none;
-      color: #f00;
+      color: #a50;
       text-shadow: 0 0 10px #f00;
-      height: 100%;
+      height: 10vh;
+      width: 10vh;
+      aspect-ratio: 1/1;
       display: flex;
       justify-content: center;
+      text-decoration: none;
       font-weight: 400;
       align-items: center;
-      border: 1px solid #f00;
-      font-size: clamp(1px,5vw,7vw);
+      border: 1px solid #a80;
+      box-shadow: 0 0 5px #ffd700;
+      font-size: clamp(1px,5vw,15px);
       border-radius: 999px;
       border-left: none;
       border-right: none;
@@ -309,7 +317,7 @@
       top: 0;
       left: 0;
       background: #000;
-      z-index: 10000;
+      z-index: 100;
       display: none;
       overflow-y: auto;
       justify-items: center;
@@ -414,6 +422,69 @@
       align-items: center;
       justify-content: center;
     }
+    .page-result-war {
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      background: #000;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .section-result-war {
+      background: #222;
+      box-shadow: 0 0 10px gold;
+      border: 1px solid gold;
+      height: 60%;
+      width:80vw;
+      border-radius: 10px;
+      display: grid;
+      grid-template-rows: 3fr 1fr 1fr 3fr;
+      gap: 1px;
+    }
+    .section-result-war div, .section-result-war output{
+      background: #000000;
+      border-radius: 10px;
+      display: flex;
+      overflow-x: auto;
+      gap: 0;
+      justify-content: center;
+      align-items: center;
+    }
+    .section-result-war output {
+      justify-content: flex-start;
+    }
+    .section-result-war div h1, .section-result-war output h2 {
+      font-size: clamp(4px,10vw,62px);
+      text-shadow: none;
+      flex-shrink: 0;
+      height: auto;
+      width: auto;
+      display: grid;
+      text-align: center;
+      justify-items: center;
+      border: none;
+      margin-left: 0;
+      text-shadow: 0 0 10px #ffd700;
+      opacity: 1;
+    }
+    .section-result-war output h2, .section-result-war h3 {
+      font-size: clamp(4px,4vw,24px);
+      color: #ccc;
+      width: 40%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      text-shadow: 0 0 10px #0ff;
+    }
+    .section-result-war h3 {
+      color: #0f0;
+      font-size: clamp(4px,5vw,24px);
+    }
+    
   </style>
 </head>
 <body>
@@ -433,12 +504,13 @@
     <img src="https://i.imgur.com/4c2VklY.png" class="castle223" data-info='{"power":10000,"level":10,"name":"castle1","gold":1000,"wood":3500,"weath":3500,"cavalry":150,"chariot":50,"archer":800,"infantry":1000}'>
     <section></section>
     <img src="https://i.imgur.com/P6MezWe.png" class="castle223" data-info='{"power":15000,"level":15,"name":"castle2","gold":1500,"wood":15000,"weath":15000,"cavalry":225,"chariot":75,"archer":1200,"infantry":1500}'>
-    <div class="nav-center">
+    <!--<div class="nav-center">
       <button></button>
       <button></button>
       <button></button>
       <button></button>
-    </div>
+    </div>-->
+    <div></div>
     <img src="https://i.imgur.com/nDxUd21.png" class="castle223" data-info='{"power":25000,"level":20,"name":"castle3","gold":3500,"wood":25000,"weath":25000,"cavalry":450,"chariot":150,"archer":2400,"infantry":3000}'>
     <section></section>
     <img src="https://i.imgur.com/ftippdM.png" class="castle223" data-info='{"power":50000,"level":25,"name":"castle4","gold":7000,"wood":40000,"weath":40000,"cavalry":1000,"chariot":500,"archer":5000,"infantry":6000}'>
@@ -470,8 +542,8 @@
       <img id="castle-enemie" src="" class="map-enemie-castle">
     </section>
     <nav class="meno-in-map-enemie">
-      <button class="btn-in-meno">Attack</button>
-      <button class="btn-in-meno">Runing</button>
+      <button class="btn-in-meno" id='final-btn-attack'>Attack</button>
+      <a class="btn-in-meno" href='Game.html'>Running</a>
     </nav>
     <button id="show-castle">
       <img src='' id='img-show-castle'>
@@ -499,6 +571,33 @@
       <output><img src='https://i.imgur.com/o4fQCzX.png'><h2 id='enemie-archer'></h2></output>
       <output><img src='https://i.imgur.com/P0P9pGs.png'><h2 id='enemie-infantry'></h2></output>
       <output><img src='https://i.imgur.com/pde984q.png'><h2 id='enemie-forces'></h2></output>
+    </section>
+  </section>
+  <!-- ==================== Result War ==================== -->
+  <section class='page-result-war' id='page-result-war'>
+    <button class='btn-close'>×</button>
+    <section class='section-result-war' id='section-result-war'>
+      <div>
+        <h1 id='star-1'> </h1>
+        <h1 style='margin-top:-10px' id='star-2'> </h1>
+        <h1 id='star-3'> </h1>
+      </div>
+      <output>
+        <h2 id='reward-gold'>🌾: uploading ...</h2>
+        <h2 id='reward-wood'>🪵: uploading ...</h2>
+        <h2 id='reward-weath'>🪙: uploading ...</h2>
+        <h2 id='reward-cup'>🏆: +15</h2>
+      </output>
+      <output>
+        <h2 id='forces-me-2'>: 10000</h2>
+        <h2 id='forces-enemie-2'>dd:27272</h2>
+        <h2 id='remainder-forces-me'>⭐:62672</h2>
+        <h2 id='remainder-forces-enemie'></h2>
+      </output>
+      <div>
+        <h3 id='message-result-war'>Loading ...</h3>
+      </div>
+      <audio src='Sounds/result-music.mp3' id='result-music'></audio>
     </section>
   </section>
   <script>
@@ -561,6 +660,7 @@
     }
     drawLines();
     window.addEventListener("resize", () => {
+      castles = document.querySelectorAll(".castle223");
       starBg.width = window.innerWidth;
       starBg.height = window.innerHeight;
       lineBg.width = window.innerWidth;
@@ -568,7 +668,7 @@
       atoms = [];
       for (let i = 0; i < 200; i++) {
         let atom = new creatAtom();
-        atom.size *= 2;
+        atom.size *= 1.2;
         atoms.push(atom);
       }
       drawLines();
@@ -623,10 +723,22 @@
     const btnInfo = document.getElementById("btn-info");
     const sectionInfoEnemie = document.getElementById('section-info-enemie');
     btnInfo.addEventListener('click', () => {
+      
       sectionInfoEnemie.style.display = 'grid';
       enemie_information();
+      
     });
-
+  /*==================== ENEMIE INFORMATION ==================== */
+    let forcesEnemie = 0;
+    function enemie_forces(){
+        if(!objectEnemieInfo){
+          return
+        }else{
+      forcesEnemie = Number(objectEnemieInfo.cavalry) + Number(objectEnemieInfo.chariot) + Number(objectEnemieInfo.archer) + Number(objectEnemieInfo.infantry);
+      document.getElementById('enemie-forces').textContent = forcesEnemie;
+      document.getElementById('forces-enemie').textContent = forcesEnemie;
+        }
+    }
     function enemie_information() {
       const enemyFields = {
         power: 'enemie-power',
@@ -640,30 +752,20 @@
         archer: 'enemie-archer',
         infantry: 'enemie-infantry'
       };
+      
       for ([key, id] of Object.entries(enemyFields)) {
         document.getElementById(id).textContent = objectEnemieInfo[key];
       }
-      const forcesEnemie = Number(objectEnemieInfo.cavalry) + Number(objectEnemieInfo.chariot) + Number(objectEnemieInfo.archer) + Number(objectEnemieInfo.infantry);
-      document.getElementById('enemie-forces').textContent = forcesEnemie;
-      document.getElementById('forces-enemie').textContent = forcesEnemie;
+      enemie_forces();
     }
-
-    document.querySelectorAll('.btn-close').forEach(page => {
-      page.addEventListener('click', () => {
-        sectionInfoEnemie.style.display = 'none';
-        mapEnemie.style.display = 'none';
-      });
-    });
-
-    let forcesMe = parseInt(localStorage.getItem('totalForces'));
+    let forcesMe = parseInt(localStorage.getItem('totalForces')) || 0;
     let tagForcesMe = document.getElementById('forces-me');
     tagForcesMe.textContent = forcesMe;
 
-    let cupMe = 10;
-    let powerMe = shortPower(parseInt(localStorage.getItem('power')));
-    let levelMe = parseInt(localStorage.getItem('castleLevel'));
-
-    document.getElementById('cup-me').textContent = '🏆 =>' + cupMe;
+    let powerMe = shortPower(parseInt(localStorage.getItem('power')))||0;
+    let levelMe = parseInt(localStorage.getItem('castleLevel'))||1;
+    let cups = parseInt(localStorage.getItem('cups'))||1;
+    document.getElementById('cup-me').textContent = '🏆 =>' + cups;
     document.getElementById('power-me').textContent = '⚔ =>' + powerMe;
     document.getElementById('level-me').textContent = '⭐ =>' + levelMe;
 
@@ -672,8 +774,104 @@
       else if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
       else return num;
     }
-
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    /*==================== RESULT WAR ===================*/
+    let resources = JSON.parse(localStorage.getItem('resources'))||{gold:0,wood:0,weath:0};
+    
+    let finalBtnAttack = document.getElementById('final-btn-attack');
+    let pageResultWar = document.getElementById('page-result-war'); 
+
+    
+    finalBtnAttack.addEventListener('click',()=>{
+      document.getElementById('result-music').play();
+      let research = JSON.parse(localStorage.getItem('research')) || {
+        forces:0,
+        resources:0,
+        castle:0,
+      };
+      let remainderForcesMe = forcesMe - (forcesEnemie * (1-(research.forces/10)));
+      if(remainderForcesMe<0){
+        remainderForcesMe = 0;
+      }
+      let remainderForcesEnemie = forcesEnemie - forcesMe;
+      let theDeadMe = forcesMe>0?((forcesMe - (remainderForcesMe))/forcesMe)*100:100;
+      
+      if(remainderForcesEnemie<0){
+        remainderForcesEnemie = 0;
+      }
+      let rewardCup = 0;
+      let resultWar = '';
+      if(theDeadMe <= 80){
+        document.getElementById('star-1').textContent = '⭐';
+        rewardCup += 1;
+        resultWar = 'good';
+      } else {
+        document.getElementById('star-1').textContent = '💀';
+      }
+      if(theDeadMe <= 40){
+        document.getElementById('star-2').textContent = '⭐';
+        rewardCup += 1;
+        resultWar = 'very good';  
+      } else {
+        document.getElementById('star-2').textContent = '💀';
+      }
+      if(theDeadMe<=20){
+        document.getElementById('star-3').textContent = '⭐';
+        rewardCup += 1;
+        resultWar = 'Excellent';
+      } else {
+        document.getElementById('star-3').textContent = '💀';
+      }
+      
+      document.getElementById('forces-me-2').textContent = forcesMe;
+      document.getElementById('forces-enemie-2').textContent = forcesEnemie;
+      document.getElementById('remainder-forces-me').textContent = remainderForcesMe;
+      document.getElementById('remainder-forces-enemie').textContent = remainderForcesEnemie;
+      let sectionResultWar = document.getElementById('section-result-war');
+      let messageResultWar = document.getElementById('message-result-war');
+      if(remainderForcesMe>remainderForcesEnemie){
+        pageResultWar.style.display = 'grid';
+        document.getElementById('reward-gold').textContent = '🪙: +'+(objectEnemieInfo.gold);
+        resources.gold += objectEnemieInfo.gold;
+      document.getElementById('reward-wood').textContent = '🪵: +'+ objectEnemieInfo.wood;
+        resources.wood += objectEnemieInfo.wood;
+      document.getElementById('reward-weath').textContent = '🌾: +'+ objectEnemieInfo.weath;
+        resources.weath += objectEnemieInfo.weath;
+      document.getElementById('reward-cup').textContent = '🏆: +'+ rewardCup;
+        messageResultWar.innerHTML = 'You won<br>'+  resultWar;
+        } else if(remainderForcesMe<remainderForcesEnemie){
+          pageResultWar.style.display = 'grid';
+          sectionResultWar.style.border = '1px solid #f00';
+        sectionResultWar.style.boxShadow = '0 0 10px #f00';
+        messageResultWar.style.color = '#f00';
+        messageResultWar.style.textShadow = '0 0 10px #f00';
+        document.getElementById('reward-gold').textContent = '🪙: +'+ 0;
+      document.getElementById('reward-wood').textContent = '🪵: +' + 0;
+      document.getElementById('reward-weath').textContent = '🌾: +'+ 0;
+        
+      document.getElementById('reward-cup').textContent = '🏆: -2';
+        rewardCup -= 2;
+        document.querySelectorAll('[id^="star-"]').forEach(star=>{
+          star.style.color = '#f00';
+        });
+        messageResultWar.textContent = 'you lose';
+        }
+      cups += rewardCup;
+      if(cups<0){
+        cups = 0;
+      }
+      localStorage.setItem('totalForces',remainderForcesMe);
+    localStorage.setItem('cups',cups);
+    localStorage.setItem('resources',JSON.stringify(resources));
+      });
+    document.querySelectorAll('.btn-close').forEach(page => {
+      page.addEventListener('click', () => {
+        sectionInfoEnemie.style.display = 'none';
+        mapEnemie.style.display = 'none';
+        pageResultWar.style.display = 'none';
+      });
+    });
+    
   </script>
 </body>
-</html>
+  </html>
