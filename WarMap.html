@@ -523,7 +523,7 @@
     <button class="nav-btn" id="playMusic">Music</button>
     <button class="nav-btn">Attack</button>
     <button class="nav-btn" id="shop">Shop</button>
-    <button class="nav-btn" id="backPage">Back</button>
+    <button class="nav-btn" onclick='history.back()'>Back</button>
   </nav>
   <section id="map-enemie">
     <button class='btn-close'>×</button>
@@ -689,9 +689,6 @@
 
     let btnShop = document.getElementById("shop");
     btnShop.addEventListener("click", () => { window.location.href = "shop.html"; });
-
-    let btnBack = document.getElementById("backPage");
-    btnBack.addEventListener("click", () => { window.location.href = "Game.html"; });
 
     let castleEnemie = document.getElementById("castle-enemie");
     let allImages = document.querySelectorAll("img");
