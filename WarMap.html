@@ -881,8 +881,7 @@
       localStorage.setItem('totalForces',remainderForcesMe);
       localStorage.setItem('cups',cups);
       localStorage.setItem('resources',JSON.stringify(resources));
-      getInfoMe();
-      giveInfoMe();
+      
     });
     document.querySelectorAll('.btn-close').forEach(page => {
       page.addEventListener('click', () => {
@@ -891,7 +890,11 @@
         mapEnemie.style.display = 'none';
       });
     });
-    
+    function callFunction(){
+      getInfoMe();
+      giveInfoMe();
+    }
+    setInterval(callFunction,2000);
   </script>
 </body>
   </html>
