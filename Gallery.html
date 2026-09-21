@@ -40,13 +40,16 @@
       50% { transform: translate(1%, -2%); }
       75% { transform: translate(2%, 2%); }
     }
+    img {
+      pointer-events: none;
+    }
     .container-gallery {
       background: none;
       width: 90vw;
       aspect-ratio: 1/1;
       z-index: 50;
       gap: 3px;
-      margin-top: 10vh;
+      margin-top: 15vh;
       border-radius: 60px;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -67,14 +70,13 @@
       display: grid;
       align-items: center;
       justify-items: center;
-      height: 3vh;
+      height: 4rem;
       width: 6rem;
       box-shadow: 0 0 10px #fa0;
       text-decoration: none;
       border: 1px solid #a70;
       font-weight: 500;
-      position: fixed;
-      bottom: 3vh;
+      margin-top: 3vh;
     }
     .message-success {
       width: 60vw;
