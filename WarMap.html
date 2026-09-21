@@ -757,13 +757,15 @@
       }
       enemie_forces();
     }
-    let forcesMe = parseInt(localStorage.getItem('totalForces')) || 0;
+    
     let tagForcesMe = document.getElementById('forces-me');
-    tagForcesMe.textContent = forcesMe;
+    
     let powerMe = 0;
     let levelMe = 0;
+    let forcesme = 0;
     let cups = 0;
     function getInfoMe(){
+      forcesMe = parseInt(localStorage.getItem('totalForces')) || 0;
       powerMe = shortPower(parseInt(localStorage.getItem('power')))||0;
       levelMe = parseInt(localStorage.getItem('castleLevel'))||1;
       cups = parseInt(localStorage.getItem('cups'))||1;
@@ -775,6 +777,7 @@
     document.getElementById('cup-me').textContent = '🏆 =>' + cups;
     document.getElementById('power-me').textContent = '⚔ =>' + powerMe;
     document.getElementById('level-me').textContent = '⭐ =>' + levelMe;
+    tagForcesMe.textContent = forcesMe;
       }
     giveInfoMe();
     function shortPower(num) {
