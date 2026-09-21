@@ -761,12 +761,16 @@
     let tagForcesMe = document.getElementById('forces-me');
     tagForcesMe.textContent = forcesMe;
     let powerMe = 0;
-    function getPower(){
-       powerMe = shortPower(parseInt(localStorage.getItem('power')))||0;
+    let levelMe = 0;
+    let cups = 0;
+    function getInfoMe(){
+      powerMe = shortPower(parseInt(localStorage.getItem('power')))||0;
+      levelMe = parseInt(localStorage.getItem('castleLevel'))||1;
+      cups = parseInt(localStorage.getItem('cups'))||1;
     }
-    getPower();
-    let levelMe = parseInt(localStorage.getItem('castleLevel'))||1;
-    let cups = parseInt(localStorage.getItem('cups'))||1;
+    getInfoMe();
+    
+    
     function giveInfoMe(){
     document.getElementById('cup-me').textContent = '🏆 =>' + cups;
     document.getElementById('power-me').textContent = '⚔ =>' + powerMe;
@@ -869,10 +873,13 @@
       if(cups<0){
         cups = 0;
       }
+      
       localStorage.setItem('forces', JSON.stringify(forces));
       localStorage.setItem('totalForces',remainderForcesMe);
       localStorage.setItem('cups',cups);
       localStorage.setItem('resources',JSON.stringify(resources));
+      getInfoMe();
+      giveInfoMe();
     });
     document.querySelectorAll('.btn-close').forEach(page => {
       page.addEventListener('click', () => {
@@ -880,8 +887,6 @@
         pageResultWar.style.display = 'none';
         mapEnemie.style.display = 'none';
       });
-      getPower();
-    giveInfoMe();
     });
     
   </script>
