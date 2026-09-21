@@ -40,9 +40,6 @@
       50% { transform: translate(1%, -2%); }
       75% { transform: translate(2%, 2%); }
     }
-    img {
-      pointer-events: none;
-    }
     .container-gallery {
       background: none;
       width: 90vw;
@@ -79,9 +76,9 @@
       margin-top: 3vh;
     }
     .message-success {
-      width: 60vw;
-      height: 10vh;
-      background: #efe;
+      width: 80vw;
+      height: 8vh;
+      background: #afb;
       color: #595;
       text-shadow: 0 0 10px #383;
       border-radius: 10px;
@@ -110,7 +107,7 @@
     <img class='element' onclick='changProfile(this)' src='https://i.imgur.com/KhieSoo.png'>
     <img class='element' onclick='changProfile(this)' src='https://i.imgur.com/c0Z2EiC.png'>
   </section>
-  <a class='back-btn' href='Game.html'>back</a>
+  <a class='back-btn' onclick='history.back()'>back</a>
   <section id='message-success' class='message-success'> Changed&#x2713;</section>
   <script>
     const canvas = document.getElementById('canvas');
