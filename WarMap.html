@@ -21,7 +21,7 @@
       font-family: "Uncial Antiqua", cursive;
     }
     @keyframes changeColor {
-      0%,100% {box-shadow: 0 0 13px #444;}
+      0%,100% {box-shadow: 0 0 13px #fb0;}
       50% {box-shadow: 0 0 10px #0ff;}
     }
     @keyframes shake {
@@ -43,12 +43,85 @@
       position: relative;
       z-index: 10;
     }
+    #fatherMap div{
+      position: relative;
+      height:100%;
+      width:100%;
+    }
     #fatherMap img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      border: 1px solid #444;
       border-radius: 500px;
       z-index: 10;
-      animation: changeColor 2s infinite,shake 2s infinite;
+      border: none;
+      border-top: clamp(2px,0.7vw,80px) solid #fa0;
+      border-bottom: clamp(2px,0.7vw,80px) solid #80f;
+      box-shadow: 
+        1px 1px clamp(2px,1vw,80px) #80f,
+        -1px -1px clamp(4px,1.5vw,80px) #fa0,
+        0 0 clamp(6px,2vw,80px) #80f,
+        0 0 clamp(8px,2.5vw,80px) #fa0
+      ;
+      animation: changeColr 2s infinite,shake 2s infinite;
+    }
+    #fatherMap img:hover {
+      
+      box-shadow: 
+        0 0 4px #80f,
+        0 0 6px #fa0,
+        0 0 8px #80f,
+        0 0 10px #fa0
+      ;
+    }
+    #fatherMap h1{
+      position: absolute;
+      color: red;
+      width: 30%;
+      border: 1px solid #f00;
+      z-index: 20;
+      bottom: 0;
+      left: 35%;
+      font-size: clamp(1px,3vw,60px);
+      background: #000;
+      border-radius: 999px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2px 1px;
+    }
+    .compass {
+      font-size: 2vw;
+      color: #444;
+      opacity: 1;
+      box-shadow:none;
+      border:none;width:90%;
+      aspect-ratio:1/1;
+      animation:none;
+      display: flex;
+      justify-content:center;
+      align-items:center !important;
+      background: none;
+      height:100%;
+      width:100%;
+      position: relative;
+      
+    }
+    .compass img {
+      box-shadow:none !important;
+      border:none !important;
+      width:80% !important;
+      aspect-ratio:1/1;
+      animation:none !important;
+      transition: transform 1s ease !important;
+      top:10% !important;
+      left:10% !important;
+    }
+    .compass img:hover {
+      transform: rotate(180deg) !important;
+      position: absolute;
+      
     }
     canvas {
       position: fixed;
@@ -57,21 +130,20 @@
       pointer-events: none;
       height: 100%;
       width: 100%;
+      z-index: 100000;
     }
-    #starCanvas { z-index: 20; }
-    #lineCanvas { z-index: 5; filter: drop-shadow(0 0 15px #00f0ff); }
     .space-nav {
-      position: fixed;
+      margin-top:30px;
       bottom: 10px;
       gap: 2px;
       background: linear-gradient(135deg,#333,#000);
-      border: 0.5px solid #4488aaff;
+      border: 0.5px solid #80f;
       border-radius: 9px;
-      box-shadow: 0 0 clamp(4px,4vw,40px) #00ffff;
+      box-shadow: 0 0 clamp(4px,4vw,40px) #80f;
       z-index: 10;
       width: 30%;
-      left: 35%;
-      max-width: 18vh;
+      margin-left: 35%;
+      max-width: 30vh;
       aspect-ratio: 1/1;
       display: grid;
       grid-template-columns: repeat(2,1fr);
@@ -83,14 +155,14 @@
       justify-content: center;
       font-size: clamp(1vw,3vw,5vw);
       background: none;
-      border: 1px solid #333;
+      border: 1px solid #321;
       border-radius: 9px;
-      color:transparent;
+      color: #320;
       transition: all 1s ease;
       position: relative;
       overflow: hidden;
     }
-    .nav-btn:hover { border-color: #999; color: #bbb; }
+    .nav-btn:hover { border-color: #fa0; color: #fa0; }
     .nav-center {
       border: clamp(1px,1vw,4px) solid #000;
       width: 100%;
@@ -109,7 +181,7 @@
       width: 50%;
       aspect-ratio: 1/1;
       border-radius: 999px;
-      border: 4px solid #666;
+      border: 4px solid #fa0;
       left: 25%;
       background: none;
       border-left: none;
@@ -127,12 +199,12 @@
     }
     #nav-attack button {
       background: #000;
-      border: clamp(1px,0.5vw,8px) solid #666;
+      border: clamp(1px,0.5vw,8px) solid #fa0;
       border-radius: 999px;
       box-shadow: 0 0 10px #555;
       height: 70%;
       width: 70%;
-      color: #555;
+      color: #fa0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -144,26 +216,54 @@
       left: 1vw;
       top: 1vh;
       height: 35vw;
-      width: 35vw;
+      width: 45vw;
       border: 1px solid #000;
-      background: #f80;
+      background: none;
       box-shadow: 0 0 10px #000;
-      gap: 1px;
+      gap: 10px;
       display: grid;
       grid-template-rows: repeat(3,1fr);
     }
-    .info-me div {
-      color: #999;
-      -webkit-text-stroke: 0.3px #f30;
-      font-size: clamp(1px,2vh,3vh);
+    .info-me img {
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 10px;
       border: none;
+      border-radius: 999px;
+    }
+    .info-me div {
+      position: relative;
+      width: 80%;
+      border: clamp(1px,0.3vw,14px) solid #fa0;
+      border-right: none;
+      display: flex;
+      box-shadow: 
+        0 0 5px #fa0,
+        0 0 10px #f80,
+        0 0 5px inset #fa0;
+      border-radius: clamp(1px,4vw,80px);
       display: flex;
       justify-content: left;
       background: #000;
       align-items: center;
-      overflow: auto;
+    
+      
+    }
+    .info-me div span, .info-me div h1 {
       white-space: nowrap;
-      font-family: "Faster One", cursive;
+      font-family: none;
+      color: #f80;
+      text-shadow: 0 0 10px #fa0;
+      
+      font-size: clamp(1px,4vw,60px);
+      left: 18vw;
+      position: absolute;
+    }
+    .info-me div h1 {
+      left: auto;
+      right: -3vw;
+      font-size: clamp(1px,6vw,60px);
     }
     #map-enemie {
       height: 100%;
@@ -182,7 +282,7 @@
       border: none !important;
       border-left: 1px solid #ff3b1f !important;
       border-right: 1px solid #00d4ff !important;
-      width: 80vw;
+      width: 90vw;
       margin-left: 0;
       margin-top: 58%;
       aspect-ratio: 1/1;
@@ -192,7 +292,8 @@
       border-radius: 999px;
     }
     .map-enemie-castle {
-      width: 98%;
+      width: 100%;
+      aspect-ratio: 1/1;
       border-radius: 999px;
       border: none;
       box-shadow: none;
@@ -229,14 +330,14 @@
       height: 10vh;
       gap: 20px;
       border: none;
-      border-bottom: 1px solid #555;
+      border-bottom: 1px solid #fa0;
       border-radius: 999px;
       justify-content: center;
     }
     .btn-in-meno {
       font-family: "Londrina Shadow", cursive;
       background: none;
-      color: #a50;
+      color: #fa0;
       text-shadow: 0 0 10px #f00;
       height: 10vh;
       width: 10vh;
@@ -246,7 +347,7 @@
       text-decoration: none;
       font-weight: 400;
       align-items: center;
-      border: 1px solid #a80;
+      border: 1px solid #fa0;
       box-shadow: 0 0 5px #ffd700;
       font-size: clamp(1px,5vw,15px);
       border-radius: 999px;
@@ -488,12 +589,23 @@
   </style>
 </head>
 <body>
-  <canvas id="lineCanvas"></canvas>
   <canvas id="starCanvas"></canvas>
   <output class="info-me">
-    <div id='cup-me'>🏆 => Loading ...</div>
-    <div id='power-me'>⚔ => Loading ...</div>
-    <div id='level-me'>⭐ => Loading ...</div>
+    <div>
+      <img src='images/cup.png'>
+      <span id='cup-me'></span>
+      <h1>✦</h1>
+    </div>
+    <div style='width:98%;border:clamp(1px,0.3vw,14px) solid #80f;box-shadow:0 0 4px #80f,0 0 6px #00f,0 0 8px #80f,0 0 8px inset #50f;'>
+      <img src='images/sword.png'>
+      <span id='power-me' style='color:#50f;text-shadow:0 0 15px #90f'></span>
+      <h1 style='color:#50f;text-shadow:0 0 10px #80f'>✦</h1>
+    </div>
+    <div>
+      <img src='images/star.png'>
+      <span id='level-me'></span>
+      <h1>✦</h1>
+    </div>
   </output>
   <nav id="nav-attack">
     <button id="btn-attack">Atack</button>
@@ -501,19 +613,28 @@
   </nav>
   <section id="fatherMap">
     <section></section>
-    <img src="https://i.imgur.com/4c2VklY.png" class="castle223" data-info='{"power":10000,"level":10,"name":"castle1","gold":1000,"wood":3500,"weath":3500,"cavalry":150,"chariot":50,"archer":800,"infantry":1000}'>
+    <div>
+    <img src="images/enemie5.png" class="castle223" data-info='{"power":95000,"level":10,"name":"castle1","gold":1000,"wood":3500,"weath":3500,"cavalry":200,"chariot":100,"archer":800,"infantry":900,"imgForces":"images/forces-enemie-5.png"}'>
+      <h1 style='color:#fda;border:1px solid #fda'>5</h1>
+    </div>
     <section></section>
-    <img src="https://i.imgur.com/P6MezWe.png" class="castle223" data-info='{"power":15000,"level":15,"name":"castle2","gold":1500,"wood":15000,"weath":15000,"cavalry":225,"chariot":75,"archer":1200,"infantry":1500}'>
-    <!--<div class="nav-center">
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
-    </div>-->
-    <div></div>
-    <img src="https://i.imgur.com/nDxUd21.png" class="castle223" data-info='{"power":25000,"level":20,"name":"castle3","gold":3500,"wood":25000,"weath":25000,"cavalry":450,"chariot":150,"archer":2400,"infantry":3000}'>
+    <div>
+    <img src="images/enemie10.png" class="castle223" data-info='{"power":205000,"level":15,"name":"castle2","gold":1500,"wood":15000,"weath":15000,"cavalry":400,"chariot":200,"archer":1600,"infantry":1800,"imgForces":"images/forces-enemie-10.png"}'>
+      <h1 style='color:#fd8;border:1px solid #fd8'>10</h1>
+    </div>
+    <article class='compass'>
+      <img src='images/direction.png'>
+    </article>
+    <div>
+    <img src="images/enemie15.png" class="castle223" data-info='{"power":310000,"level":20,"name":"castle3","gold":3500,"wood":25000,"weath":25000,"cavalry":800,"chariot":400,"archer":3200,"infantry":3600,"imgForces":"images/forces-enemie-15.png"}'>
+      <h1 style='color:#fc4;border:1px solid #fc4'>15</h1>
+    </div>
     <section></section>
-    <img src="https://i.imgur.com/ftippdM.png" class="castle223" data-info='{"power":50000,"level":25,"name":"castle4","gold":7000,"wood":40000,"weath":40000,"cavalry":1000,"chariot":500,"archer":5000,"infantry":6000}'>
+      
+    <div>
+    <img src="images/enemie20.png" class="castle223" data-info='{"power":815000,"level":25,"name":"castle4","gold":7000,"wood":40000,"weath":40000,"cavalry":1600,"chariot":800,"archer":6400,"infantry":7200,"imgForces":"images/forces-enemie-20.png"}'>
+      <h1 style='color:#fa0;border:1px solid #fa0'>20</h1>
+    </div>
     <section></section>
     <audio src="Sounds/War.mp3" id="music" loop></audio>
     <audio id="soundClick" src="Sounds/click.mp3"></audio>
@@ -529,12 +650,12 @@
     <button class='btn-close'>×</button>
     <section class="section-cards">
       <div class="card-me">
-        <img src="https://i.imgur.com/pde984q.png">
+        <img src='images/forces-Me.png' id='img-forces-me'>
         <h1 id='forces-me'>Loading ...</h1>
       </div>
       <div class="emoji-katana" id="emoji-katana">⚔</div>
       <div class="card-enemie">
-        <img src="https://i.imgur.com/oox2OkC.png">
+        <img src="https://i.imgur.com/oox2OkC.png" id='img-forces-enemie'>
         <h1 id='forces-enemie'>Loading ...</h1>
       </div>
     </section>
@@ -543,7 +664,7 @@
     </section>
     <nav class="meno-in-map-enemie">
       <button class="btn-in-meno" id='final-btn-attack'>Attack</button>
-      <a class="btn-in-meno" href='Game.html'>Running</a>
+      <a class="btn-in-meno" onclick='history.back()'>Running</a>
     </nav>
     <button id="show-castle">
       <img src='' id='img-show-castle'>
@@ -551,7 +672,7 @@
   </section>
   <section id='section-info-enemie'>
     <button class='btn-close'>×</button>
-    <img src='https://i.imgur.com/oox2OkC.png' class='section-info-enemie-img'>
+    <img src='images/spy.png' class='section-info-enemie-img'>
     <title>✦Castle✦</title>
     <section class='info'>
       <output><h1>power :</h1><h2 id='enemie-power'></h2></output>
@@ -566,11 +687,11 @@
     </section>
     <title>✦Army✦</title>
     <section class='info top' style='height: 33.3vh; grid-template-rows: repeat(5,1fr);'>
-      <output><img src='https://i.imgur.com/GryqRa0.png'><h2 id='enemie-cavalry'></h2></output>
-      <output><img src='https://i.imgur.com/wq2mCWr.png'><h2 id='enemie-chariot'></h2></output>
-      <output><img src='https://i.imgur.com/o4fQCzX.png'><h2 id='enemie-archer'></h2></output>
-      <output><img src='https://i.imgur.com/P0P9pGs.png'><h2 id='enemie-infantry'></h2></output>
-      <output><img src='https://i.imgur.com/pde984q.png'><h2 id='enemie-forces'></h2></output>
+      <output><img src='images/cavalry.png'><h2 id='enemie-cavalry'></h2></output>
+      <output><img src='images/chariot.png'><h2 id='enemie-chariot'></h2></output>
+      <output><img src='images/archer.png'><h2 id='enemie-archer'></h2></output>
+      <output><img src='images/infantry.png'><h2 id='enemie-infantry'></h2></output>
+      <output><img src='images/forces-Me.png'><h2 id='enemie-forces'></h2></output>
     </section>
   </section>
   <!-- ==================== Result War ==================== -->
@@ -611,10 +732,11 @@
       constructor() {
         this.x = Math.random() * starBg.width;
         this.y = Math.random() * starBg.height;
-        this.moveX = (Math.random() - 0.5) * 0.5;
-        this.moveY = (Math.random() - 0.5) * 0.5;
+        this.moveX = (Math.random() - 0.5) * 0.3;
+        this.moveY = (Math.random() - 0.5) * 0.3;
         this.size = Math.random() * 2.5;
         this.opacity = Math.random() + 0.05;
+        this.randomColor = Math.floor(Math.random()*2);
       }
       update() {
         this.x += this.moveX;
@@ -625,7 +747,8 @@
       draw() {
         starPn.beginPath();
         starPn.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        starPn.fillStyle = `rgba(100,180,180,${this.opacity})`;
+        let listColor = [`rgba(255,180,0,${this.opacity})`,`rgba(80,80,80,${this.opacity})`];
+        starPn.fillStyle = listColor[this.randomColor];
         starPn.fill();
       }
     }
@@ -636,43 +759,16 @@
       requestAnimationFrame(updateStars);
     }
     updateStars();
-
-    let lineBg = document.getElementById("lineCanvas");
-    let linePn = lineBg.getContext("2d");
-    lineBg.width = window.innerWidth;
-    lineBg.height = window.innerHeight;
-    linePn.shadowColor = "#33f0ff";
-    linePn.shadowBlur = 5;
     let castles = document.querySelectorAll(".castle223");
-    function drawLines() {
-      let positions = [];
-      castles.forEach(img => positions.push(img.getBoundingClientRect()));
-      for (let i = 0; i < positions.length; i++) {
-        for (let j = i + 1; j < positions.length; j++) {
-          let a = positions[i], b = positions[j];
-          linePn.beginPath();
-          linePn.moveTo(a.x + a.width / 2, a.y + a.height / 2);
-          linePn.lineTo(b.x + b.width / 2, b.y + b.height / 2);
-          linePn.strokeStyle = "#555";
-          linePn.lineWidth = 0.7;
-          linePn.stroke();
-        }
-      }
-    }
-    drawLines();
     window.addEventListener("resize", () => {
-      castles = document.querySelectorAll(".castle223");
       starBg.width = window.innerWidth;
       starBg.height = window.innerHeight;
-      lineBg.width = window.innerWidth;
-      lineBg.height = window.innerHeight;
       atoms = [];
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 100; i++) {
         let atom = new creatAtom();
         atom.size *= 1.2;
         atoms.push(atom);
       }
-      drawLines();
     });
 
     let statusMusic = false;
@@ -705,7 +801,7 @@
         imgCastleEnemie = IMG.src;
         document.getElementById('img-show-castle').src = imgCastleEnemie;
         navAttack.style.display = "grid";
-        setTimeout(() => { navAttack.style.display = "none"; }, 3000);
+        setTimeout(() => { navAttack.style.display = "none"; }, 5000);
       });
     });
     const btnShowCastle = document.getElementById("show-castle");
@@ -716,6 +812,7 @@
     btnAttack.addEventListener("click", () => {
       mapEnemie.style.display = "grid";
       enemie_information();
+      document.getElementById('img-forces-enemie').src = objectEnemieInfo.imgForces;
     });
 
     const btnInfo = document.getElementById("btn-info");
@@ -723,7 +820,9 @@
     btnInfo.addEventListener('click', () => {
       sectionInfoEnemie.style.display = 'grid';
       enemie_information();
+      
     });
+    
     /*==================== ENEMIE INFORMATION ==================== */
     let forcesEnemie = 0;
     function enemie_forces(){
@@ -759,7 +858,7 @@
     
     let powerMe = 0;
     let levelMe = 0;
-    let forcesme = 0;
+    let forcesMe = 0;
     let cups = 0;
     function getInfoMe(){
       forcesMe = parseInt(localStorage.getItem('totalForces')) || 0;
@@ -771,9 +870,9 @@
     
     
     function giveInfoMe(){
-    document.getElementById('cup-me').textContent = '🏆 =>' + cups;
-    document.getElementById('power-me').textContent = '⚔ =>' + powerMe;
-    document.getElementById('level-me').textContent = '⭐ =>' + levelMe;
+    document.getElementById('cup-me').textContent =  cups;
+    document.getElementById('power-me').textContent =  powerMe;
+    document.getElementById('level-me').textContent = levelMe;
     tagForcesMe.textContent = forcesMe;
       }
     giveInfoMe();
