@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Market</title>
+  <link href="https://fonts.googleapis.com/css2?family=Ewert&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000;
+      --golden: #fa0;
+      --red: #f00;
+      --gray: #c0c0c0;
+    }
+    * {
+      margin: 0;
+    }
+    body {
+      background: var(--black);
+    }
+    .container-img-trader {
+      position: relative;
+      width: 70%;
+      aspect-ratio: 1/1.5;
+      left: 15%;
+      top: 10vh;
+      border-radius: 999px;
+    }
+    .canvas-particles-trader {
+      position: absolute;
+      width: 101%;
+      top: 0;
+      left: 0;
+      background: none;
+      height: 101%;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+    .img-trader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+      border-radius: 999px;
+      border: clamp(1px,0.2vh,20px) solid var(--gray);
+      box-shadow: 0 0 20px var(--gray);
+    }
+    .container-headline {
+      width: 80%;
+      margin-left: 10%;
+      margin-top: 20vh;
+      border: clamp(1px,0.2vh,20px) solid var(--gray);
+      height: 10vh;
+      min-height: 15vw;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      direction: rtl;
+      border-radius: clamp(20px,6vw,998px);
+      border-right: none;
+      border-left: none;
+      box-shadow: 0 0 10px #c0c0c0;
+    }
+    @keyframes headline {
+      0% {
+        margin-right: -100%;
+      }
+      100% {margin-right: 110%}
+    }
+    .text-headline {
+      font-size: clamp(4px,5vw,100px);
+      color: var(--gray);
+      animation: headline 10s infinite;
+      white-space: nowrap;
+      font-family: 'Ewert',cursive;
+    }
+    /*
+      ctg => cup-to-gold
+    */
+    .ctg-header {
+      margin-top: 0;
+      font-size: clamp(4px,6vw,100px);
+      font-family: 'Ewert',cursive;
+      border: 1px solid #432;
+      border-radius: 5vw;
+      width: 90%;
+      height: auto;
+      margin-left: 5%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #b8860b;
+    }
+    .ctg-header::after,.ctg-header::before {
+      content: '✦';
+      color: #b8860b;
+      font-size: clamp(4px,6vw,100px);
+      margin: 1px;
+    }
+    .ctg-section {
+      width: 90%;
+      margin-left: 5%;
+      margin-top: 10vh;
+      height: 60vh;
+      min-height: 60dvh;
+      border: 1px solid #fa0;
+      box-shadow: 0 0 10px #fa0;
+      border-radius: clamp(10px,5vw,30px);
+      display: grid;
+      grid-template-rows: 1fr 2fr 1fr 1fr;
+      gap: 20px;
+    }
+    .ctg-scroller {
+      border: 1px solid #555;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      overflow-x: auto;
+    }
+    .ctg-scroller button {
+      height: 90%;
+      aspect-ratio: 1/1;
+      border: 1px solid gold;
+      flex-shrink: 0;
+      background: #000;
+      border-radius: 5vw;
+      box-shadow: 0 0 10px #fa0;
+      position: relative;
+      display: grid;
+      grid-template-rows: 4fr 1fr 1fr;
+      gap: 2px;
+    }
+    .ctg-scroller button div {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .ctg-scroller div img {
+      height: 100%;
+      top: 0;
+      position: absolute;
+    }
+    .ctg-scroller button h1, .ctg-scroller button h2{
+      width: 100%;
+      height: 100%;
+      border: 1px solid #fa0;
+      display: flex;
+      align-items: center;
+      color: #fa0;
+      justify-content: center;
+      border-radius: 5vw;
+      font-size: clamp(4px,3vw,100px);
+      
+    }
+    .ctg-scroller button h2 {
+      border: 1px solid #0f0;
+      color: #0f0;
+    }
+    .ctg-custom {
+      border: 1px solid var(--red);
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .ctg-custom input {
+      border: 1px solid #a00;
+      box-shadow: 0 0 10px #f00;
+      color: var(--red);
+      border-radius: 5vw;
+      height: 60%;
+      width: 50%;
+      right: 2vw;
+      background: #000;
+      position: absolute;
+      outline: none;
+      font-family: 'Rye', cursive;
+      font-size: clamp(1px,4vw,100px);
+    }
+    .ctg-custom button {
+      position: absolute;
+      width: 30%;
+      height: 80%;
+      left: 2vw;
+      border: clamp(1px,0.2vw,20px) solid var(--red);
+      box-shadow: 0 0 10px #f00;
+      font-family: 'Rye', cursive;
+      color: #f80;
+      border-radius: 999px;
+      background: linear-gradient(135deg,#000,#800,#000);
+      font-size: clamp(1px,4vw,100px);
+      font-weight: 900;
+    }
+    .ctg-custom button:hover{
+      background: #900;
+    }
+    .ctg-show-result-input {
+      border: none;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+      align-items: center;
+    }
+    .ctg-show-result-input h1 {
+      height: 80%;
+      width: 100%;
+      border: 1px solid var(--golden);
+      color: var(--golden);
+      display: flex;
+      overflow-x: scroll;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(4px,4vw,100px);
+      font-family: 'Rye', cursive;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .error-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: #1a0000;
+  border: 2px solid #f00;
+  border-radius: 15px;
+  padding: 25px 40px;
+  color: #f00;
+  font-family: 'Rye', cursive;
+  font-size: clamp(16px, 5vw, 30px);
+  text-shadow: 0 0 10px #f00;
+  box-shadow: 
+    0 0 20px #f00,
+    0 0 40px #f00,
+    inset 0 0 20px rgba(255, 0, 0, 0.2);
+  z-index: 99999;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  text-align: center;
+  pointer-events: none;
+}
+
+.error-box.show {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.error-box::before {
+  content: '⚠️';
+  display: block;
+  font-size: 2em;
+  margin-bottom: 10px;
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+      }
+    .success-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: linear-gradient(135deg, #001a00, #000);
+  border: 2px solid #0f0;
+  border-radius: 15px;
+  padding: 25px 40px;
+  color: #0f0;
+  font-family: 'Rye', cursive;
+  font-size: clamp(16px, 5vw, 30px);
+  text-shadow: 0 0 10px #0f0;
+  box-shadow: 
+    0 0 20px #0f0,
+    0 0 40px #fa0,
+    inset 0 0 20px rgba(0, 255, 0, 0.2);
+  z-index: 99999;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  text-align: center;
+  pointer-events: none;
+}
+
+.success-box.show {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.success-box::before {
+  content: '💰';
+  display: block;
+  font-size: 2em;
+  margin-bottom: 10px;
+  animation: bounce 0.6s infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+                       }
+  </style>
+</head>
+<body>
+  <!-- ==================== HTML/trader ==================== -->
+  <section class='container-img-trader' id='container-img-trader'>
+    <img class='img-trader' src='images/trader.png'>
+    <audio id='sound-trader' src='Sounds/Welcome.mp3'></audio>
+    <canvas class='canvas-particles-trader' id='canvas-particles-trader'></canvas>
+  </section>
+  <!-- ==================== JS/trader ==================== -->
+  <script>
+    //playSound
+    document.getElementById('container-img-trader').addEventListener('click',()=>{
+      let sound = document.getElementById('sound-trader');
+      sound.volume = 0.2;
+      sound.play();
+    });
+    //creatParticle
+    const canvasParticles = document.getElementById('canvas-particles-trader');
+    const penParticles = canvasParticles.getContext('2d');
+    canvasParticles.height = canvasParticles.clientHeight;
+    canvasParticles.width = canvasParticles.clientWidth;
+    let arrayParticle = [];
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvasParticles.width;
+        this.y = Math.random() * canvasParticles.height;
+        this.moveX = (Math.random() - 0.5) * 1.3;
+        this.moveY = (Math.random() * -1) * 1.6;
+        this.size = Math.random() * 1.5;
+        this.opacity = Math.random();
+        this.index = Math.floor(Math.random()*2);
+      }
+      update() {
+        this.x += this.moveX;
+        this.y += this.moveY;
+        if(this.y<0) {
+          this.y = canvasParticles.height;
+        }
+        if(this.x>canvasParticles.width || this.x<0) {
+          this.moveX *= -1;
+        }
+      }
+      draw() {
+        penParticles.beginPath();
+        penParticles.arc(this.x,this.y,this.size,0,Math.PI*2);
+        let colors = [`rgba(150,150,150,1)`,`rgba(255,180,0,${this.opacity})`];
+        penParticles.fillStyle = colors[this.index];
+        penParticles.fill();
+      }
+    }
+    for(let i=0 ; i<150 ; i++) {
+      arrayParticle.push(new Particle());
+    }
+    function animate() {
+      penParticles.clearRect(0,0,canvasParticles.width,canvasParticles.height);
+      arrayParticle.forEach(P =>{
+        P.update();
+        P.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+  <!-- /// -->
+
+  <!-- ==================== HTML/headline ==================== -->
+  <header class='container-headline'>
+    <p class='text-headline' id='message-headline'>🏴‍☠️ Black market 🏴‍☠️</p>
+  </header>
+  <!-- ==================== JS/headline ==================== -->
+  <script>
+    let arrayMessages = [
+      'به بازار سیاه خوش اومدی ',
+      '👑 Welcome back commander👑 ',
+      '🏆Give me your cups and take my coins,OK?🏆',
+      '🏆جام هایت را به من بده ، و سکه های مرا بگیر',
+      '🎲 Gambling / trading / Chance 🎲',
+      '🎲 قمار/ معامله / شانس 🎲',
+    ];
+    let indexArrayMessages = 0;
+    function messageHeadline() {
+      let message = '';
+      message = arrayMessages[indexArrayMessages];
+      document.getElementById('message-headline').textContent = message;
+      indexArrayMessages = (indexArrayMessages + 1) % arrayMessages.length;
+    }
+    setInterval( messageHeadline,10000);
+  </script>
+  <!-- /// -->
+
+  <!-- ==================== JS/error/access Message ==================== -->
+  <script>
+function showError(message) {
+  let oldError = document.querySelector('.error-box');
+  if (oldError) oldError.remove();
+
+  let errorBox = document.createElement('div');
+  errorBox.classList.add('error-box');
+  errorBox.textContent = message;
+  document.body.appendChild(errorBox);
+
+  setTimeout(() => errorBox.classList.add('show'),10);
+  
+  setTimeout(() => {
+    errorBox.classList.remove('show');
+    setTimeout(() => errorBox.remove(), 400);
+  }, 2000);
+    }
+  /* /// */
+  function showSuccess(message) {
+  let oldBox = document.querySelector('.success-box');
+  if (oldBox) oldBox.remove();
+
+  let successBox = document.createElement('div');
+  successBox.classList.add('success-box');
+  successBox.textContent = message;
+  document.body.appendChild(successBox);
+
+  setTimeout(() => successBox.classList.add('show'), 10);
+
+  setTimeout(() => {
+    successBox.classList.remove('show');
+    setTimeout(() => successBox.remove(), 400);
+  }, 2000);
+}
+  </script>
+  <!-- ==================== HTML/deal Gold ==================== -->
+  <section class='ctg-section'>
+    <header class='ctg-header'>Cup-To-Gold </header>
+    <scroller-items class='ctg-scroller'>
+      <button data-need="10" class='item-scroller'>
+        <div>
+          <img src='images/1coin.png'>
+        </div>
+        <h1>10🏆: 10🪙</h1>
+        <h2>+ 0</h2>
+      
+      </button>
+      <button data-need="100" class='item-scroller'>
+        <div>
+          <img src='images/2coin.png'>
+        </div>
+        <h1>100🏆: 1K🪙</h1>
+        <h2>+ 900</h2>
+      </button>
+      <button data-need="1000" class='item-scroller'>
+        <div>
+          <img src='images/3coin.png'>
+        </div>
+        <h1>1K🏆: 100K🪙</h1>
+        <h2>+ 99K</h2>
+      </button>
+      <button data-need="10000" class='item-scroller'>
+        <div>
+          <img src='images/3coin.png'>
+        </div>
+        <h1>10K🏆:10M🪙</h1>
+        <h2>+ 9990K</h2>
+      </button>
+    </scroller-items>
+    <section class='ctg-custom'>
+      <input id='input-cups' type='number' placeholder='enter your cup'>
+      <button id='ctg-btn-confirm'>Trading</button>
+    </section>
+    <section class='ctg-show-result-input'>
+      <h1 id='show-cups'>Cups🏆</h1>
+      <h1 id='gold-debt'>Gold 🪙</h1>
+      <h1 id='gold-profit'>Profit 📈</h1>
+    </section>
+  </section>
+  <script>
+    const inputCups = document.getElementById('input-cups');
+    const showCups = document.getElementById('show-cups');
+    const showGoldDebt = document.getElementById('gold-debt');
+    const showProfit = document.getElementById('gold-profit');
+    
+    let valueInputCups = 0;
+    inputCups.addEventListener('input',()=>{
+      
+      valueInputCups = inputCups.value;
+      showCups.textContent = '🏆'+shortNumber(valueInputCups);
+      goldDebt(valueInputCups);
+    });
+    let debt = 0;
+    function goldDebt(cups) {
+      let coefficient = cups / 10;
+      debt = Math.ceil(cups * coefficient);
+      showGoldDebt.textContent = '🪙'+ shortNumber(debt);
+      let profit = debt - cups;
+      if(profit>0){
+      showProfit.textContent = '+' + shortNumber(Math.round(profit));
+        showProfit.style.border = '1px solid #0f0';
+        showProfit.style.color = '#0f0';
+      }if(profit<0) {
+        showProfit.style.border = '1px solid #f00';
+        showProfit.style.color = '#f00';
+        showProfit.textContent = Math.round(profit);
+      }if(profit === 0){
+        showProfit.style.border = '1px solid #fa0';
+        showProfit.style.color = '#fa0';
+        showProfit.textContent = Math.round(profit);
+        if(!inputCups.value){
+      showCups.textContent = 'Cups🏆';
+      showGoldDebt.textContent = 'Gold 🪙';
+      showProfit.textContent = 'Profit 📈';
+    }
+      }
+    }
+    
+    function shortNumber(number) {
+      if(number>1000000000) {
+        return (number/1000000000).toFixed(3)+'B';
+      }
+      if(number>1000000) {
+        return (number/1000000).toFixed(3)+'M';
+      }
+      if(number>1000) {
+        return (number/1000).toFixed(3)+'K';
+      }
+      else{
+        return number;
+      }
+    }
+    
+    
+    function checkedAsset(needCups,debtGold=((needCups/10)*needCups)) {
+      let resources = JSON.parse(localStorage.getItem('resources'));
+      let assetCupsMe = parseInt(localStorage.getItem('cups'))||0;
+      function trading() {
+        assetCupsMe -= needCups;
+        if(assetCupsMe<0){
+          assetCupsMe = 0;
+        }
+        resources.gold += debtGold;
+        localStorage.setItem('resources',JSON.stringify(resources));
+        localStorage.setItem('cups',assetCupsMe);
+      }
+      if(0===assetCupsMe){
+        showError('not enough your cups🏆');
+        return
+      }
+      if(needCups>assetCupsMe){
+    showError('not enough your cups🏆');
+        return
+      }else if(needCups<=assetCupsMe){
+      trading();
+      showSuccess('Triding🏆');
+      }
+    }
+    document.getElementById('ctg-btn-confirm').addEventListener('click',()=>{
+      checkedAsset(valueInputCups);
+    });
+    document.querySelectorAll('.item-scroller').forEach(item=>{
+      item.addEventListener('click',()=>{
+        checkedAsset(parseInt(item.dataset.need));
+      })
+    });
+  </script>
+</body>
+</html>
