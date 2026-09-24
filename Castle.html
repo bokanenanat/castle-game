@@ -744,9 +744,12 @@ document.getElementById('lock-close').addEventListener('click', () => {
       savedResources.gold -= allCost.gold;
       savedResources.wood -= allCost.wood;
       savedResources.weath -= allCost.weath;
+      let research = JSON.parse(localStorage.getItem('research')) || {resources:0,forces:0,castle:0};
 
       for (let key in allCost) {
-        allCost[key] = Math.round(allCost[key] * (1.2 + 0.8));
+        allCost.gold = Math.round(allCost.gold * (1.6 - research.resources));
+        allCost.wood = Math.round(allCost.wood * (1.9 - research.resources));
+        allCost.weath = Math.round(allCost.weath * (1.9 - research.resources));
       }
 
       level += 1;
