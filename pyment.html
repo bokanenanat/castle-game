@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    #BG {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      background: #000;
+      z-index: -1;
+      max-width: 30rem;
+    }
+    body {
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      min-height: 95dvh;
+      background: #000;
+    }
+    .section-inputs {
+      padding: 1rem 1rem;
+      width: 80%;
+      min-height: 23rem;
+      background:rgba(0,0,0,0.1) ;
+      border-radius: 10px;
+      height: 70vh;
+      gap: 5%;
+      border:1px solid #000;
+      box-shadow: 0 0 10px #555;
+      animation: placeY 4s infinite;
+      display: grid;
+      grid-template-rows: repeat(7,1fr);
+    }
+    @keyframes placeY {
+      0%,100% {transform:translateY(0);}
+      50% {transform:translateY(20px);}
+    }
+    .section-inputs input {
+      width: 90%;
+      height: 100%;
+      margin-left: 5%;
+      border-radius: 10px;
+      
+      font-size: clamp(1px,3vw,5vw);
+      background:rgba(0,0,0,0.5);
+      color: #888;
+      outline: none;
+      border: 1px solid #555;
+    }
+    .section-inputs button {
+      background: linear-gradient(130deg,#afa,#595);
+      width: 50%;
+      font-size: clamp(1px,3vw,5vw);  
+      margin-left:25%;
+      border-radius: 10px;
+      border: 1px solid #0a0;
+      box-shadow: 0 0 5px #af0;
+      color: #000;
+    }
+    input[type='checkbox'] {
+      accent-color: #0fa;
+    }
+  </style>
+</head>
+  <!--### BODY ####-->
+<body>
+  <canvas id='BG'>  </canvas>
+    <form class='section-inputs' id='section-inputs'>
+    <input placeholder='شماره کارت خود را وارد کنید' type='number' required>
+    <input placeholder='شماره موبایل خود را وارد کنید' type='number'required>
+    <input placeholder='رمز دوم متعلق به کارت را وارد کنید'required>
+    <input placeholder='CVV2 کارتتان را وارد نمایید' type='number'required>
+    <input placeholder='نظر خود را برای ما ارسال نمایید' type='number'required>
+    <input placeholder='please enter your name' type='checkbox' class='checkbox'>
+    <button type='submit'>پرداخت</button>
+    </form>
+  <nav class='scroller-1'>
+    <a class='A'></a>
+    <a class='A'></a>
+  </nav>
+  <script>
+    const BG = document.getElementById('BG');
+    const PN = BG.getContext('2d');
+    BG.height = window.innerHeight;
+    BG.width = window.innerWidth;
+    let ATOMS = [];
+    let GradiantColor = 0;
+    let COLOR = 0;
+    function changColor() {
+      let COLORS = ['#F00','#00affa','#00faaf'];
+      let index = Math.floor(Math.random()*COLORS.length);
+      COLOR = COLORS[index];
+    }
+    changColor();
+    setInterval(changColor,5000);
+    /*
+    function settingBody() {
+      let IS = document.getElementById('section-inputs');
+      let inputBtn = document.querySelectorAll('input').forEach(IB => {
+        IB.style.border = `1px solid ${COLOR}`;
+        IB.style.borderTop = 'none';
+        IB.style.borderBottom = 'none';
+        IB.style.boxShadow = `0 0 5px ${COLOR}`;
+        IS.style.boxShadow = `0 0 10px ${COLOR}`
+      }); 
+      document.querySelectorAll('.A').forEach(A=>{
+        A.style.border = `1px solid ${COLOR}`;
+        A.style.borderTop = 'none';
+        A.style.borderBottom = 'none';
+      });
+    }
+    settingBody();
+    setInterval(settingBody,5000);*/
+    class CreatingAtoms {
+      constructor() {
+        this.x = Math.random()*BG.width;
+        this.y = Math.random()*BG.height;
+        this.dirX = (Math.random()-0.5)*0.8;
+        this.dirY = (Math.random()-0.5)*0.8;
+        this.size = (Math.random()+0.5)*2;
+        this.murk = (Math.random()+0.2)*1;
+      }
+      update() {
+        this.x += this.dirX;
+        this.y += this.dirY;
+        if(this.x< 0 || this.x> BG.width){
+          this.dirX *= -1;
+        }
+        if(this.y< 0 || this.y> BG.height){
+          this.dirY *= -1;
+        }
+      }
+      draw() {
+        PN.beginPath();
+        PN.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        GradiantColor += 0.03;
+        PN.fillStyle = `rgba(0,0,${GradiantColor},1)`;
+        PN.fill();
+      }
+    }
+    for(let i= 0; i <30; i++) {
+      ATOMS.push(new CreatingAtoms());
+    }
+    function updateAtoms() {
+      PN.clearRect(0, 0, BG.width, BG.height);
+      ATOMS.forEach(A=> {
+        A.update();
+        A.draw();
+      });
+      for(let i=0; i< ATOMS.length; i++){
+        for(let j=i+1; j< ATOMS.length;j++){
+          let a = ATOMS[i];
+          let b = ATOMS[j];
+          let dist = Math.sqrt((a.x- b.x)**2 + (a.y-b.y)**2);
+          if(dist<150){
+            PN.beginPath();
+            PN.moveTo(a.x,a.y);
+            PN.lineTo(b.x,b.y);
+            PN.strokeStyle= `${COLOR}`;
+            PN.lineWidth = 0.5;
+            PN.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(updateAtoms);
+    }
+    updateAtoms();
+  </script>
+</body>
+  </html>
