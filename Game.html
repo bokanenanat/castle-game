@@ -424,6 +424,10 @@
     <button class='settings-btn' id='btn-show-forces'>
       <img src='https://i.imgur.com/GryqRa0.png'>
     </button>
+    <button class='settings-btn' id='reset-btn'>
+      R
+    </button>
+    
   </div>
   <aside class='container-show-forces' id='container-show-forces'>
     <div>
@@ -453,7 +457,10 @@
 
   <script>
     /*==================== FORCES SYSTEM ====================*/
-    let forces = {
+    document.getElementById('reset-btn').addEventListener('click',()=>{
+      localStorage.clear();
+    });
+      let forces = {
         infantry: 100,
         cavalry: 100,
         archer: 80,
