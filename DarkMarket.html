@@ -304,7 +304,7 @@
 <body>
   <!-- ==================== HTML/trader ==================== -->
   <section class='container-img-trader' id='container-img-trader'>
-    <img class='img-trader' src='images/trader.jpg'>
+    <img class='img-trader' src='prof/trader.jpg'>
     <audio id='sound-trader' src='Sounds/Welcome.mp3'></audio>
     <canvas class='canvas-particles-trader' id='canvas-particles-trader'></canvas>
   </section>
@@ -432,7 +432,7 @@ function showError(message) {
     <scroller-items class='ctg-scroller'>
       <button data-need="10" class='item-scroller'>
         <div>
-          <img src='images/1coin.png'>
+          <img src='images/1coin.jpg'>
         </div>
         <h1>10🏆: 10🪙</h1>
         <h2>+ 0</h2>
@@ -440,28 +440,28 @@ function showError(message) {
       </button>
       <button data-need="100" class='item-scroller'>
         <div>
-          <img src='images/2coin.png'>
+          <img src='images/2coin.jpg'>
         </div>
         <h1>100🏆: 1K🪙</h1>
         <h2>+ 900</h2>
       </button>
       <button data-need="1000" class='item-scroller'>
         <div>
-          <img src='images/3coin.png'>
+          <img src='images/3coin.jpg'>
         </div>
         <h1>1K🏆: 100K🪙</h1>
         <h2>+ 99K</h2>
       </button>
       <button data-need="10000" class='item-scroller'>
         <div>
-          <img src='images/3coin.png'>
+          <img src='images/3coin.jpg'>
         </div>
         <h1>10K🏆:10M🪙</h1>
         <h2>+ 9990K</h2>
       </button>
     </scroller-items>
     <section class='ctg-custom'>
-      <input id='input-cups' type='number' placeholder='enter your cup'>
+      <input id='input-cups' type='number' placeholder='enter your cup' max='10000'>
       <button id='ctg-btn-confirm'>Trading</button>
     </section>
     <section class='ctg-show-result-input'>
@@ -475,17 +475,30 @@ function showError(message) {
     const showCups = document.getElementById('show-cups');
     const showGoldDebt = document.getElementById('gold-debt');
     const showProfit = document.getElementById('gold-profit');
-    
+    let statusTrade = true;
     let valueInputCups = 0;
     inputCups.addEventListener('input',()=>{
-      
-      valueInputCups = inputCups.value;
-      showCups.textContent = '🏆'+shortNumber(valueInputCups);
-      goldDebt(valueInputCups);
+      let input_1 = Number(inputCups.value.trim());
+      function checkFloat(value){
+        valueInputCups = Math.floor(Number(value));
+        showCups.textContent = '🏆'+shortNumber(valueInputCups);
+        goldDebt(valueInputCups);
+      }
+      if(input_1>0 && typeof input_1 === 'number' && Number.isFinite(input_1) && input_1 <= 10000) {
+        checkFloat(input_1);
+      } else {
+        showError('ورودی نامعتبر');
+        statusTrade = false;
+      }
     });
     let debt = 0;
+    let userBug = false;
     function goldDebt(cups) {
       let coefficient = cups / 10;
+      if(coefficient<0){
+        showError('invalid input');
+        return
+      }
       debt = Math.ceil(cups * coefficient);
       showGoldDebt.textContent = '🪙'+ shortNumber(debt);
       let profit = debt - cups;
@@ -529,25 +542,31 @@ function showError(message) {
       let resources = JSON.parse(localStorage.getItem('resources'));
       let assetCupsMe = parseInt(localStorage.getItem('cups'))||0;
       function trading() {
-        assetCupsMe -= needCups;
-        if(assetCupsMe<0){
-          assetCupsMe = 0;
+        if(needCups<=0){
+          showError('invalid inpit');
+          return
         }
-        resources.gold += debtGold;
-        localStorage.setItem('resources',JSON.stringify(resources));
-        localStorage.setItem('cups',assetCupsMe);
+        if(statusTrade === false) {
+          showError('invalid input');
+          return
+        };
+        if(assetCupsMe >= needCups && needCups>0){
+          assetCupsMe -= needCups;
+          showSuccess('Trading');
+          
+          if(assetCupsMe<0){
+            assetCupsMe = 0;
+          }
+          resources.gold += debtGold;
+          localStorage.setItem('resources',JSON.stringify(resources));
+          localStorage.setItem('cups',assetCupsMe);
+        }
+        else {
+          showError('invalid input');
+        }
       }
-      if(0===assetCupsMe){
-        showError('not enough your cups🏆');
-        return
-      }
-      if(needCups>assetCupsMe){
-    showError('not enough your cups🏆');
-        return
-      }else if(needCups<=assetCupsMe){
+      statusTrade = true;
       trading();
-      showSuccess('Triding🏆');
-      }
     }
     document.getElementById('ctg-btn-confirm').addEventListener('click',()=>{
       checkedAsset(valueInputCups);
@@ -559,4 +578,4 @@ function showError(message) {
     });
   </script>
 </body>
-</html>
+  </html>
