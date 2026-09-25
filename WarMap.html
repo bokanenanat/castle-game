@@ -530,16 +530,17 @@
       position: fixed;
       background: #000;
       z-index: 200;
-      display: none;
+      display: grid;
       align-items: center;
       justify-content: center;
     }
     .section-result-war {
-      background: #222;
-      box-shadow: 0 0 10px gold;
-      border: 1px solid gold;
-      height: 60%;
-      width:80vw;
+      background: #c0c0c0;
+      box-shadow: 0 0 10px #f70;
+      border: 1px solid #fa0;
+      height: 70%;
+      width:90vw;
+      max-width: 50rem;
       border-radius: 10px;
       display: grid;
       grid-template-rows: 3fr 1fr 1fr 3fr;
@@ -550,6 +551,7 @@
       border-radius: 10px;
       display: flex;
       overflow-x: auto;
+      overflow-y: hidden;
       gap: 0;
       justify-content: center;
       align-items: center;
@@ -558,7 +560,7 @@
       justify-content: flex-start;
     }
     .section-result-war div h1, .section-result-war output h2 {
-      font-size: clamp(4px,10vw,62px);
+      font-size: clamp(4px,13vw,100px);
       text-shadow: none;
       flex-shrink: 0;
       height: auto;
@@ -572,19 +574,31 @@
       opacity: 1;
     }
     .section-result-war output h2, .section-result-war h3 {
-      font-size: clamp(4px,4vw,24px);
-      color: #ccc;
+      font-size: clamp(4px,5vw,60px);
+      color: #000;
+      -webkit-text-stroke: clamp(0.4px,0.1vw,8px) #f90;
       width: 40%;
-      height: 100%;
+      height: 90%;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-      text-shadow: 0 0 10px #0ff;
+      text-shadow: 0 0 10px #fa0;
+      border: 1px solid #fa0;
     }
     .section-result-war h3 {
-      color: #0f0;
+      color: #fa0;
+      -webkit-text-stroke: clamp(0.4px,0.1vw,8px) #f70;
       font-size: clamp(4px,5vw,24px);
+      width: 80%;
+      height: 30%;
+      box-shadow: 
+        0 0 2px #fa0,
+        0 0 6px #f50,
+        0 0 4px #fc0,
+        0 0 6px inset #f50
+        ;
+      border-radius: 30px;
     }
   </style>
 </head>
@@ -614,25 +628,25 @@
   <section id="fatherMap">
     <section></section>
     <div>
-    <img src="images/enemie5.jpg" class="castle223" data-info='{"power":95000,"level":10,"name":"castle1","gold":1000,"wood":3500,"weath":3500,"cavalry":200,"chariot":100,"archer":800,"infantry":900,"imgForces":"images/forces-enemie-5.jpg"}'>
+    <img src="images/enemie5.jpg" class="castle223" data-info='{"power":95000,"level":10,"name":"castle1","gold":1000,"wood":3500,"weath":3500,"cavalry":200,"chariot":100,"archer":800,"infantry":900,"imgForces":"images/forces-enemie-5.jpg","cupReward":6}'>
       <h1 style='color:#fda;border:1px solid #fda'>5</h1>
     </div>
     <section></section>
     <div>
-    <img src="images/enemie10.jpg" class="castle223" data-info='{"power":205000,"level":15,"name":"castle2","gold":1500,"wood":15000,"weath":15000,"cavalry":400,"chariot":200,"archer":1600,"infantry":1800,"imgForces":"images/forces-enemie-10.jpg"}'>
+    <img src="images/enemie10.jpg" class="castle223" data-info='{"power":205000,"level":15,"name":"castle2","gold":1500,"wood":15000,"weath":15000,"cavalry":400,"chariot":200,"archer":1600,"infantry":1800,"imgForces":"images/forces-enemie-10.jpg","cupReward":12}'>
       <h1 style='color:#fd8;border:1px solid #fd8'>10</h1>
     </div>
     <article class='compass'>
       <img src='images/direction.jpg'>
     </article>
     <div>
-    <img src="images/enemie15.jpg" class="castle223" data-info='{"power":310000,"level":20,"name":"castle3","gold":3500,"wood":25000,"weath":25000,"cavalry":800,"chariot":400,"archer":3200,"infantry":3600,"imgForces":"images/forces-enemie-15.jpg"}'>
+    <img src="images/enemie15.jpg" class="castle223" data-info='{"power":310000,"level":20,"name":"castle3","gold":3500,"wood":25000,"weath":25000,"cavalry":800,"chariot":400,"archer":3200,"infantry":3600,"imgForces":"images/forces-enemie-15.jpg","cupReward":18}'>
       <h1 style='color:#fc4;border:1px solid #fc4'>15</h1>
     </div>
     <section></section>
       
     <div>
-    <img src="images/enemie20.jpg" class="castle223" data-info='{"power":815000,"level":25,"name":"castle4","gold":7000,"wood":40000,"weath":40000,"cavalry":1600,"chariot":800,"archer":6400,"infantry":7200,"imgForces":"images/forces-enemie-20.jpg"}'>
+    <img src="images/enemie20.jpg" class="castle223" data-info='{"power":815000,"level":25,"name":"castle4","gold":7000,"wood":40000,"weath":40000,"cavalry":1600,"chariot":800,"archer":6400,"infantry":7200,"imgForces":"images/forces-enemie-20.jpg","cupReward":24}'>
       <h1 style='color:#fa0;border:1px solid #fa0'>20</h1>
     </div>
     <section></section>
@@ -704,19 +718,19 @@
         <h1 id='star-3'> </h1>
       </div>
       <output>
-        <h2 id='reward-gold'>🌾: uploading ...</h2>
-        <h2 id='reward-wood'>🪵: uploading ...</h2>
-        <h2 id='reward-weath'>🪙: uploading ...</h2>
+        <h2 id='reward-gold'>🌾:...</h2>
+        <h2 id='reward-wood'>🪵:...</h2>
+        <h2 id='reward-weath'>🪙:...</h2>
         <h2 id='reward-cup'>🏆: +15</h2>
       </output>
       <output>
-        <h2 id='forces-me-2'>: 10000</h2>
-        <h2 id='forces-enemie-2'>dd:27272</h2>
-        <h2 id='remainder-forces-me'>⭐:62672</h2>
-        <h2 id='remainder-forces-enemie'></h2>
+        <h2 id='forces-me-2'>....</h2>
+        <h2 id='forces-enemie-2'>....</h2>
+        <h2 id='remainder-forces-me'>....</h2>
+        <h2 id='remainder-forces-enemie'>....</h2>
       </output>
       <div>
-        <h3 id='message-result-war'>Loading ...</h3>
+        <h3 id='message-result-war'>Loading...</h3>
       </div>
       <audio src='Sounds/result-music.mp3' id='result-music'></audio>
     </section>
@@ -916,21 +930,21 @@
       let resultWar = '';
       if(theDeadMe <= 80){
         document.getElementById('star-1').textContent = '⭐';
-        rewardCup += 1;
+        rewardCup = Math.ceil(objectEnemieInfo.cupReward/3);
         resultWar = 'good';
       } else {
         document.getElementById('star-1').textContent = '💀';
       }
       if(theDeadMe <= 40){
         document.getElementById('star-2').textContent = '⭐';
-        rewardCup += 1;
+        rewardCup = Math.ceil(2/objectEnemieInfo.cupReward);
         resultWar = 'very good';
       } else {
         document.getElementById('star-2').textContent = '💀';
       }
       if(theDeadMe<=20){
         document.getElementById('star-3').textContent = '⭐';
-        rewardCup += 1;
+        rewardCup = objectEnemieInfo.cupReward;
         resultWar = 'Excellent';
       } else {
         document.getElementById('star-3').textContent = '💀';
@@ -951,11 +965,11 @@
         document.getElementById('reward-weath').textContent = '🌾: +'+ objectEnemieInfo.weath;
         resources.weath += objectEnemieInfo.weath;
         document.getElementById('reward-cup').textContent = '🏆: +'+ rewardCup;
-        messageResultWar.innerHTML = 'You won<br>'+  resultWar;
+        messageResultWar.innerHTML = '⚔You won⚔<br>'+  resultWar;
       } else if(remainderForcesMe<remainderForcesEnemie){
         pageResultWar.style.display = 'grid';
-        sectionResultWar.style.border = '1px solid #f00';
-        sectionResultWar.style.boxShadow = '0 0 10px #f00';
+        sectionResultWar.style.border = '1px solid #f40';
+        sectionResultWar.style.boxShadow = '0 0 10px #f30';
         messageResultWar.style.color = '#f00';
         messageResultWar.style.textShadow = '0 0 10px #f00';
         document.getElementById('reward-gold').textContent = '🪙: +'+ 0;
