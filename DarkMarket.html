@@ -248,7 +248,7 @@
 }
 
 .error-box::before {
-  content: '⚠️';
+  content: '💀';
   display: block;
   font-size: 2em;
   margin-bottom: 10px;
@@ -288,7 +288,7 @@
 }
 
 .success-box::before {
-  content: '💰';
+  content: '༺🏆༻';
   display: block;
   font-size: 2em;
   margin-bottom: 10px;
@@ -299,6 +299,125 @@
   0% { transform: translateY(0); }
   100% { transform: translateY(-10px); }
                        }
+    /*
+      gmb = gamble
+    */
+    .gmb-img {
+      width: 70%;
+      aspect-ratio: 1/1;
+      margin-left: 15%;
+      margin-top: 10vh;
+    }
+    .gmb-section {
+      width: 90%;
+      margin-left: 5%;
+      margin-top: 0;
+      margin-bottom: 10vh;
+      height: 50vh;
+      min-height: 20rem;
+      box-shadow: 0 0 10px var(--gray);
+      border: 1px solid var(--gray);
+      border-radius: clamp(10px,5vw,30px);
+      display: grid;
+      grid-template-rows: 1fr 3fr 1fr;
+      gap: 1vh;
+      background: #000;
+    }
+    .gmb-informations {
+      display: flex;
+      justify-content: center;
+      gap: 10vw;
+      align-items: center;
+      width: 94%;
+      margin-left: 3%;
+      border: 1px solid #666;
+      border-radius: 2vw;
+      background: none;
+    }
+    .gmb-informations h1 {
+      height: 60%;
+      width: 40%;
+      border: 1px solid var(--golden);
+      box-shadow: 0 0 8px var(--golden);
+      color: var(--golden);
+      font-size: 4vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2vw;
+    }
+    .gmb-container-input {
+      heigh: 100%;
+      width: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gmb-container-input input {
+      width: 80%;
+      height: 80%;
+      border: 1px solid #fa0;
+      background: #000;
+      color: var(--gray);
+    }
+    .gmb-container-dice {
+      width: 100%;
+      background: #999;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+    }
+    .gmb-dice {
+      background: #000;
+      height: 100%;
+      width: 100%;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      grid-template-rows: 4fr 1fr;
+    }
+    .gmb-dice img {
+      width: 70%;
+      border-radius: 2vw;
+      transition: all 1s ease;
+    }
+    .gmb-dice p {
+      width: 100%;
+      height: 90%;
+      border: 1px solid #555;
+      color: #0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2vw;
+      border: 1px solid #0f0;
+    }
+    .gmb-result {
+      width: 98%;
+      margin-left: 1%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10vw;
+      border: 1px solid var(--gray);
+      border-radius: 5vw;
+      background: none;
+    }
+    .gmb-result h1 {
+      height: 60%;
+      width: 40%;
+      box-shadow: 0 0 8px var(--golden);
+      border: 1px solid var(--golden);
+      color: var(--golden);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4vw;
+      border-radius: 2vw;
+    }
   </style>
 </head>
 <body>
@@ -406,7 +525,7 @@ function showError(message) {
   setTimeout(() => {
     errorBox.classList.remove('show');
     setTimeout(() => errorBox.remove(), 400);
-  }, 2000);
+  }, 3000);
     }
   /* /// */
   function showSuccess(message) {
@@ -423,7 +542,7 @@ function showError(message) {
   setTimeout(() => {
     successBox.classList.remove('show');
     setTimeout(() => successBox.remove(), 400);
-  }, 2000);
+  }, 3000);
 }
   </script>
   <!-- ==================== HTML/deal Gold ==================== -->
@@ -487,7 +606,7 @@ function showError(message) {
       if(input_1>0 && typeof input_1 === 'number' && Number.isFinite(input_1) && input_1 <= 10000) {
         checkFloat(input_1);
       } else {
-        showError('ورودی نامعتبر');
+        showError('⚠️ invalid input ⚠️');
         statusTrade = false;
       }
     });
@@ -496,7 +615,7 @@ function showError(message) {
     function goldDebt(cups) {
       let coefficient = cups / 10;
       if(coefficient<0){
-        showError('invalid input');
+        showError('⚠️ invalid input ⚠️');
         return
       }
       debt = Math.ceil(cups * coefficient);
@@ -536,18 +655,18 @@ function showError(message) {
         return number;
       }
     }
-    
+    let assetCupsMe = parseInt(localStorage.getItem('cups'))||0;
     
     function checkedAsset(needCups,debtGold=((needCups/10)*needCups)) {
-      let resources = JSON.parse(localStorage.getItem('resources'));
-      let assetCupsMe = parseInt(localStorage.getItem('cups'))||0;
+      let resources = JSON.parse(localStorage.getItem('resources'))||{gold:0,wood:0,weath:0};
+      assetCupsMe = parseInt(localStorage.getItem('cups'))||0;
       function trading() {
         if(needCups<=0){
-          showError('invalid inpit');
+          showError('⚠️invalid inpit⚠️');
           return
         }
         if(statusTrade === false) {
-          showError('invalid input');
+          showError('⚠️ Error ⚠️');
           return
         };
         if(assetCupsMe >= needCups && needCups>0){
@@ -562,7 +681,7 @@ function showError(message) {
           localStorage.setItem('cups',assetCupsMe);
         }
         else {
-          showError('invalid input');
+          showError('⚠️invalid input⚠️');
         }
       }
       statusTrade = true;
@@ -577,5 +696,86 @@ function showError(message) {
       })
     });
   </script>
+  
+  <!-- ==================== HTML/Gambling ==================== -->
+  <img class='gmb-img' src='images/gambler.jpg'>
+  <article class='gmb-section'>
+    <output class='gmb-informations'>
+      <h1 id='cups-me'>🏆: ...</h1>
+      <h1>50%</h1>
+    </output>
+    
+    <section class='gmb-container-dice'>
+      <div class='gmb-dice'>
+        <img src='images/dice-1.jpg' class='dice' data-quantity="1000">
+        <p>1000🏆</p>
+      </div>
+      <div class='gmb-dice'>
+        <img src='images/dice-2.jpg' class='dice' data-quantity="100">
+        <p style='color:var(--golden);border:1px solid var(--golden);'>100🏆</p>
+      </div>
+      <div class='gmb-dice' data-quantity="10">
+        <img src='images/dice-3.jpg' class='dice' data-quantity="10">
+        <p style='color:#f00;border:1px solid var(--red);'>10🏆</p>
+      </div>
+      <audio src='Sounds/dice.mp3' id='sound-dice'></audio>
+    </section>
+    <section class='gmb-result'>
+      <h1 id='show-won'>+🏆</h1>
+      <h1 id='show-lost'>-🏆</h1>
+    </section>
+  </article>
+  <!-- ==================== JS/Gembling ==================== -->
+  <script>
+    function updateShowCupsMe() {
+    let showCupsMe = document.getElementById('cups-me');
+      localStorage.setItem('cups',assetCupsMe || 0);
+    assetCupsMe = parseInt(localStorage.getItem('cups'))||0;
+    showCupsMe.textContent = '🏆:'+ assetCupsMe;
+    }
+    updateShowCupsMe();
+    let won = 0;
+    let lost = 0;
+    function gmb_checkAssetCup(need,number) {
+      
+      
+      if(assetCupsMe<=0|| assetCupsMe<need){
+        showError('your cups not enough🏆');
+        return     
+      }
+      if(number%2 === 0 && assetCupsMe>need) {
+        assetCupsMe += (need);
+      updateShowCupsMe();
+        showSuccess('🥳you won this bet🥳');
+        won += (need);
+        document.getElementById('show-won').textContent = '+🏆' + won;
+      }
+      if(number%2 !== 0) {
+        assetCupsMe -= need;
+        if(assetCupsMe<0) {
+          assetCupsMe = 0;
+        }
+        updateShowCupsMe();
+        showError('💀you lost this bet💀');
+        lost += need;
+        document.getElementById('show-lost').textContent = '-🏆' + lost;
+      }
+    }
+    document.querySelectorAll('.dice').forEach(item=>{
+      item.addEventListener('click',()=>{
+        item.style.transform='rotate(1080deg)';
+        document.getElementById('sound-dice').play();
+        const arrayNumbers = [1,2,3,4,5,6,7,8,9,10];
+        const index = Math.floor(Math.random()*arrayNumbers.length);
+        const number = arrayNumbers[index];
+        const need = parseInt(item.dataset.quantity)||0;
+        setTimeout(()=>{
+          gmb_checkAssetCup(need,number);
+          item.style.transform='';
+        },2000);
+      }); 
+    });
+  </script>
+  
 </body>
-  </html>
+      </html>
