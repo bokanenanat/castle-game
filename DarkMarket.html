@@ -578,6 +578,7 @@ function showError(message) {
         <h1>10K🏆:10M🪙</h1>
         <h2>+ 9990K</h2>
       </button>
+      <audio src='Sounds/coins.mp3' id='sound-coins'></audio>
     </scroller-items>
     <section class='ctg-custom'>
       <input id='input-cups' type='number' placeholder='enter your cup' max='10000'>
@@ -692,6 +693,7 @@ function showError(message) {
     });
     document.querySelectorAll('.item-scroller').forEach(item=>{
       item.addEventListener('click',()=>{
+        document.getElementById('sounds-coins').play();
         checkedAsset(parseInt(item.dataset.need));
       })
     });
