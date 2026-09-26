@@ -693,7 +693,7 @@ function showError(message) {
     });
     document.querySelectorAll('.item-scroller').forEach(item=>{
       item.addEventListener('click',()=>{
-        document.getElementById('sounds-coins').play();
+        document.getElementById('sound-coins').play();
         checkedAsset(parseInt(item.dataset.need));
       })
     });
@@ -767,7 +767,7 @@ function showError(message) {
       item.addEventListener('click',()=>{
         item.style.transform='rotate(1080deg)';
         document.getElementById('sound-dice').play();
-        const arrayNumbers = [1,2,3,4,5,6,7,8,9,10];
+        const arrayNumbers = [2,1,2,1,2,1,2,1,2,1,2];
         const index = Math.floor(Math.random()*arrayNumbers.length);
         const number = arrayNumbers[index];
         const need = parseInt(item.dataset.quantity)||0;
