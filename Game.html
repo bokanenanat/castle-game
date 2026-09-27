@@ -259,8 +259,8 @@
     /* ==================== SETTINGS PANEL ==================== */
     .settings-panel {
       position: fixed;
-      bottom: 7vh;
-      left: 1px;
+      top: 85%;
+      height: 30%;
       z-index: 200;
       display: flex;
       flex-direction: column;
@@ -268,7 +268,6 @@
       background: var(--panel-bg);
       border: 1px solid var(--panel-border);
       border-radius: 16px;
-      padding: 0.8rem;
       backdrop-filter: blur(15px);
       box-shadow:
         0 0 25px rgba(255, 215, 0, 0.15),
@@ -288,10 +287,8 @@
       background: transparent;
       border: 1px solid rgba(255, 215, 0, 0.2);
       color: var(--gold-1);
-      width: 8vw;
-      max-height: 30rem;
-      max-width: 15rem;
-      height: 10vw;
+      width: 100%;
+      height: 50px;
       cursor: pointer;
       border-radius: 12px;
       font-size: 1.5rem;
@@ -348,17 +345,13 @@
         padding: 0.8rem 2rem;
       }
       .settings-panel {
-        bottom:7vh;
-        left: 1px;
-        gap: 0.4rem;
-        padding: 0.5rem;
+        top:85%;
+        height: 15%;
+        left: 10px;
+        gap: 1px;
       }
       .settings-btn {
-        width: 10vw;
-        max-height: 15rem;
-        max-width: 15rem;
-        height: 10vw;
-        font-size: 3.5vw;
+        aspect-ratio: 1/1;
       }
     }
     .container-show-forces {
