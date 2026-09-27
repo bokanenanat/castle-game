@@ -420,34 +420,30 @@
     <button class="settings-btn" id="music-toggle" title="Toggle Music">
       <img src='images/music.jpg'>
     </button>
-    <a class='settings-btn' href='Gallery.html'>👑</a>
     <button class='settings-btn' id='btn-show-forces'>
       <img src='images/cavalry.jpg'>
-    </button>
-    <button class='settings-btn' id='reset-btn'>
-      R
     </button>
     
   </div>
   <aside class='container-show-forces' id='container-show-forces'>
     <div>
-      <p id='count-cavalry'>300,000</p>
+      <p id='count-cavalry'>loading...</p>
       <img src='images/cavalry.jpg'>
     </div>
     <div>
-      <p id='count-infantry'>300,000</p>
+      <p id='count-infantry'>loading...</p>
       <img src='images/infantry.jpg'>
     </div>
     <div>
-      <p id='count-archer'>300,000</p>
+      <p id='count-archer'>loading...</p>
       <img src='images/archer.jpg'>
     </div>
     <div>
-      <p id='count-chariot'>300,000</p>
+      <p id='count-chariot'>loading...</p>
       <img src='images/chariot.jpg'>
     </div>
     <div>
-      <p id='count-forces'>300,000</p>
+      <p id='count-forces'>loading...</p>
       <img src='images/forces-Me.jpg'>
     </div>
   </aside>
@@ -457,9 +453,6 @@
 
   <script>
     /*==================== FORCES SYSTEM ====================*/
-    document.getElementById('reset-btn').addEventListener('click',()=>{
-      localStorage.clear();
-    });
       let forces = {
         infantry: 100,
         cavalry: 100,
