@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -85,30 +86,120 @@
       user-select: none;
       pointer-events: none;
     }
-    .forces-scroller {
+    /* ==================== ERROR BOX ==================== */
+.error-box-gold {
   position: fixed;
-  bottom: 3rem;
-  left: 0;
-  width: 100vw;
-  height: 18vh;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0 1rem;
-  z-index: 30;
-  scroll-snap-type: x mandatory;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: linear-gradient(160deg, #1a0000, #0d0000, #200000);
+  border: 2px solid #f00;
+  border-radius: 20px;
+  padding: 30px 50px;
+  color: #f00;
+  font-family: 'Rye', cursive;
+  font-size: clamp(16px, 5vw, 28px);
+  text-shadow: 0 0 15px #f00;
+  box-shadow:
+    0 0 20px #f00,
+    0 0 40px #f00,
+    0 0 60px #800,
+    inset 0 0 30px rgba(255, 0, 0, 0.15);
+  z-index: 99999;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  text-align: center;
+  pointer-events: none;
+  letter-spacing: 2px;
 }
+
+.error-box-gold.show {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.error-box-gold::before {
+  content: '💀';
+  display: block;
+  font-size: 3em;
+  margin-bottom: 15px;
+  animation: errorShake 0.6s infinite;
+  filter: drop-shadow(0 0 15px #f00);
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-8px) rotate(-5deg); }
+  75% { transform: translateX(8px) rotate(5deg); }
+}
+
+/* ==================== SUCCESS BOX ==================== */
+.success-box-gold {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: linear-gradient(160deg, #001a00, #000d00, #002200);
+  border: 2px solid #0f0;
+  border-radius: 20px;
+  padding: 30px 50px;
+  color: #ffd700;
+  font-family: 'Rye', cursive;
+  font-size: clamp(16px, 5vw, 28px);
+  text-shadow:
+    0 0 10px #ffd700,
+    0 0 20px #ffa500,
+    0 0 30px #0f0;
+  box-shadow:
+    0 0 20px #0f0,
+    0 0 40px #ffd700,
+    0 0 60px #ffa500,
+    inset 0 0 30px rgba(0, 255, 0, 0.15);
+  z-index: 99999;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  text-align: center;
+  pointer-events: none;
+  letter-spacing: 2px;
+}
+
+.success-box-gold.show {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.success-box-gold::before {
+  content: '🏆';
+  display: block;
+  font-size: 3em;
+  margin-bottom: 15px;
+  animation: successBounce 0.6s infinite alternate;
+  filter: drop-shadow(0 0 15px #ffd700);
+}
+
+@keyframes successBounce {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-15px) scale(1.1); }
+                                    }
+    .forces-scroller {
+      margin-top: 5vh;
+      margin-left: 0;
+      width: 90vw;
+      height: 18vh;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0 1rem;
+      z-index: 30;
+      scroll-snap-type: x mandatory;
+    }
 
 .forces-scroller::-webkit-scrollbar {
   display: none;
 }
 
-.force-card {
+.force-card, .res-card {
   flex-shrink: 0;
-  width: 25vw;
+  width: 20vw;
   min-width: 100px;
-  height: 100%;
+  height: 98%;
   background: #000;
   border: 1px solid var(--gold);
   box-shadow: 0 0 8px var(--gold);
@@ -128,14 +219,14 @@
   transform: translateY(-3px);
 }
 
-.force-card img {
+.force-card img, .res-card img {
   width: 100%;
   height: 60%;
   object-fit: contain;
   border-bottom: 1px solid var(--gold);
 }
 
-.force-card h1 {
+.force-card h1, .res-card h1 {
   color: var(--gold);
   font-size: clamp(8px, 3vw, 14px);
   text-align: center;
@@ -146,7 +237,7 @@
   flex: 1;
   margin: 0;
     }
-    .force-card h2 {
+    .force-card h2, .res-card h2 {
       color: #eee;
       top: 0;
       left: 1px;
@@ -199,6 +290,28 @@
     <h2>250</h2>
     <h1>Chariot<br>1200🪙</h1>
   </div>
+    </section>
+    <section class='forces-scroller'>
+      <div class='res-card' data-type='wood' data-cost='300'>
+        <img src='images/1wood.jpg'>
+        <h2>3000</h2>
+        <h1>wood🪵<br>300🪙</h1>
+      </div>
+      <div class='res-card' data-type='wood' data-cost='3000'>
+        <img src='images/2wood.jpg'>
+        <h2>30000</h2>
+        <h1>wood🪵<br>3000🪙</h1>
+      </div>
+      <div class='res-card' data-type='weath' data-cost='300'>
+        <img src='images/1weath.jpg'>
+        <h2>3000</h2>
+        <h1>weath🌾<br>300🪙</h1>
+      </div>
+      <div class='res-card' data-type='weath' data-cost='3000'>
+        <img src='images/2weath.jpg'>
+        <h2>30000</h2>
+        <h1>weath🌾<br>3000🪙</h1>
+      </div>
     </section>
   <script>
     let bg = document.getElementById('canvas');
@@ -264,17 +377,56 @@
         P.addEventListener('click',()=>{window.location.href='pyment.html'});
       });
     } openPyment();
+    /* ==================== SHOW ERROR ==================== */
+function showError(message) {
+  // حذف قبلی
+  let old = document.querySelector('.error-box-gold');
+  if (old) old.remove();
+
+  // ساخت جدید
+  let box = document.createElement('div');
+  box.classList.add('error-box-gold');
+  box.textContent = message;
+  document.body.appendChild(box);
+
+  // نمایش
+  setTimeout(() => box.classList.add('show'), 10);
+
+  // حذف
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => box.remove(), 500);
+  }, 3000);
+}
+
+/* ==================== SHOW SUCCESS ==================== */
+function showSuccess(message) {
+  let old = document.querySelector('.success-box-gold');
+  if (old) old.remove();
+
+  let box = document.createElement('div');
+  box.classList.add('success-box-gold');
+  box.textContent = message;
+  document.body.appendChild(box);
+
+  setTimeout(() => box.classList.add('show'), 10);
+
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => box.remove(), 500);
+  }, 3000);
+             }
     
+    let resources = JSON.parse(localStorage.getItem('resources')) || {
+      gold: 0,
+      wood: 0,
+      weath: 0
+    };
     document.querySelectorAll('.force-card').forEach(card => {
   card.addEventListener('click', () => {
     let forceType = card.dataset.force;
     let cost = parseInt(card.dataset.cost);
 
-    let resources = JSON.parse(localStorage.getItem('resources')) || {
-  gold: 0,
-  wood: 0,
-  weath: 0
-};
     if (resources.gold >= cost) {
       resources.gold -= cost;
       localStorage.setItem('resources', JSON.stringify(resources));
@@ -289,12 +441,27 @@
       forces[forceType] += 250;
       localStorage.setItem('forces', JSON.stringify(forces));
       
-      alert('✅ ' + forceType + ' خریداری شد!');
+      showSuccess('⚡'+forceType+'⚡');
     } else {
-      alert('❌ طلا کافی نیست!');
+      showError('your coins not enough');
     }
   });
 });
+    document.querySelectorAll('.res-card').forEach(card=>{
+      card.addEventListener('click',()=>{
+        const resType = card.dataset.type;
+        const cost = Number(card.dataset.cost);
+        const value= cost*10;
+        if(resources.gold>=cost) {
+          resources.gold -= cost;
+          resources[resType] += value;
+          localStorage.setItem('resources', JSON.stringify(resources));
+          showSuccess('⚡'+resType+'⚡');
+        } else {
+          showError('your coins not enough !');
+        }
+      });
+    });
   </script>
 </body>
   </html>
