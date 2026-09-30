@@ -282,10 +282,10 @@ errorClose.addEventListener('click', () => {
       forces = savedForces;
     }
     function shortQuantity(num) {
-      if(num >= 1000000000) return (num/1000000000).fixedTo(3) + 'B';
-      if(num >= 1000000) return (num/1000000).fixedTo(3) + 'M';
-      if(num >= 1000) return (num/1000).fixedTo(3) + 'K';
-      if(num < 1000) return num;
+      if(num >= 1000000000) return (num/1000000000).toFixed(3) + 'B';
+      if(num >= 1000000) return (num/1000000).toFixed(3) + 'M';
+      if(num >= 1000) return (num/1000).toFixed(3) + 'K';
+      return num;
     }
     function updateResources() {
       document.getElementById('res-gold').textContent = resources.gold;
