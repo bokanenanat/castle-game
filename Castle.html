@@ -745,9 +745,9 @@ document.getElementById('lock-close').addEventListener('click', () => {
       savedResources.wood -= allCost.wood;
       savedResources.weath -= allCost.weath;
       
-        allCost.gold = Math.round(allCost.gold * (1.6 - research.resources));
-        allCost.wood = Math.round(allCost.wood * (1.9 - research.resources));
-        allCost.weath = Math.round(allCost.weath * (1.9 - research.resources));
+        allCost.gold = Math.round(allCost.gold * (1.9 - research.resources));
+        allCost.wood = Math.round(allCost.wood * (2.2 - research.resources));
+        allCost.weath = Math.round(allCost.weath * (2.2 - research.resources));
 
       level += 1;
       if(level >= 25) {
