@@ -288,9 +288,9 @@ errorClose.addEventListener('click', () => {
       return num;
     }
     function updateResources() {
-      document.getElementById('res-gold').textContent = resources.gold;
-      document.getElementById('res-wood').textContent = resources.wood;
-      document.getElementById('res-weath').textContent = resources.weath;
+      document.getElementById('res-gold').textContent = shortQuantity(resources.gold);
+      document.getElementById('res-wood').textContent = shortQuantity(resources.wood);
+      document.getElementById('res-weath').textContent = shortQuantity(resources.weath);
     }
 
     function updateDisplay() {
