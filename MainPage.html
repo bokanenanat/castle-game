@@ -384,9 +384,9 @@
     });
     /* ==================== OBJECT S ==================== */
     let resources = {
-      gold : 100 ,
-      wood : 100 ,
-      weath : 100
+      gold : 10 ,
+      wood : 30 ,
+      weath : 30
     }
     let player = {
       name : 'lord' , 
@@ -417,9 +417,9 @@
       readResources();
       /*castleLevel = parseInt(localStorage.getItem('castleLevel'));*/
       let bonus = 1 + (research.resources * 0.5);
-      resources.gold += (castleLevel * 50) * bonus;
-      resources.wood += (castleLevel * 100) * bonus;
-      resources.weath += (castleLevel * 100) * bonus;
+      resources.gold += ((castleLevel*0.5) * 30) * bonus;
+      resources.wood += ((castleLevel*0.5) * 90) * bonus;
+      resources.weath += ((castleLevel*0.5) * 90) * bonus;
       saveResources();
       showResources();
       showPlayer();
