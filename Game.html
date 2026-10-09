@@ -417,6 +417,9 @@
     <button class='settings-btn' id='btn-show-forces'>
       <img src='images/cavalry.jpg'>
     </button>
+    <button class='settings-btn' id='btn-reset'>
+      ×
+    </button>
     
   </div>
   <aside class='container-show-forces' id='container-show-forces'>
@@ -446,7 +449,10 @@
   <audio id='soundClick'src='Sounds/click.mp3'></audio>
 
   <script>
-    /*==================== FORCES SYSTEM ====================*/
+    document.getElementById('btn-reset').addEventListener('click',()=>{
+      localStorage.clear();
+    });
+      /*==================== FORCES SYSTEM ====================*/
       let forces = {
         infantry: 100,
         cavalry: 100,
