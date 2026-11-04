@@ -16,6 +16,191 @@
       display: grid;
       justify-items: center;
     }
+    /* ==================== LETTER OVERLAY ==================== */
+    .letter-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      background: rgba(0, 0, 0, 0.85);
+      display: none; /* در ابتدا مخفی است */
+      justify-content: center;
+      align-items: center;
+      z-index: 100000; /* بالاتر از همه چیز */
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .letter-overlay.show {
+      display: flex;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* نامه قدیمی */
+    .letter {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background-color: #f4e8c1;
+      background-image: 
+        linear-gradient(rgba(244, 232, 193, 0.9), rgba(244, 232, 193, 0.9)),
+        url('https://www.transparenttextures.com/patterns/old-paper.png');
+      padding: 40px 30px;
+      border-radius: 4px;
+      box-shadow: 
+        0 0 50px rgba(0, 0, 0, 0.9),
+        inset 0 0 80px rgba(139, 69, 19, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.1);
+      color: #3e2723;
+      border: 1px solid #d4b886;
+      animation: letterAppear 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      transform: scale(0.8) rotate(-2deg);
+      opacity: 0;
+    }
+
+    @keyframes letterAppear {
+      to {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    /* دکمه بستن (×) */
+    .btn-close-letter {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 35px;
+      height: 35px;
+      background: #5d4037;
+      color: #f4e8c1;
+      border: none;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .btn-close-letter:hover {
+      background: #8b4513;
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    /* بقیه استایل‌های داخلی نامه (همون‌هایی که توی کد قبلی بود) */
+    .letter-header {
+      text-align: center;
+      border-bottom: 2px solid #8b4513;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .letter-header h1 {
+      font-family: 'Rye', cursive;
+      color: #5d4037;
+      font-size: clamp(20px, 5vw, 32px);
+      letter-spacing: 2px;
+    }
+    .letter-header .subtitle {
+      font-size: 12px;
+      color: #8b4513;
+      margin-top: 5px;
+      font-style: italic;
+    }
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: clamp(12px, 3vw, 15px);
+      line-height: 1.6;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(139, 69, 19, 0.3);
+    }
+    .feature-item:last-child { border-bottom: none; }
+    .feature-item .star { color: #8b4513; }
+    .feature-item strong { color: #5d4037; display: block; margin-bottom: 4px; }
+    .feature-item ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .feature-item li {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.9em;
+    }
+    .warning-box {
+      background: rgba(139, 69, 19, 0.1);
+      border: 1px dashed #8b4513;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: clamp(11px, 2.5vw, 13px);
+      color: #8b4513;
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .signature {
+      text-align: left;
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(139, 69, 19, 0.4);
+    }
+    .signature .name {
+      font-family: 'Rye', cursive;
+      font-size: clamp(20px, 5vw, 30px);
+      color: #5d4037;
+      transform: rotate(-2deg);
+      display: inline-block;
+    }
+    .signature .title {
+      font-size: 11px;
+      color: #8b4513;
+      margin-top: 4px;
+      font-style: italic;
+    }
+    .wax-seal {
+      position: absolute;
+      bottom: -15px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, #b71c1c, #7f0000);
+      border-radius: 50%;
+      box-shadow: 
+        2px 2px 5px rgba(0,0,0,0.4),
+        inset -2px -2px 5px rgba(0,0,0,0.3),
+        inset 2px 2px 5px rgba(255,255,255,0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .wax-seal::after {
+      content: '✦';
+      font-size: 24px;
+      color: #ffccbc;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
     img {
       -webkit-touch-callout: none;   /* برای iOS */
       -webkit-user-select: none;     /* برای Chrome/Safari */
@@ -25,7 +210,7 @@
       pointer-events: auto;          /* اجازه کلیک */
     }
 
-/* برای همه عناصر (اختیاری) */
+    /* برای همه عناصر (اختیاری) */
     * {
       -webkit-touch-callout: none;
       -webkit-user-select: none;
@@ -294,7 +479,6 @@
     </section>
   </section>
   
-  
   <!-- ==================== EARTH MAP ==================== -->
   <section class="father-earth">
     <a class="castle-P" href="Castle.html"></a>
@@ -321,6 +505,39 @@
     <a class="container-btn">
       <img src="images/resources.jpg" class="img-btn-attack" alt="Resources">
     </a>
+  </section>
+
+  <!-- ==================== LETTER ==================== -->
+  <section class="letter-overlay" id="letter-overlay">
+    <div class="letter">
+      <button class="btn-close-letter" id="btn-close-letter">×</button>
+      <div class="letter-header">
+        <h1>ROYAL DECREE</h1>
+        <div class="subtitle">✦ فرمان سلطنتی ✦</div>
+      </div>
+
+      <div class="features-list">
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۱- دارای ۴ ساختمان:</strong><ul><li>🏰 قلعه</li><li>🏛️ دانشگاه</li><li>⚔️ سربازخانه</li><li>⚒️ آهنگری (درحال ساخت)</li></ul></div></div>
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۲- اقتصاد بازی:</strong><ul><li>🪙 طلا</li><li>🌾 گندم</li><li>🪵 چوب</li></ul></div></div>
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۳- دارای چهار نوع نیرو:</strong><ul><li>⚙️ ارابه</li><li>🐎 سواره نظام</li><li>🏹 کماندار</li><li>🛡️ پیاده نظام</li></ul></div></div>
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۴- بازار سیاه، معاملات غیر قانونی و قمار:</strong><ul><li>🎲 شرط‌بندی</li></ul></div></div>
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۵- فروشگاه متنوع، شیک و مینیمال:</strong><ul><li>🔮 خرید منابع</li></ul></div></div>
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۶- مَپ حمله به قلعه‌های همسایه و غارت:</strong><ul><li>📯 حمله نظامی</li></ul></div></div>
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۷- مَپ جمع‌آوری منابع از مزارع و معادن:</strong><ul><li>⛏️ معدن</li><li>🪨 سنگ</li><li>(درحال ساخت)</li></ul></div></div>
+        <div class="feature-item"><span class="star">✦</span><div class="content"><strong>۸- حمله به هیولا، جمع‌آوری جوایز و غنیمت‌های فوق‌العاده:</strong><ul><li>💀 هیولا</li><li>⚡ غنیمت</li></ul></div></div>
+      </div>
+
+      <div class="warning-box">
+        ⚠️ توجه:<br>
+        تمامی اطلاعات از جمله سطح‌ها، قدرت، نیروها، منابع و... در حافظه محلی مرورگر شما ذخیره می‌شود. در صورت پاک کردن داده‌های مرورگر، تمامی اطلاعات شما ریست خواهد شد. ⚠️
+      </div>
+
+      <div class="signature">
+        <div class="name">Javad Nadimi</div>
+        <div class="title">✦سازنده و پشتیبان بازی✦</div>
+      </div>
+      <div class="wax-seal"></div>
+    </div>
   </section>
 
   <!-- ==================== CANVAS + AUDIO ==================== -->
@@ -396,8 +613,8 @@
       
     /* ==================== SAVE RESOURCES ==================== */
     function saveResources() {
-        localStorage.setItem('resources',JSON.stringify(resources));
-      }
+      localStorage.setItem('resources',JSON.stringify(resources));
+    }
     
     /* ==================== READ RESOURCES ==================== */
     function readResources() { 
@@ -429,8 +646,8 @@
     /* ==================== SHOW INFO RESOURCES ==================== */
     function showResources() {
       document.getElementById('gold').innerHTML = "🪙 " + shortResources(resources.gold || 0);
-  document.getElementById('wood').innerHTML = "🪵 " + shortResources(resources.wood || 0);
-  document.getElementById('weath').innerHTML = "🌾 " + shortResources(resources.weath);
+      document.getElementById('wood').innerHTML = "🪵 " + shortResources(resources.wood || 0);
+      document.getElementById('weath').innerHTML = "🌾 " + shortResources(resources.weath);
     }
     showResources();
     /* ==================== PLAYER NAME ==================== */
@@ -503,7 +720,22 @@
     if(pathEarth) {
       earthImg.src = pathEarth[1];
     }
+    
+    // نمایش نامه بعد از ۲ ثانیه
+    setTimeout(() => {
+      const letterOverlay = document.getElementById('letter-overlay');
+      letterOverlay.style.display = 'flex';
+      // برای اجرای انیمیشن
+      setTimeout(() => letterOverlay.classList.add('show'), 10);
+    }, 2000);
+
+    // بستن نامه با کلیک روی دکمه ضربدر
+    document.getElementById('btn-close-letter').addEventListener('click', () => {
+      const letterOverlay = document.getElementById('letter-overlay');
+      letterOverlay.style.display = 'none';
+      localStorage.setItem('seenLetter', 'true'); // ذخیره کن که کاربر دیده
+    });
   </script>
 
 </body>
-      </html>
+  </html>
