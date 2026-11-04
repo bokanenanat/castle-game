@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" .2content="width=device-width, initial-scale=1.0">
+  <title>collect-map</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #000;
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      min-height: 100dvh;
+    }
+    iframe {
+      overflow-y: auto;
+      width: 98%;
+      aspect-ratio: 1/1.3;
+      z-index: 10;
+      border: 1px solid #555;
+      border-radius: 10vw;
+    }
+    .show-asset {
+      width: 98%;
+      height: 8vh;
+      border: 1px solid #fa0;
+      border-radius: 6vw;
+      top: 2%;
+      position: fixed;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      box-shadow: 0 0 4px #fa0;
+      gap: 0;
+    }
+    .show-asset div {
+      height: 100%;
+      width: 100%;
+      color: #fe9;
+      font-size: 3vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .message {
+      width: 70%;
+      border: 1px solid #f00;
+      height: 10%;
+      font-size: 5vw;
+      color: #c22;
+      border-radius: 6vw;
+      box-shadow: 0 0 10px #f00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      bottom: 4vh;
+      background: #000;
+      z-index: 10000;
+      
+    }
+  </style>
+</head>
+<body>
+  <section class='show-asset'>
+    <div id='tag-gold'>🪙 : loading ...</div>
+    <div id='tag-wood'>🪵 : loading ...</div>
+    <div id='tag-weath'>🌾 : loading ...</div>
+  </section>
+  <iframe src='collect-earth.html'></iframe>
+  <section class='message'>⚒ درحال ساخت✦</section>
+  <script>
+    /* ==================== SAVE RESOURCES ==================== */
+    function saveResources() {
+      localStorage.setItem('resources',JSON.stringify(resources));
+    }
+    
+    /* ==================== READ RESOURCES ==================== */
+    let resources = 'object-resources';
+    function readResources() { 
+      resources = JSON.parse(localStorage.getItem('resources')) || {gold:10,wood:10,weath:10};
+    }
+    function assigningValue() {
+      readResources();
+      document.getElementById('tag-gold').textContent = "🪙 : "+resources.gold;
+      document.getElementById('tag-wood').textContent = "🪵 : "+resources.wood;
+      document.getElementById('tag-weath').textContent = "🌾 : "+resources.weath;
+    }
+    assigningValue();
+  </script>
+</body>
+</html>
