@@ -484,7 +484,7 @@
     <a class="castle-P" href="Castle.html"></a>
     <a class="univer-P" href="university.html"></a>
     <a class="mint-P" href="garrison.html"></a>
-    <a class="blacksmithing-P" href="blacksmithing.html"></a>
+    <a class="blacksmithing-P" href="Blacksmithing.html"></a>
     <img src="images/1.png" class="earth-image" alt="Map" id="img-earth">
   </section>
 
@@ -575,12 +575,12 @@
       draw() {
         pn.beginPath();
         pn.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        pn.fillStyle = `rgba(80,50,100,${this.opacity})`;
+        pn.fillStyle = `rgba(80,40,100,${this.opacity})`;
         pn.fill();
       }
     }
 
-    for (let i = 0; i < 180; i++) {
+    for (let i = 0; i < 190; i++) {
       atoms.push(new creatAtom());
     }
 
