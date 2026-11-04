@@ -1,0 +1,795 @@
+<!doctype html>
+<html>
+  <head>
+    <title>collect-earth</title>
+    <style>
+      body {
+        background: #000;
+        display: grid;
+        align-items: center;
+        justify-items: start;
+        height: 100dvh;
+      }
+      .container-earth {
+        width: 100%;
+        aspect-ratio: 1/1;
+        position: relative;
+      }
+      .earth-image {
+        width: 100%;
+        aspect-ratio: 1/1;
+      }
+      .container-earth button {
+        width: 10%;
+        aspect-ratio: 1/1;
+        background: none;
+        border-radius: 2vw;
+        position: absolute;
+        border: none;
+      }
+      .container-earth button:hover {
+        background: #fa03;
+        box-shadow: 0 0 4px #ffd700;
+        border-radius: 999px;
+        border: 1px solid #fa00;
+      }
+      .importer-farm-1 {
+        left: 31%;
+        top: 51%;
+      }
+      .importer-farm-2 {
+        left: 43%;
+        top: 33%;
+      }
+      .importer-farm-3 {
+        left: 80%;
+        top: 43%;
+      }
+      .importer-sawmill-1 {
+        left: 24%;
+        top: 24%;
+      }
+      .importer-sawmill-2 {
+        left: 70%;
+        top: 57%;
+      }
+      .importer-sawmill-3 {
+        left: 40%;
+        top: 71%;
+      }
+      .importer-mine-1 {
+        left: 18%;
+        top: 62%;
+      }
+      .importer-mine-2 {
+        left: 69%;
+        top: 26%;
+      }
+      .btns-zoom {
+        width: 15vw;
+        aspect-ratio: 1/1;
+        border: 1px solid #fa0;
+        background: #111;
+        border-radius: 999px;
+        position: fixed;
+        bottom: 4%;
+        color: #fa0;
+        box-shadow: 0 0 1vh inset #ff9f00;
+        font-size: 6vw;
+        letter-spacing: -1px;
+        z-index: 10;
+      }
+      .left-zoom {
+        left: 4%;
+      }
+      .right-zoom {
+        right: 4%;
+      }
+      /* ==================== PAGE FARM ==================== */
+      .page-farm {
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, #1a1400 0%, #000 100%);
+        box-shadow: 0 0 5vw inset #4a3b00;
+        display: none;
+        z-index: 100;
+        position: fixed;
+        overflow: auto;
+        top: 0;
+        left: 0;
+        grid-template-columns: 1fr; /* چون فقط یه آیتم داریم */
+        grid-template-rows: auto 1fr;
+        gap: 15px;
+        padding: 5vw;
+        box-sizing: border-box;
+      }
+
+      /* عنوان صفحه مزرعه */
+      .farm-header {
+        text-align: center;
+        color: #ffd700;
+        font-size: 7vw;
+        font-family: "Rye", cursive;
+        text-shadow:
+          0 0 10px #fa0,
+          0 0 20px #f50;
+        border-bottom: 2px solid #fa05;
+        padding-bottom: 10px;
+      }
+
+      /* کادر مزرعه */
+      .farm-card {
+        background: rgba(0, 0, 0, 1);
+        border: 1px solid #fa0;
+        border-radius: 15px;
+        box-shadow:
+          0 0 15px rgba(255, 170, 0, 0.2),
+          inset 0 0 10px rgba(255, 170, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        gap: 15px;
+        transition: all 0.3s ease;
+        width: 80%;
+        max-width: 800px;
+        margin: 0 auto;
+        margin-top: 5vh;
+      }
+
+      .farm-card:hover {
+        box-shadow:
+          0 0 3vw rgba(255, 180, 0, 0.9),
+          inset 0 0 20px rgba(255, 215, 0, 0.2);
+        border-color: #ffc700;
+      }
+
+      /* آیکون گندم */
+      .farm-card img {
+        border-radius: 999px;
+        width: 40vw;
+        max-width: 150px;
+        filter: drop-shadow(0 0 15px rgba(255, 170, 0, 0.6));
+      }
+
+      /* متن‌ها */
+      .farm-card h3 {
+        color: #ffd700;
+        font-size: 6vw;
+        margin: 0;
+        text-shadow: 0 0 5px #fa0;
+      }
+
+      .farm-card p {
+        color: #ccc;
+        font-size: 4vw;
+        margin: 0;
+      }
+
+      /* دکمه جمع‌آوری */
+      .farm-card button {
+        background: linear-gradient(135deg, #332200, #110a00);
+        border: 1px solid #fa0;
+        color: #fa0;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-size: 4.5vw;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+        transition: all 0.2s;
+        width: 80%;
+        max-width: 200px;
+      }
+
+      .farm-card button:hover {
+        background: linear-gradient(135deg, #664400, #332200);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        color: #ffd700;
+      }
+
+      .farm-card button:active {
+        transform: scale(0.95);
+      }
+
+      /* دکمه بستن */
+      .page-farm .btn-close {
+        background: #1a0000;
+        border: 2px solid #f00;
+        color: #f00;
+        font-size: 6vw;
+        width: 12vw;
+        height: 12vw;
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px #f00,
+          inset 0 0 10px #f00;
+        position: absolute;
+        top: 3vw;
+        right: 3vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        z-index: 10;
+      }
+
+      .page-farm .btn-close:hover {
+        background: #f00;
+        color: #000;
+        transform: rotate(90deg) scale(1.1);
+      }
+      /* بخش اطلاعات مزرعه */
+      .farm-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 90%;
+        margin: 10px 0;
+      }
+
+      .info-box {
+        background: rgba(255, 170, 0, 0.1);
+        border: 1px solid rgba(255, 170, 0, 0.3);
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .info-label {
+        color: #aaa;
+        font-size: 3vw;
+        margin-bottom: 5px;
+      }
+
+      .info-value {
+        color: #ffd700;
+        font-size: 4vw;
+        font-weight: bold;
+        text-shadow: 0 0 5px #fa0;
+      }
+      /* ==================== PAGE SAWMILL ==================== */
+      .page-sawmill {
+        height: 100%;
+        width: 100%;
+        background: radial-gradient(circle at center, #1a0e00 0%, #000 100%);
+        box-shadow: 0 0 5vw inset #3b2200;
+        display: none;
+        z-index: 100;
+        position: fixed;
+        overflow-y: auto;
+        top: 0;
+        left: 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        gap: 15px;
+        padding: 5vw;
+        box-sizing: border-box;
+      }
+
+      /* عنوان صفحه چوب‌بری */
+      .sawmill-header {
+        text-align: center;
+        color: #b5651d; /* رنگ قهوه‌ای چوبی */
+        font-size: 7vw;
+        font-family: "Rye", cursive;
+        text-shadow:
+          0 0 10px #8b4513,
+          0 0 20px #3e2723;
+        border-bottom: 2px solid #8b451350;
+        padding-bottom: 10px;
+      }
+
+      /* کادر چوب‌بری */
+      .sawmill-card {
+        background: rgba(0, 0, 0, 1);
+        border: 1px solid #8b4513;
+        border-radius: 15px; /* گوشه‌های تیزتر برای حس چوب */
+        box-shadow:
+          0 0 15px rgba(139, 69, 19, 0.3),
+          inset 0 0 10px rgba(139, 69, 19, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        gap: 15px;
+        transition: all 0.3s ease;
+        width: 80%;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 5vh;
+      }
+
+      .sawmill-card:hover {
+        box-shadow:
+          0 0 4vw rgba(181, 101, 29, 0.7),
+          inset 0 0 20px rgba(139, 69, 19, 0.3);
+        border-color: #b5651d;
+      }
+
+      /* آیکون چوب */
+      .sawmill-card img {
+        border-radius: 999px; /* مربعی برای چوب */
+        width: 40vw;
+        max-width: 150px;
+        filter: drop-shadow(0 0 15px rgba(139, 69, 19, 0.6));
+      }
+
+      /* متن‌ها */
+      .sawmill-card h3 {
+        color: #d2b48c; /* رنگ تان (چرمی) */
+        font-size: 6vw;
+        margin: 0;
+        text-shadow: 0 0 5px #8b4513;
+      }
+
+      /* بخش اطلاعات چوب‌بری */
+      .sawmill-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 90%;
+        margin: 10px 0;
+      }
+
+      .sawmill-info .info-box {
+        background: rgba(139, 69, 19, 0.1);
+        border: 1px solid rgba(139, 69, 19, 0.4);
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .sawmill-info .info-label {
+        color: #a08c7d;
+        font-size: 3vw;
+        margin-bottom: 5px;
+      }
+
+      .sawmill-info .info-value {
+        color: #d2b48c;
+        font-size: 4vw;
+        font-weight: bold;
+        text-shadow: 0 0 5px #8b4513;
+      }
+
+      /* دکمه جمع‌آوری چوب */
+      .sawmill-card button {
+        background: linear-gradient(135deg, #2b1a00, #0f0a00);
+        border: 1px solid #8b4513;
+        color: #d2b48c;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 4.5vw;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(139, 69, 19, 0.4);
+        transition: all 0.2s;
+        width: 80%;
+        max-width: 200px;
+      }
+
+      .sawmill-card button:hover {
+        background: linear-gradient(135deg, #4a2e00, #2b1a00);
+        box-shadow: 0 0 20px rgba(181, 101, 29, 0.7);
+        color: #fff;
+      }
+
+      .sawmill-card button:active {
+        transform: scale(0.95);
+      }
+
+      /* دکمه بستن */
+      .page-sawmill .btn-close {
+        background: #1a0000;
+        border: 2px solid #f00;
+        color: #f00;
+        font-size: 6vw;
+        width: 12vw;
+        height: 12vw;
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px #f00,
+          inset 0 0 10px #f00;
+        position: absolute;
+        top: 3vw;
+        right: 3vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        z-index: 10;
+      }
+
+      .page-sawmill .btn-close:hover {
+        background: #f00;
+        color: #000;
+        transform: rotate(90deg) scale(1.1);
+      }
+      /* ==================== PAGE MINE ==================== */
+      .page-mine {
+        height: 100%;
+        width: 100%;
+        background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+        box-shadow: 0 0 5vw inset #444;
+        display: none;
+        z-index: 100;
+        position: absolute;
+        top: 0;
+        left: 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        gap: 15px;
+        padding: 5vw;
+        box-sizing: border-box;
+      }
+
+      /* عنوان صفحه معدن */
+      .mine-header {
+        text-align: center;
+        color: #ccc; /* رنگ نقره‌ای/سنگی */
+        font-size: 7vw;
+        font-family: "Rye", cursive;
+        text-shadow:
+          0 0 10px #555,
+          0 0 20px #000;
+        border-bottom: 2px solid #555;
+        padding-bottom: 10px;
+      }
+
+      /* کادر معدن */
+      .mine-card {
+        background: rgba(10, 10, 10, 0.9);
+        border: 1px solid #888;
+        border-radius: 10px;
+        box-shadow:
+          0 0 15px rgba(200, 200, 200, 0.1),
+          inset 0 0 10px rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        gap: 15px;
+        transition: all 0.3s ease;
+        width: 80%;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 5vh;
+      }
+
+      .mine-card:hover {
+        box-shadow:
+          0 0 4vw rgba(255, 215, 0, 0.4),
+          inset 0 0 20px rgba(255, 215, 0, 0.1);
+        border-color: #ffd700;
+      }
+
+      /* آیکون طلا */
+      .mine-card img {
+        border-radius: 50%;
+        width: 40vw;
+        max-width: 150px;
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+      }
+
+      /* متن‌ها */
+      .mine-card h3 {
+        color: #ffd700; /* طلایی */
+        font-size: 6vw;
+        margin: 0;
+        text-shadow: 0 0 10px #fa0;
+      }
+
+      /* بخش اطلاعات معدن */
+      .mine-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 90%;
+        margin: 10px 0;
+      }
+
+      .mine-info .info-box {
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .mine-info .info-label {
+        color: #888;
+        font-size: 3vw;
+        margin-bottom: 5px;
+      }
+
+      .mine-info .info-value {
+        color: #ffd700;
+        font-size: 4vw;
+        font-weight: bold;
+        text-shadow: 0 0 5px #fa0;
+      }
+
+      /* دکمه جمع‌آوری طلا */
+      .mine-card button {
+        background: linear-gradient(135deg, #222, #000);
+        border: 1px solid #ffd700;
+        color: #ffd700;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 4.5vw;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        transition: all 0.2s;
+        width: 80%;
+        max-width: 200px;
+      }
+
+      .mine-card button:hover {
+        background: linear-gradient(135deg, #444, #111);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        color: #fff;
+      }
+
+      .mine-card button:active {
+        transform: scale(0.95);
+      }
+
+      /* دکمه بستن (همون استایل قرمز) */
+      .page-mine .btn-close {
+        background: #1a0000;
+        border: 2px solid #f00;
+        color: #f00;
+        font-size: 6vw;
+        width: 12vw;
+        height: 12vw;
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px #f00,
+          inset 0 0 10px #f00;
+        position: absolute;
+        top: 3vw;
+        right: 3vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        z-index: 10;
+      }
+
+      .page-mine .btn-close:hover {
+        background: #f00;
+        color: #000;
+        transform: rotate(90deg) scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="container-earth" id="earth">
+      <img class="earth-image" src="images/earth-collect.jpg" />
+      <button
+        class="importer-farm-1"
+        data-amount="15000"
+        data-time="5"
+      ></button>
+      <button
+        class="importer-farm-2"
+        data-amount="40000"
+        data-time="10"
+      ></button>
+      <button
+        class="importer-farm-3"
+        data-amount="100000"
+        data-time="20"
+      ></button>
+      <button
+        class="importer-sawmill-1"
+        data-amount="15000"
+        data-time="5"
+      ></button>
+      <button
+        class="importer-sawmill-2"
+        data-amount="40000"
+        data-time="10"
+      ></button>
+      <button
+        class="importer-sawmill-3"
+        data-amount="100000"
+        data-time="20"
+      ></button>
+      <button
+        class="importer-mine-1"
+        data-amount="5000"
+        data-time="15"
+        data-id="1"
+      ></button>
+      <button
+        class="importer-mine-2"
+        data-amount="12000"
+        data-time="30"
+        data-id="2"
+      ></button>
+    </section>
+    <section class="page-farm" id="page-farm">
+      <button class="btn-close">×</button>
+
+      <div class="farm-header">🌾 مزرعه گندم 🌾</div>
+
+      <div class="farm-card">
+        <img src="images/3weath.jpg" alt="گندم" />
+        <h3>گندم</h3>
+
+        <!-- بخش اطلاعات منابع -->
+        <div class="farm-info">
+          <div class="info-box">
+            <span class="info-label">موجودی:</span>
+            <span class="info-value" id="farm-amount">۱۰۰ 🌾</span>
+          </div>
+          <div class="info-box">
+            <span class="info-label">زمان جمع‌آوری:</span>
+            <span class="info-value" id="farm-time">۵ دقیقه</span>
+          </div>
+        </div>
+
+        <button id="btn-collect-wheat">جمع‌آوری</button>
+      </div>
+    </section>
+    <section class="page-sawmill" id="page-sawmill">
+      <button class="btn-close">×</button>
+
+      <div class="sawmill-header">🪵 چوب‌بری 🪵</div>
+
+      <div class="sawmill-card">
+        <img src="images/2wood.jpg" alt="چوب" />
+        <h3>چوب</h3>
+
+        <!-- بخش اطلاعات منابع -->
+        <div class="sawmill-info">
+          <div class="info-box">
+            <span class="info-label">موجودی:</span>
+            <span class="info-value" id="sawmill-amount">۱۰۰ 🪵</span>
+          </div>
+          <div class="info-box">
+            <span class="info-label">زمان جمع‌آوری:</span>
+            <span class="info-value" id="sawmill-time">۵ دقیقه</span>
+          </div>
+        </div>
+
+        <button id="btn-collect-wood">جمع‌آوری</button>
+      </div>
+    </section>
+    <section class="page-mine" id="page-mine">
+      <button class="btn-close">×</button>
+
+      <div class="mine-header">⛏️ معدن طلا ⛏️</div>
+
+      <div class="mine-card">
+        <img src="images/1coin.jpg" alt="طلا" />
+        <h3>طلا</h3>
+
+        <div class="mine-info">
+          <div class="info-box">
+            <span class="info-label">موجودی:</span>
+            <span class="info-value" id="mine-amount">۱۰۰ 🪙</span>
+          </div>
+          <div class="info-box">
+            <span class="info-label">زمان جمع‌آوری:</span>
+            <span class="info-value" id="mine-time">۵ دقیقه</span>
+          </div>
+        </div>
+
+        <button id="btn-collect-gold">جمع‌آوری</button>
+      </div>
+    </section>
+    <button class="btns-zoom left-zoom" id="zoom-out">--</button>
+    <button class="btns-zoom right-zoom" id="zoom">+</button>
+    <script>
+      const zoomOut = document.getElementById("zoom-out");
+      const zoom = document.getElementById("zoom");
+      const earth = document.getElementById("earth");
+      let zoomNumber = 100; // % //
+      zoom.addEventListener("click", () => {
+        if (zoomNumber <= 250) {
+          zoomNumber += 10;
+          earth.style.width = zoomNumber + "%";
+        }
+      });
+      zoomOut.addEventListener("click", () => {
+        if (zoomNumber > 100) {
+          zoomNumber -= 10;
+          earth.style.width = zoomNumber + "%";
+        }
+      });
+      const pageMine = document.getElementById("page-mine");
+      let mineAmount = 0;
+      let mineTime = 0;
+      let mineID = 0;
+      document.querySelectorAll('[class^="importer-mine"]').forEach((MINE) => {
+        MINE.addEventListener("click", () => {
+          mineAmount = MINE.dataset.amount;
+          mineTime = parseInt(MINE.dataset.time);
+          mineID = parseInt(MINE.dataset.id);
+          document.getElementById("mine-amount").textContent =
+            mineAmount + "🪙";
+          document.getElementById("mine-time").textContent =
+            "دقیقه : " + mineTime;
+          pageMine.style.display = "grid";
+          localStorage.setItem(`mineAmount_${mineID}`,mineAmount);
+          localStorage.setItem(`mineTime_${mineID}`,mineTime);
+          
+        });
+      });
+      document.getElementById("btn-collect-gold").addEventListener("click", () => {
+          let clickTime = Date.now();
+          localStorage.setItem(`clickTime_${mineID}`,clickTime)
+          mineTime = localStorage.getItem(`mineTime_${mineID}`);
+          mineAmount = localStorage.getItem(`mineAmount_${mineID}`);
+          let intervalMine = setInterval(() => {
+            timerMine(Date.now());
+          }, 1000);
+          function timerMine(currentTime) {
+            clickTime = parseInt(localStorage.getItem(`clickTime_${mineID}`));
+            const collectTime = clickTime + mineTime * 200;
+            if (collectTime <= currentTime) {
+              clearInterval(intervalMine);
+              return;
+            }
+          }
+        });
+      const pageFarm = document.getElementById("page-farm");
+      document.querySelectorAll('[class^="importer-farm"]').forEach((FARM) => {
+        FARM.addEventListener("click", () => {
+          pageFarm.style.display = "grid";
+          const farmAmount = FARM.dataset.amount;
+          const farmTime = FARM.dataset.time;
+          document.getElementById("farm-amount").textContent =
+            farmAmount + "🌾";
+          document.getElementById("farm-time").textContent =
+            "دقیقه : " + farmTime;
+        });
+      });
+      const pageSawmill = document.getElementById("page-sawmill");
+      document
+        .querySelectorAll('[class^="importer-sawmill"]')
+        .forEach((SAWMILL) => {
+          SAWMILL.addEventListener("click", () => {
+            pageSawmill.style.display = "grid";
+            const sawmillAmount = SAWMILL.dataset.amount;
+            const sawmillTime = SAWMILL.dataset.time;
+            document.getElementById("sawmill-amount").textContent =
+              sawmillAmount + "🪵";
+            document.getElementById("sawmill-time").textContent =
+              "دقیقه : " + sawmillTime;
+          });
+        });
+      const btnClose = document
+        .querySelectorAll(".btn-close")
+        .forEach((CLOSE) => {
+          CLOSE.addEventListener("click", () => {
+            pageFarm.style.display = "none";
+            pageSawmill.style.display = "none";
+            pageMine.style.display = "none";
+          });
+        });
+    </script>
+  </body>
+</html>
