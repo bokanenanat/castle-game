@@ -342,7 +342,7 @@
         this.y = Math.random() * bg.height;
         this.moveX = (Math.random() - 0.5) * 0.5;
         this.moveY = (Math.random() - 0.5) * 0.5;
-        this.size = Math.random() * 2.5;
+        this.size = Math.random() * 2;
         this.opacity = Math.random() + 0.09;
       }
       update() {
@@ -358,12 +358,12 @@
       draw() {
         pn.beginPath();
         pn.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        pn.fillStyle = `rgba(80,80,110,${this.opacity})`;
+        pn.fillStyle = `rgba(80,50,100,${this.opacity})`;
         pn.fill();
       }
     }
 
-    for (let i = 0; i < 300; i++) {
+    for (let i = 0; i < 180; i++) {
       atoms.push(new creatAtom());
     }
 
