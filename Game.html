@@ -474,7 +474,7 @@
       }
     }
     
-    function systemForces() {
+    function systemPower() {
       getForces();
       saveForces();
       forces.total = forces.infantry + forces.cavalry + forces.archer + forces.chariot;
@@ -497,11 +497,15 @@
       */
       
       function creatPower(IN,AR,CA,CH) {
-        let castle = parseInt(localStorage.getItem('castleLevel'));
-        castle = (castle + 2)* 1000;
+        let castle = parseInt(localStorage.getItem('castleLevel')||1);
+        let blacksmithing = parseInt(localStorage.getItem('blackLevel')||1);
+        buildings = (castle + 2)* 10000 + (blacksmithing*10000);
+        let researchSaved = localStorage.getItem('research');
+        let research = researchSaved? JSON.parse(researchSaved): {forces:0,castle:0,resources:0};
+        let researchPower = 40000 * (research.resources*1/5) + 60000 * (research.forces*1/5) + 80000 * (research.castle*1/5);
         power = (IN * 2) + (AR * 40) + (CA * 60) + (CH * 80);
         
-        power += castle;
+        power += buildings + researchPower;
         localStorage.setItem('power',power);
       }
       creatPower(
@@ -518,7 +522,7 @@
         indexFRC += 1;
       });
     }
-    setInterval(systemForces,2000);
+    setInterval(systemPower,3000);
     /* ==================== CREATE FLOATING PARTICLES ==================== */
     const particlesContainer = document.getElementById('particles');
     const particleCount = 30;
