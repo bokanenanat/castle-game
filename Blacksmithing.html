@@ -629,15 +629,13 @@ function showCost() {
 }
 
 /* ==================== RESOURCE DATA ==================== */
-let savedGold = parseInt(localStorage.getItem('gold')) || 1;
-let savedWood = parseInt(localStorage.getItem('wood')) || 1;
-let savedWeath = parseInt(localStorage.getItem('weath')) || 1;
+let savedResources = JSON.parse(localStorage.getItem('resources')) || {gold:10,wood:10,weath:10};
+
 
 /* ==================== SAVE FUNCTION ==================== */
 function save() {
-  localStorage.setItem('gold', savedGold);
-  localStorage.setItem('wood', savedWood);
-  localStorage.setItem('weath', savedWeath);
+  localStorage.setItem('resources', JSON.stringify(savedResources));
+  
   localStorage.setItem('blackCostGold', allCost.gold);
   localStorage.setItem('blackCostWood', allCost.wood);
   localStorage.setItem('blackCostWeath', allCost.weath);
@@ -660,9 +658,9 @@ function countResources() {
         showLockError();
         return;
     }
-  savedGold -= allCost.gold;
-  savedWood -= allCost.wood;
-  savedWeath -= allCost.weath;
+  savedResources.gold -= allCost.gold;
+  savedResources.wood -= allCost.wood;
+  savedResources.weath -= allCost.weath;
 
   for (let key in allCost) {
     allCost[key] = Math.round(allCost[key] * (1.2 + 0.2));
@@ -678,7 +676,7 @@ function countResources() {
 /* ==================== UPGRADE BUTTON EVENT ==================== */
 const upgradeBtn = document.getElementById('black-upgrade-btn');
 upgradeBtn.addEventListener('click', () => {
-  if (allCost.gold <= savedGold && allCost.wood <= savedWood && allCost.weath <= savedWeath) {
+  if (allCost.gold <= savedResources.gold && allCost.wood <= savedResources.wood && allCost.weath <= savedResources.weath) {
     countResources();
   } else{
       document.getElementById('error-overlay').style.display = 'block';
@@ -692,4 +690,4 @@ showLevel();
 showCost();
   </script>
 </body>
-</html>
+    </html>
